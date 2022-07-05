@@ -82,11 +82,11 @@ void Logger::printPieces(int lineIdx) const
 
 void Logger::printLines() const
 {
-    for (int i = 0; i < 8; ++i)
+    for (int i = 8; i > 0; --i)
     {
-        *m_os << "  " << i + 1 << " ⎪";
-        printPieces(i);
-        *m_os << " " << i + 1;
+        *m_os << "  " << i << " ⎪";
+        printPieces(i - 1);
+        *m_os << " " << i;
         *m_os << "\n ———————————————————————————————————————" << std::endl;
     }
 }

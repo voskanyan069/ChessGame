@@ -1,39 +1,43 @@
-#ifndef __PIECES_BASE_PIECE_MGR_HXX__
-#define __PIECES_BASE_PIECE_MGR_HXX__
+#ifndef __PIECES_PIECE_MGR_HXX__
+#define __PIECES_PIECE_MGR_HXX__
 
 #include "pieces/BasePiece.hxx"
+#include "utils/Exception.hxx"
 
+#include <string>
 #include <vector>
+#include <iostream>
 
 namespace Pieces
 {
-    class PieceMgr;
-};
+    inline void ConvertPosition(const std::string& str, Pieces::Position& pos)
+    {
+        if (2 == str.size() &&
+            ((64 < (int)str[0] && 73 > (int)str[0]) ||
+            (96 < (int)str[0] && 105 > (int)str[0])) &&
+            (48 < (int)str[1] && 57 > (int)str[1]))
+        {
+            int reducer = 65;
+            if (72 > (int)str[0])
+            {
+                reducer = 97;
+            }
+            int x = (int)str[0] - reducer;
+            int y = (int)str[1] - 49;
+            pos.x = x;
+            pos.y = y;
+            return;
+        }
+        throw Utils::Exception("Incorrect position");
+    }
 
-class Pieces::PieceMgr
-{
-public:
-    static PieceMgr* GetInstance();
-    PieceMgr(PieceMgr const&) = delete;
-    ~PieceMgr();
-    void operator=(PieceMgr const&) = delete;
-
-private:
-    PieceMgr();
-
-public:
-    void DestroyPieces();
     template <typename T>
-    T* CreatePiece(const Pieces::PieceColor& color,
+    inline T* CreatePiece(const Pieces::PieceColor& color,
             const Pieces::Position& position)
     {
         T* piece = new T(color, position);
-        m_pieces.push_back(piece);
         return piece;
     }
-
-private:
-    std::vector<Pieces::BasePiece*> m_pieces;
 };
 
-#endif // __PIECES_BASE_PIECE_MGR_HXX__
+#endif // __PIECES_PIECE_MGR_HXX__

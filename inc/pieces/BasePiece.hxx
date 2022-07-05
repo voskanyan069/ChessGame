@@ -7,7 +7,7 @@ namespace Pieces
 {
     class BasePiece;
     struct Position;
-    typedef enum { WHITE, BLACK, UNDEF } PieceColor;
+    typedef enum { WHITE = 0, BLACK = 1, UNDEF = 2 } PieceColor;
 }
 
 struct Pieces::Position

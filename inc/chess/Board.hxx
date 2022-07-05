@@ -17,18 +17,25 @@ public:
     static Board* GetInstance();
     Board(Board const&) = delete;
     void operator=(Board const&) = delete;
+    ~Board();
 
 private:
     Board();
-    void initEmptyFields();
-    void initWhitePieces();
-    void initBlackPieces();
 
 public:
     Pieces::BasePiece*** GetBoard() const;
+    void Clean();
 
 private:
     void initBoard();
+    void initEmptyFields();
+    void initPawnPieces();
+    void initRookPieces();
+    void initKnightPieces();
+    void initBishopPieces();
+    void initQueenPieces();
+    void initKingPieces();
+    void initPieces();
 
 private:
     Pieces::BasePiece*** m_board;

@@ -16,6 +16,7 @@ FILE( GLOB CHESS_SOURCES
     "${PROJECT_SOURCE_DIR}/src/*.cxx"
     "${PROJECT_SOURCE_DIR}/src/chess/*.cxx"
     "${PROJECT_SOURCE_DIR}/src/pieces/*.cxx"
+    "${PROJECT_SOURCE_DIR}/src/player/*.cxx"
     )
 FILE( GLOB UTILS_SOURCES "${PROJECT_SOURCE_DIR}/src/utils/*.cxx" )
 
