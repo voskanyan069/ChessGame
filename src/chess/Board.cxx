@@ -1,6 +1,7 @@
 #include "chess/Board.hxx"
 #include "pieces/PieceMgr.hxx"
 #include "pieces/BasePiece.hxx"
+#include "pieces/EmptyPiece.hxx"
 #include "pieces/Pawn.hxx"
 #include "pieces/Rook.hxx"
 #include "pieces/Knight.hxx"
@@ -120,9 +121,41 @@ void Chess::Board::initBoard()
     initPieces();
 }
 
+void Chess::Board::SetAvailableMoves(const Pieces::Positions& positions) const
+{
+    for (auto& pos : positions)
+    {
+        if (nullptr == m_board[pos.x][pos.y])
+        {
+            Pieces::BasePiece* available = new Pieces::EmptyPiece(
+                    Pieces::Position(pos.x, pos.y));
+            m_board[pos.x][pos.y] = std::move(available);
+        }
+    }
+}
+
 Pieces::BasePiece*** Chess::Board::GetBoard() const
 {
     return m_board;
+}
+
+void Chess::Board::DestroyEmpties()
+{
+    for (int i = 0; i < 8; ++i)
+    {
+        for (int j = 0; j < 8; ++j)
+        {
+            if (nullptr == m_board[i][j])
+            {
+                continue;
+            }
+            if (Pieces::PieceColor::UNDEF == m_board[i][j]->GetColor())
+            {
+                delete m_board[i][j];
+                m_board[i][j] = nullptr;
+            }
+        }
+    }
 }
 
 void Chess::Board::Clean()

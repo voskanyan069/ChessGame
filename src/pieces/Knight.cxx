@@ -8,7 +8,6 @@ Pieces::Knight::Knight(const Pieces::PieceColor& color,
     setPieceChar(color, "♘", "♞");
 }
 
-Pieces::Position* Pieces::Knight::GetAvailableMoves() const
+void Pieces::Knight::GetAvailableMoves(Pieces::Positions& positions)
 {
-    return nullptr;
 }

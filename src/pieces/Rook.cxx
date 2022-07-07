@@ -8,7 +8,6 @@ Pieces::Rook::Rook(const Pieces::PieceColor& color,
     setPieceChar(color, "♖", "♜");
 }
 
-Pieces::Position* Pieces::Rook::GetAvailableMoves() const
+void Pieces::Rook::GetAvailableMoves(Pieces::Positions& positions)
 {
-    return nullptr;
 }

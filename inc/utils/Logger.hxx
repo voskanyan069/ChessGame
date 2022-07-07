@@ -1,13 +1,15 @@
 #ifndef __UTILS_LOGGER_HXX__
 #define __UTILS_LOGGER_HXX__
 
+#include "pieces/BasePiece.hxx"
+
 #include <boost/format.hpp>
 
 #include <ostream>
 
-namespace Pieces
+namespace Chess
 {
-    class BasePiece;
+    class Board;
 }
 
 typedef enum
@@ -51,6 +53,7 @@ private:
 
 private:
     std::ostream* m_os;
+    Chess::Board* m_board;
 };
 
 #endif // __UTILS_LOGGER_HXX__

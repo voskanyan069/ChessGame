@@ -15,7 +15,7 @@ public:
     ~Queen() = default;
 
 public:
-    Position* GetAvailableMoves() const override;
+    void GetAvailableMoves(Pieces::Positions& positions) override;
 };
 
 #endif // __PIECES_QUEEN_HXX__

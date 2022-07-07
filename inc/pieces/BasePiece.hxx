@@ -2,11 +2,13 @@
 #define __PIECES_BASE_PIECE_HXX__
 
 #include <string>
+#include <vector>
 
 namespace Pieces
 {
     class BasePiece;
     struct Position;
+    typedef std::vector<Position> Positions;
     typedef enum { WHITE = 0, BLACK = 1, UNDEF = 2 } PieceColor;
 }
 
@@ -33,7 +35,8 @@ public:
     const std::string& GetPieceChar() const;
     PieceColor GetColor() const;
     Position GetPosition() const;
-    virtual Position* GetAvailableMoves() const;
+    virtual void GetAvailableMoves(Pieces::Positions& positions);
+    virtual void Move(const Pieces::Position& position);
 
 protected:
     void setPieceChar(const Pieces::PieceColor& color,
@@ -41,8 +44,9 @@ protected:
 
 protected:
     std::string m_pieceChar;
-    PieceColor m_color;
-    Position m_position;
+    Pieces::PieceColor m_color;
+    Pieces::Position m_position;
+    Pieces::Positions m_vecAvailableMoves;
 };
 
 #endif // __PIECES_BASE_PIECE_HXX__

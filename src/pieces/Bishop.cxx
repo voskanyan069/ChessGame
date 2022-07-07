@@ -8,7 +8,6 @@ Pieces::Bishop::Bishop(const Pieces::PieceColor& color,
     setPieceChar(color, "♗", "♝");
 }
 
-Pieces::Position* Pieces::Bishop::GetAvailableMoves() const
+void Pieces::Bishop::GetAvailableMoves(Pieces::Positions& positions)
 {
-    return nullptr;
 }

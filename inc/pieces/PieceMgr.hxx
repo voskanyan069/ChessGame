@@ -17,15 +17,13 @@ namespace Pieces
             (96 < (int)str[0] && 105 > (int)str[0])) &&
             (48 < (int)str[1] && 57 > (int)str[1]))
         {
-            int reducer = 65;
+            int reducer = 97;
             if (72 > (int)str[0])
             {
-                reducer = 97;
+                reducer = 65;
             }
-            int x = (int)str[0] - reducer;
-            int y = (int)str[1] - 49;
-            pos.x = x;
-            pos.y = y;
+            pos.x = (int)str[1] - 49;
+            pos.y = (int)str[0] - reducer;
             return;
         }
         throw Utils::Exception("Incorrect position");

@@ -8,7 +8,6 @@ Pieces::King::King(const Pieces::PieceColor& color,
     setPieceChar(color, "♔", "♚");
 }
 
-Pieces::Position* Pieces::King::GetAvailableMoves() const
+void Pieces::King::GetAvailableMoves(Pieces::Positions& positions)
 {
-    return nullptr;
 }

@@ -24,7 +24,7 @@ void Pieces::BasePiece::setPieceChar(const Pieces::PieceColor& color,
         }
         default:
         {
-            m_pieceChar = ' ';
+            m_pieceChar = " ";
         }
     }
 }
@@ -44,7 +44,10 @@ Pieces::Position Pieces::BasePiece::GetPosition() const
     return m_position;
 }
 
-Pieces::Position* Pieces::BasePiece::GetAvailableMoves() const
+void Pieces::BasePiece::GetAvailableMoves(Pieces::Positions& positions)
 {
-    return nullptr;
+}
+
+void Pieces::BasePiece::Move(const Pieces::Position& position)
+{
 }

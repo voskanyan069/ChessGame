@@ -1,14 +1,11 @@
 #ifndef __CHESS_BOARD_HXX__
 #define __CHESS_BOARD_HXX__
 
+#include "pieces/BasePiece.hxx"
+
 namespace Chess
 {
     class Board;
-}
-
-namespace Pieces
-{
-    class BasePiece;
 }
 
 class Chess::Board
@@ -23,7 +20,9 @@ private:
     Board();
 
 public:
+    void SetAvailableMoves(const Pieces::Positions& positions) const;
     Pieces::BasePiece*** GetBoard() const;
+    void DestroyEmpties();
     void Clean();
 
 private:

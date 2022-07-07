@@ -1,6 +1,7 @@
 #include "utils/Logger.hxx"
 #include "chess/Board.hxx"
 #include "pieces/BasePiece.hxx"
+#include "pieces/Pawn.hxx"
 
 #include <iostream>
 
@@ -17,6 +18,7 @@ Logger* Logger::GetInstance()
 
 Logger::Logger()
     : m_os(&std::cout)
+    , m_board(Chess::Board::GetInstance())
 {
 }
 
@@ -75,7 +77,7 @@ void Logger::printPieces(int lineIdx) const
     for (int i = 0; i < 8; ++i)
     {
         *m_os << " ";
-        printPieceChar(Chess::Board::GetInstance()->GetBoard()[lineIdx][i]);
+        printPieceChar(m_board->GetBoard()[lineIdx][i]);
         *m_os << " |";
     }
 }
@@ -101,4 +103,5 @@ void Logger::PrintBoard() const
     printLetters();
     printLines();
     printLetters(false);
+    m_board->DestroyEmpties();
 }

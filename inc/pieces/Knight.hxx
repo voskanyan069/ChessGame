@@ -15,7 +15,7 @@ public:
     ~Knight() = default;
 
 public:
-    Position* GetAvailableMoves() const override;
+    void GetAvailableMoves(Pieces::Positions& positions) override;
 };
 
 #endif // __PIECES_KNIGHT_HXX__
