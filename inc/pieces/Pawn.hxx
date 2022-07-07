@@ -16,7 +16,6 @@ public:
 
 public:
     void GetAvailableMoves(Pieces::Positions& positions) override;
-    void Move(const Pieces::Position& position) override;
 
 private:
     void getAvailableMovesWhite(Pieces::Positions& positions) const;

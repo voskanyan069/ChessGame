@@ -44,7 +44,6 @@ void Pieces::Pawn::getAvailableMovesBlack(Pieces::Positions& positions) const
 
 void Pieces::Pawn::GetAvailableMoves(Pieces::Positions& positions)
 {
-    m_vecAvailableMoves.clear();
     if (m_color == Pieces::PieceColor::WHITE)
     {
         getAvailableMovesWhite(positions);
@@ -53,24 +52,7 @@ void Pieces::Pawn::GetAvailableMoves(Pieces::Positions& positions)
     {
         getAvailableMovesBlack(positions);
     }
+    m_vecAvailableMoves.clear();
     m_vecAvailableMoves.insert(m_vecAvailableMoves.end(), positions.begin(),
             positions.end());
-}
-
-void Pieces::Pawn::Move(const Pieces::Position& position)
-{
-    for (auto& pos : m_vecAvailableMoves)
-    {
-        if (pos.x != position.x || pos.y != position.y)
-        {
-            continue;
-        }
-        Pieces::BasePiece*** board = Chess::Board::GetInstance()->GetBoard();
-        delete board[m_position.x][m_position.y];
-        board[m_position.x][m_position.y] = nullptr;
-        board[position.x][position.y] = Pieces::CreatePiece<
-            Pieces::Pawn>(m_color, position);
-        m_position.x = position.x;
-        m_position.y = position.y;
-    }
 }

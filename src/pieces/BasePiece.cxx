@@ -1,4 +1,5 @@
 #include "pieces/BasePiece.hxx"
+#include "chess/Board.hxx"
 
 Pieces::BasePiece::BasePiece(const PieceColor& color, const Position& position)
     : m_pieceChar(" ")
@@ -50,4 +51,17 @@ void Pieces::BasePiece::GetAvailableMoves(Pieces::Positions& positions)
 
 void Pieces::BasePiece::Move(const Pieces::Position& position)
 {
+    for (auto& pos : m_vecAvailableMoves)
+    {
+        if (pos.x != position.x || pos.y != position.y)
+        {
+            continue;
+        }
+        Pieces::BasePiece*** board = Chess::Board::GetInstance()->GetBoard();
+        board[position.x][position.y] = std::move(
+                board[m_position.x][m_position.y]);
+        board[m_position.x][m_position.y] = nullptr;
+        m_position.x = position.x;
+        m_position.y = position.y;
+    }
 }

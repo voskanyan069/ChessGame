@@ -35,8 +35,8 @@ public:
     const std::string& GetPieceChar() const;
     PieceColor GetColor() const;
     Position GetPosition() const;
+    void Move(const Pieces::Position& position);
     virtual void GetAvailableMoves(Pieces::Positions& positions);
-    virtual void Move(const Pieces::Position& position);
 
 protected:
     void setPieceChar(const Pieces::PieceColor& color,

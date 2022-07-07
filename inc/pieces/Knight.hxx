@@ -16,6 +16,9 @@ public:
 
 public:
     void GetAvailableMoves(Pieces::Positions& positions) override;
+
+private:
+    void getAvailableMoves(Pieces::Positions& positions) const;
 };
 
 #endif // __PIECES_KNIGHT_HXX__

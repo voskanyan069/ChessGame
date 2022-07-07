@@ -5,8 +5,6 @@
 #include "utils/Exception.hxx"
 
 #include <string>
-#include <vector>
-#include <iostream>
 
 namespace Pieces
 {
