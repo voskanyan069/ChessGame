@@ -9,7 +9,7 @@ namespace Pieces
     class BasePiece;
     struct Position;
     typedef std::vector<Position> Positions;
-    typedef enum { WHITE = 0, BLACK = 1, UNDEF = 2 } PieceColor;
+    typedef enum { WHITE, BLACK, UNDEF } PieceColor;
 }
 
 struct Pieces::Position
@@ -22,6 +22,16 @@ struct Pieces::Position
         , y(y)
     {
     }
+
+    inline bool operator==(const Position& other)
+    {
+        return x == other.x && y == other.y;
+    }
+
+    inline bool operator!=(const Position& other)
+    {
+        return !(*this == other);
+    }
 };
 
 class Pieces::BasePiece
@@ -32,18 +42,21 @@ public:
     virtual ~BasePiece() = default;
 
 public:
+    void SetHittable(bool isHittable);
     const std::string& GetPieceChar() const;
     PieceColor GetColor() const;
     Position GetPosition() const;
     void Move(const Pieces::Position& position);
-    virtual void GetAvailableMoves(Pieces::Positions& positions);
+    void GetAvailableMoves(Pieces::Positions& positions);
 
 protected:
+    virtual void getAvailableMoves(Pieces::Positions& positions) const;
     void setPieceChar(const Pieces::PieceColor& color,
             const std::string& white, const std::string& black);
 
 protected:
     std::string m_pieceChar;
+    std::string m_pieceInitialChar;
     Pieces::PieceColor m_color;
     Pieces::Position m_position;
     Pieces::Positions m_vecAvailableMoves;

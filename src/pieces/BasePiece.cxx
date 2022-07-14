@@ -8,6 +8,10 @@ Pieces::BasePiece::BasePiece(const PieceColor& color, const Position& position)
 {
 }
 
+void Pieces::BasePiece::getAvailableMoves(Pieces::Positions& positions) const
+{
+}
+
 void Pieces::BasePiece::setPieceChar(const Pieces::PieceColor& color,
             const std::string& white, const std::string& black)
 {
@@ -28,6 +32,19 @@ void Pieces::BasePiece::setPieceChar(const Pieces::PieceColor& color,
             m_pieceChar = " ";
         }
     }
+    m_pieceInitialChar = m_pieceChar;
+}
+
+void Pieces::BasePiece::SetHittable(bool isHittable)
+{
+    if (isHittable)
+    {
+        m_pieceChar = "\033[31m" + m_pieceChar + "\033[0m";
+    }
+    else
+    {
+        m_pieceChar = m_pieceInitialChar;
+    }
 }
 
 const std::string& Pieces::BasePiece::GetPieceChar() const
@@ -47,20 +64,36 @@ Pieces::Position Pieces::BasePiece::GetPosition() const
 
 void Pieces::BasePiece::GetAvailableMoves(Pieces::Positions& positions)
 {
+    getAvailableMoves(positions);
+    m_vecAvailableMoves.clear();
+    m_vecAvailableMoves.insert(m_vecAvailableMoves.end(), positions.begin(),
+            positions.end());
 }
 
 void Pieces::BasePiece::Move(const Pieces::Position& position)
 {
+    Chess::Board* board = Chess::Board::GetInstance();
+    Pieces::BasePiece*** pieces = board->GetBoard();
     for (auto& pos : m_vecAvailableMoves)
     {
+        if (!board->IsFree(pos))
+        {
+            board->GetPiece(pos)->SetHittable(false);
+        }
         if (pos.x != position.x || pos.y != position.y)
         {
             continue;
         }
-        Pieces::BasePiece*** board = Chess::Board::GetInstance()->GetBoard();
-        board[position.x][position.y] = std::move(
-                board[m_position.x][m_position.y]);
-        board[m_position.x][m_position.y] = nullptr;
+        if (!board->IsFree(pos))
+        {
+            if (!board->IsEnemy(m_position, pos))
+            {
+                continue;
+            }
+        }
+        pieces[position.x][position.y] = std::move(
+                pieces[m_position.x][m_position.y]);
+        pieces[m_position.x][m_position.y] = nullptr;
         m_position.x = position.x;
         m_position.y = position.y;
     }

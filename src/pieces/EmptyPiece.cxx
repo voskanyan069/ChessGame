@@ -7,6 +7,6 @@ Pieces::EmptyPiece::EmptyPiece(const Pieces::Position& position)
     m_pieceChar = "\033[32m*\033[0m";
 }
 
-void Pieces::EmptyPiece::GetAvailableMoves(Pieces::Positions& positions)
+void Pieces::EmptyPiece::getAvailableMoves(Pieces::Positions& positions) const
 {
 }

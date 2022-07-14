@@ -14,8 +14,8 @@ public:
     EmptyPiece(const Pieces::Position& position);
     ~EmptyPiece() = default;
 
-public:
-    void GetAvailableMoves(Pieces::Positions& positions) override;
+protected:
+    void getAvailableMoves(Pieces::Positions& positions) const override;
 };
 
 #endif // __PIECES_EMPTY_PIECE_HXX__

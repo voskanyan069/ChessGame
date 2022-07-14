@@ -8,6 +8,6 @@ Pieces::Queen::Queen(const Pieces::PieceColor& color,
     setPieceChar(color, "♕", "♛");
 }
 
-void Pieces::Queen::GetAvailableMoves(Pieces::Positions& positions)
+void Pieces::Queen::getAvailableMoves(Pieces::Positions& positions) const
 {
 }

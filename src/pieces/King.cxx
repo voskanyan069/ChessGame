@@ -8,6 +8,6 @@ Pieces::King::King(const Pieces::PieceColor& color,
     setPieceChar(color, "♔", "♚");
 }
 
-void Pieces::King::GetAvailableMoves(Pieces::Positions& positions)
+void Pieces::King::getAvailableMoves(Pieces::Positions& positions) const
 {
 }

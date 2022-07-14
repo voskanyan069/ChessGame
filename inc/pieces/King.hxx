@@ -14,8 +14,8 @@ public:
     King(const Pieces::PieceColor& color, const Pieces::Position& position);
     ~King() = default;
 
-public:
-    void GetAvailableMoves(Pieces::Positions& positions) override;
+protected:
+    void getAvailableMoves(Pieces::Positions& positions) const override;
 };
 
 #endif // __PIECES_KING_HXX__

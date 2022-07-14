@@ -14,8 +14,8 @@ public:
     Pawn(const Pieces::PieceColor& color, const Pieces::Position& position);
     ~Pawn() = default;
 
-public:
-    void GetAvailableMoves(Pieces::Positions& positions) override;
+protected:
+    void getAvailableMoves(Pieces::Positions& positions) const override;
 
 private:
     void getAvailableMovesWhite(Pieces::Positions& positions) const;

@@ -42,7 +42,7 @@ void Pieces::Pawn::getAvailableMovesBlack(Pieces::Positions& positions) const
     }
 }
 
-void Pieces::Pawn::GetAvailableMoves(Pieces::Positions& positions)
+void Pieces::Pawn::getAvailableMoves(Pieces::Positions& positions) const
 {
     if (m_color == Pieces::PieceColor::WHITE)
     {
@@ -52,7 +52,4 @@ void Pieces::Pawn::GetAvailableMoves(Pieces::Positions& positions)
     {
         getAvailableMovesBlack(positions);
     }
-    m_vecAvailableMoves.clear();
-    m_vecAvailableMoves.insert(m_vecAvailableMoves.end(), positions.begin(),
-            positions.end());
 }

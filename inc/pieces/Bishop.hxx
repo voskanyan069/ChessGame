@@ -14,8 +14,8 @@ public:
     Bishop(const Pieces::PieceColor& color, const Pieces::Position& position);
     ~Bishop() = default;
 
-public:
-    void GetAvailableMoves(Pieces::Positions& positions) override;
+protected:
+    void getAvailableMoves(Pieces::Positions& positions) const override;
 };
 
 #endif // __PIECES_BISHOP_HXX__

@@ -14,8 +14,8 @@ public:
     Rook(const Pieces::PieceColor& color, const Pieces::Position& position);
     ~Rook() = default;
 
-public:
-    void GetAvailableMoves(Pieces::Positions& positions) override;
+protected:
+    void getAvailableMoves(Pieces::Positions& positions) const override;
 };
 
 #endif // __PIECES_ROOK_HXX__

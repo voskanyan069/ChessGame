@@ -14,11 +14,8 @@ public:
     Knight(const Pieces::PieceColor& color, const Pieces::Position& position);
     ~Knight() = default;
 
-public:
-    void GetAvailableMoves(Pieces::Positions& positions) override;
-
-private:
-    void getAvailableMoves(Pieces::Positions& positions) const;
+protected:
+    void getAvailableMoves(Pieces::Positions& positions) const override;
 };
 
 #endif // __PIECES_KNIGHT_HXX__

@@ -119,13 +119,39 @@ void Chess::Board::initBoard()
     }
     initEmptyFields();
     initPieces();
+    //m_board[4][4] = Pieces::CreatePiece<
+    //    Pieces::Bishop>(Pieces::WHITE, Pieces::Position(4, 4));
+    //m_board[2][3] = Pieces::CreatePiece<
+    //    Pieces::Knight>(Pieces::BLACK, Pieces::Position(2, 3));
+    //m_board[2][2] = Pieces::CreatePiece<
+    //    Pieces::Bishop>(Pieces::BLACK, Pieces::Position(2, 2));
+}
+
+bool Chess::Board::IsFree(const Pieces::Position& pos) const
+{
+    return nullptr == GetPiece(pos);
+}
+
+bool Chess::Board::IsEnemy(const Pieces::Position& piecePos,
+        const Pieces::Position& newPos) const
+{
+    return GetPiece(piecePos)->GetColor() != GetPiece(newPos)->GetColor();
+}
+
+Pieces::BasePiece* Chess::Board::GetPiece(const Pieces::Position& pos) const
+{
+    if (nullptr == m_board[pos.x][pos.y])
+    {
+        return nullptr;
+    }
+    return m_board[pos.x][pos.y];
 }
 
 void Chess::Board::SetAvailableMoves(const Pieces::Positions& positions) const
 {
     for (auto& pos : positions)
     {
-        if (nullptr == m_board[pos.x][pos.y])
+        if (nullptr == GetPiece(pos))
         {
             Pieces::BasePiece* available = new Pieces::EmptyPiece(
                     Pieces::Position(pos.x, pos.y));

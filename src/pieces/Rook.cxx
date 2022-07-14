@@ -8,6 +8,6 @@ Pieces::Rook::Rook(const Pieces::PieceColor& color,
     setPieceChar(color, "♖", "♜");
 }
 
-void Pieces::Rook::GetAvailableMoves(Pieces::Positions& positions)
+void Pieces::Rook::getAvailableMoves(Pieces::Positions& positions) const
 {
 }

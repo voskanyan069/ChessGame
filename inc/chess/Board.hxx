@@ -20,6 +20,10 @@ private:
     Board();
 
 public:
+    bool IsFree(const Pieces::Position& pos) const;
+    bool IsEnemy(const Pieces::Position& piecePos,
+            const Pieces::Position& newPos) const;
+    Pieces::BasePiece* GetPiece(const Pieces::Position& pos) const;
     void SetAvailableMoves(const Pieces::Positions& positions) const;
     Pieces::BasePiece*** GetBoard() const;
     void DestroyEmpties();
