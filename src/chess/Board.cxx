@@ -119,12 +119,14 @@ void Chess::Board::initBoard()
     }
     initEmptyFields();
     initPieces();
-    //m_board[4][4] = Pieces::CreatePiece<
-    //    Pieces::Bishop>(Pieces::WHITE, Pieces::Position(4, 4));
-    //m_board[2][3] = Pieces::CreatePiece<
+    //m_board[3][3] = Pieces::CreatePiece<
+    //    Pieces::Rook>(Pieces::WHITE, Pieces::Position(3, 3));
+    //m_board[5][3] = Pieces::CreatePiece<
+    //    Pieces::Rook>(Pieces::WHITE, Pieces::Position(5, 3));
+    //m_board[1][3] = Pieces::CreatePiece<
     //    Pieces::Knight>(Pieces::BLACK, Pieces::Position(2, 3));
-    //m_board[2][2] = Pieces::CreatePiece<
-    //    Pieces::Bishop>(Pieces::BLACK, Pieces::Position(2, 2));
+    //m_board[3][7] = Pieces::CreatePiece<
+    //    Pieces::Bishop>(Pieces::BLACK, Pieces::Position(3, 7));
 }
 
 bool Chess::Board::IsFree(const Pieces::Position& pos) const

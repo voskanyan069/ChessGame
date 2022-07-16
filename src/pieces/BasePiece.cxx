@@ -1,3 +1,4 @@
+#include "utils/Exception.hxx"
 #include "pieces/BasePiece.hxx"
 #include "chess/Board.hxx"
 
@@ -64,6 +65,10 @@ Pieces::Position Pieces::BasePiece::GetPosition() const
 
 void Pieces::BasePiece::GetAvailableMoves(Pieces::Positions& positions)
 {
+    if (m_color == Pieces::PieceColor::UNDEF)
+    {
+        throw Utils::Exception("Empty position");
+    }
     getAvailableMoves(positions);
     m_vecAvailableMoves.clear();
     m_vecAvailableMoves.insert(m_vecAvailableMoves.end(), positions.begin(),
@@ -96,5 +101,7 @@ void Pieces::BasePiece::Move(const Pieces::Position& position)
         pieces[m_position.x][m_position.y] = nullptr;
         m_position.x = position.x;
         m_position.y = position.y;
+        return;
     }
+    throw Utils::Exception("Incorrect position");
 }

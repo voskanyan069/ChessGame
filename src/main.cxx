@@ -11,6 +11,8 @@ int main()
 {
     Pieces::Position pos;
     Pieces::Position newPos;
+    Pieces::BasePiece* pBP;
+    Chess::Board* pBoard = Chess::Board::GetInstance();
     PlayerMgr* playerMgr = PlayerMgr::GetInstance();
     Player* whitePlayer = new Player();
     Player* blackPlayer = new Player();
@@ -22,8 +24,7 @@ int main()
     {
         Logger::GetInstance()->PrintBoard();
         Query::GetInstance()->AskPosition("Current position", pos);
-        Pieces::BasePiece* pBP;
-        Chess::Board* pBoard = Chess::Board::GetInstance();
+        //pos = Pieces::Position(4, 4);
         pBP = pBoard->GetPiece(pos);
         if (nullptr == pBP)
             return 1;
@@ -35,5 +36,7 @@ int main()
         pBP->Move(newPos);
         Logger::GetInstance()->PrintBoard();
     }
+    delete whitePlayer;
+    delete blackPlayer;
     return 0;
 }
