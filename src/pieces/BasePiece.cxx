@@ -2,8 +2,10 @@
 #include "pieces/BasePiece.hxx"
 #include "chess/Board.hxx"
 
-Pieces::BasePiece::BasePiece(const PieceColor& color, const Position& position)
-    : m_pieceChar(" ")
+Pieces::BasePiece::BasePiece(const std::string& name,
+        const PieceColor& color, const Position& position)
+    : m_pieceName(name)
+    , m_pieceChar(" ")
     , m_color(color)
     , m_position(position)
 {
@@ -46,6 +48,11 @@ void Pieces::BasePiece::SetHittable(bool isHittable)
     {
         m_pieceChar = m_pieceInitialChar;
     }
+}
+
+const std::string& Pieces::BasePiece::GetPieceName() const
+{
+    return m_pieceName;
 }
 
 const std::string& Pieces::BasePiece::GetPieceChar() const

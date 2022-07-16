@@ -37,12 +37,13 @@ struct Pieces::Position
 class Pieces::BasePiece
 {
 public:
-    BasePiece(const PieceColor& color=UNDEF,
+    BasePiece(const std::string& name="Base", const PieceColor& color=UNDEF,
             const Position& position=Position(-1, -1));
     virtual ~BasePiece() = default;
 
 public:
     void SetHittable(bool isHittable);
+    const std::string& GetPieceName() const;
     const std::string& GetPieceChar() const;
     PieceColor GetColor() const;
     Position GetPosition() const;
@@ -55,6 +56,7 @@ protected:
             const std::string& white, const std::string& black);
 
 protected:
+    std::string m_pieceName;
     std::string m_pieceChar;
     std::string m_pieceInitialChar;
     Pieces::PieceColor m_color;

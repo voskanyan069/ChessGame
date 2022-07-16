@@ -7,7 +7,7 @@
 
 Pieces::Pawn::Pawn(const Pieces::PieceColor& color,
         const Pieces::Position& position)
-    : Pieces::BasePiece(color, position)
+    : Pieces::BasePiece("Pawn", color, position)
 {
     setPieceChar(color, "♙", "♟");
 }

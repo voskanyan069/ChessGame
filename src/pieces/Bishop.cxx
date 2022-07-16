@@ -4,7 +4,7 @@
 
 Pieces::Bishop::Bishop(const Pieces::PieceColor& color,
         const Pieces::Position& position)
-    : Pieces::BasePiece(color, position)
+    : Pieces::BasePiece("Bishop", color, position)
 {
     setPieceChar(color, "♗", "♝");
 }
@@ -22,17 +22,21 @@ void Pieces::Bishop::getAvailableMoves(Pieces::Positions& positions) const
         {
             int row = m_position.x + rowDelta * j;
             int col = m_position.y + colDelta * j;
+            Pieces::Position pos(row, col);
+            if (pos == m_position)
+            {
+                continue;
+            }
             if (row < 0 || row > 7 || col < 0 || col > 7)
             {
                 break;
             }
-            Pieces::Position pos(row, col);
-            if (!board->IsFree(pos) && pos != m_position)
+            if (!board->IsFree(pos))
             {
                 if (board->IsEnemy(m_position, pos))
                 {
                     positions.push_back(pos);
-                    board->GetPiece(pos)->SetHittable(1);
+                    board->GetPiece(pos)->SetHittable(true);
                 }
                 break;
             }

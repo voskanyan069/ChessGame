@@ -4,7 +4,7 @@
 
 Pieces::Knight::Knight(const Pieces::PieceColor& color,
         const Pieces::Position& position)
-    : Pieces::BasePiece(color, position)
+    : Pieces::BasePiece("Knight", color, position)
 {
     setPieceChar(color, "♘", "♞");
 }

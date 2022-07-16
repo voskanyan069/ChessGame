@@ -5,7 +5,7 @@
 
 Pieces::Queen::Queen(const Pieces::PieceColor& color,
         const Pieces::Position& position)
-    : Pieces::BasePiece(color, position)
+    : Pieces::BasePiece("Queen", color, position)
 {
     setPieceChar(color, "♕", "♛");
 }

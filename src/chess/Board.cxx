@@ -118,17 +118,19 @@ void Chess::Board::initBoard()
         m_board[i] = new Pieces::BasePiece*[8];
     }
     initEmptyFields();
-    initPieces();
-    //m_board[4][4] = Pieces::CreatePiece<
-    //    Pieces::Queen>(Pieces::WHITE, Pieces::Position(4, 4));
-    //m_board[5][5] = Pieces::CreatePiece<
-    //    Pieces::Bishop>(Pieces::BLACK, Pieces::Position(5, 5));
-    //m_board[5][3] = Pieces::CreatePiece<
-    //    Pieces::Rook>(Pieces::WHITE, Pieces::Position(5, 3));
-    //m_board[1][3] = Pieces::CreatePiece<
-    //    Pieces::Knight>(Pieces::BLACK, Pieces::Position(2, 3));
-    //m_board[3][7] = Pieces::CreatePiece<
-    //    Pieces::Bishop>(Pieces::BLACK, Pieces::Position(3, 7));
+    //initPieces();
+    m_board[0][4] = Pieces::CreatePiece<
+        Pieces::King>(Pieces::WHITE, Pieces::Position(0, 4));
+    m_board[1][3] = Pieces::CreatePiece<
+        Pieces::King>(Pieces::BLACK, Pieces::Position(1, 3));
+    m_board[5][5] = Pieces::CreatePiece<
+        Pieces::Bishop>(Pieces::BLACK, Pieces::Position(5, 5));
+    m_board[5][3] = Pieces::CreatePiece<
+        Pieces::Rook>(Pieces::WHITE, Pieces::Position(5, 3));
+    m_board[2][3] = Pieces::CreatePiece<
+        Pieces::Knight>(Pieces::BLACK, Pieces::Position(2, 3));
+    m_board[3][7] = Pieces::CreatePiece<
+        Pieces::Bishop>(Pieces::BLACK, Pieces::Position(3, 7));
 }
 
 bool Chess::Board::IsFree(const Pieces::Position& pos) const
