@@ -30,8 +30,9 @@ private:
     Logger();
 
 public:
-    void SetStream(std::ostream* os);
+    void PrintHelp(const std::string& helpMsg) const;
     void PrintBoard() const;
+    void SetStream(std::ostream* os);
 
 public:
     template<typename... Arguments>

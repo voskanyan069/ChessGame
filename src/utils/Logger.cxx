@@ -93,9 +93,9 @@ void Logger::printLines() const
     }
 }
 
-void Logger::SetStream(std::ostream* os)
+void Logger::PrintHelp(const std::string& helpMsg) const
 {
-    m_os = os;
+    std::cout << helpMsg;
 }
 
 void Logger::PrintBoard() const
@@ -104,4 +104,9 @@ void Logger::PrintBoard() const
     printLines();
     printLetters(false);
     m_board->DestroyEmpties();
+}
+
+void Logger::SetStream(std::ostream* os)
+{
+    m_os = os;
 }

@@ -4,11 +4,14 @@
 #include "player/Player.hxx"
 #include "player/PlayerMgr.hxx"
 #include "pieces/BasePiece.hxx"
+#include "args/ArgsParser.hxx"
 
 #include <iostream>
 
-int main()
+int main(int argc, char** argv)
 {
+    ArgsParser parser;
+    parser.ParseArguments(argc, argv);
     Pieces::Position pos;
     Pieces::Position newPos;
     Pieces::BasePiece* pBP;
