@@ -77,6 +77,7 @@ void Pieces::BasePiece::GetAvailableMoves(Pieces::Positions& positions)
 
 void Pieces::BasePiece::Move(const Pieces::Position& position)
 {
+    bool isMoved = false;
     Chess::Board* board = Chess::Board::GetInstance();
     Pieces::BasePiece*** pieces = board->GetBoard();
     for (auto& pos : m_vecAvailableMoves)
@@ -101,7 +102,10 @@ void Pieces::BasePiece::Move(const Pieces::Position& position)
         pieces[m_position.x][m_position.y] = nullptr;
         m_position.x = position.x;
         m_position.y = position.y;
-        return;
+        isMoved = true;
     }
-    throw Utils::Exception("Incorrect position");
+    if (!isMoved)
+    {
+        throw Utils::Exception("Incorrect position");
+    }
 }

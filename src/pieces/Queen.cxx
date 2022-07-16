@@ -1,5 +1,7 @@
 #include "pieces/BasePiece.hxx"
 #include "pieces/Queen.hxx"
+#include "pieces/Bishop.hxx"
+#include "pieces/Rook.hxx"
 
 Pieces::Queen::Queen(const Pieces::PieceColor& color,
         const Pieces::Position& position)
@@ -10,4 +12,8 @@ Pieces::Queen::Queen(const Pieces::PieceColor& color,
 
 void Pieces::Queen::getAvailableMoves(Pieces::Positions& positions) const
 {
+    Pieces::Bishop bishop(m_color, m_position);
+    Pieces::Rook rook(m_color, m_position);
+    bishop.GetAvailableMoves(positions);
+    rook.GetAvailableMoves(positions);
 }

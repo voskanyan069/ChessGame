@@ -20,9 +20,9 @@ int main()
     blackPlayer->name = "black";
     playerMgr->InitPlayer(Pieces::PieceColor::WHITE, whitePlayer);
     playerMgr->InitPlayer(Pieces::PieceColor::BLACK, blackPlayer);
+    Logger::GetInstance()->PrintBoard();
     for (int i = 0; i < 2; ++i)
     {
-        Logger::GetInstance()->PrintBoard();
         Query::GetInstance()->AskPosition("Current position", pos);
         //pos = Pieces::Position(4, 4);
         pBP = pBoard->GetPiece(pos);
