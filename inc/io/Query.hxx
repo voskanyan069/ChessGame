@@ -1,5 +1,5 @@
-#ifndef __UTILS_QUERY_HXX__
-#define __UTILS_QUERY_HXX__
+#ifndef __IO_QUERY_HXX__
+#define __IO_QUERY_HXX__
 
 #include <string>
 
@@ -22,4 +22,4 @@ public:
     void AskPosition(const std::string& msg, Pieces::Position& pos) const;
 };
 
-#endif // __UTILS_QUERY_HXX__
+#endif // __IO_QUERY_HXX__

@@ -1,6 +1,10 @@
 #ifndef __ARGS_ARGS_PARSER_HXX__
 #define __ARGS_ARGS_PARSER_HXX__
 
+#include "args/CMDArgument.hxx"
+
+#include <string>
+
 #include <boost/program_options.hpp>
 
 namespace po = boost::program_options;
@@ -8,15 +12,25 @@ namespace po = boost::program_options;
 class ArgsParser
 {
 public:
-    ArgsParser();
+    ArgsParser(int argc, char** argv);
     ~ArgsParser();
 
 public:
-    void ParseArguments(int argc, char** argv);
+    bool ParseArguments();
+    void GetHelpMessage(std::string& helpMsg);
+
+public:
+    template <typename T>
+    void AddOption(const char* key, const char* desc,
+            const T& defaultValue)
+    {
+        m_desc->add_options()
+            (key, po::value<T>()->default_value(defaultValue), desc);
+    }
 
 private:
-    void addOptions();
-    void countOptions();
+    template <typename T>
+    void setOption(const std::string& key, const T& val);
 
 private:
     int m_argc;

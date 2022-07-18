@@ -119,8 +119,8 @@ void Chess::Board::initBoard()
     }
     initEmptyFields();
     initPieces();
-    //m_board[0][4] = Pieces::CreatePiece<
-    //    Pieces::King>(Pieces::WHITE, Pieces::Position(0, 4));
+    //m_board[4][4] = Pieces::CreatePiece<
+    //    Pieces::Queen>(Pieces::WHITE, Pieces::Position(4, 4));
     //m_board[1][3] = Pieces::CreatePiece<
     //    Pieces::King>(Pieces::BLACK, Pieces::Position(1, 3));
     //m_board[5][5] = Pieces::CreatePiece<

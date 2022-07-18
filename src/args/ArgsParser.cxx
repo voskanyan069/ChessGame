@@ -1,6 +1,4 @@
 #include "args/ArgsParser.hxx"
-#include "args/CMDArgument.hxx"
-#include "utils/Logger.hxx"
 
 #include <sstream>
 
@@ -8,53 +6,56 @@
 
 namespace po = boost::program_options;
 
-ArgsParser::ArgsParser()
-    : m_argc(0)
-    , m_argv(nullptr)
+ArgsParser::ArgsParser(int argc, char** argv)
+    : m_argc(argc)
+    , m_argv(argv)
     , m_desc(new po::options_description("Allowed options"))
     , m_vm(new po::variables_map())
 {
+    m_desc->add_options()
+        ("help,h", "show help message");
 }
 
 ArgsParser::~ArgsParser()
 {
-    delete m_argv;
     delete m_desc;
     delete m_vm;
     CMDArguments::GetInstance()->ClearArguments();
 }
 
-void ArgsParser::ParseArguments(int argc, char** argv)
+template <typename T>
+void ArgsParser::setOption(const std::string& key, const T& val)
 {
-    m_argc = argc;
-    m_argv = argv;
-    addOptions();
-    if (m_vm->count("help"))
-    {
-        std::stringstream ss;
-        ss << *m_desc;
-        Logger::GetInstance()->PrintHelp(ss.str());
-        std::exit(1);
-    }
-    countOptions();
+    CMDArgument<T>* arg = new CMDArgument<T>(val);
+    CMDArguments::GetInstance()->SetArgument(key, (ArgumentBase*)arg);
 }
 
-void ArgsParser::countOptions()
+bool ArgsParser::ParseArguments()
 {
-    CMDStrArgument* arg = nullptr;
-
-    // Address of host
-    arg = new CMDStrArgument((*m_vm)["host"].as<std::string>());
-    CMDArguments::GetInstance()->SetArgument("host", (ArgumentBase*)arg);
-}
-
-void ArgsParser::addOptions()
-{
-    m_desc->add_options()
-        ("help,h", "show help message")
-        ("host,H", po::value<std::string>()->default_value("localhost"),
-         "host address to connect")
-        ;
     po::store(po::parse_command_line(m_argc, m_argv, *m_desc), *m_vm);
     po::notify(*m_vm);
+    if (m_vm->count("help"))
+    {
+        return false;
+    }
+    for (const auto& it : *m_vm)
+    {
+        auto& value = it.second.value();
+        if (auto v = boost::any_cast<int>(&value))
+        {
+            setOption(it.first, *v);
+        }
+        else if (auto v = boost::any_cast<std::string>(&value))
+        {
+            setOption(it.first, *v);
+        }
+    }
+    return true;
+}
+
+void ArgsParser::GetHelpMessage(std::string& helpMsg)
+{
+    std::stringstream ss;
+    ss << *m_desc;
+    helpMsg = ss.str();
 }

@@ -1,0 +1,16 @@
+syntax = 'proto3';
+
+package Proto;
+
+message Empty {
+};
+
+message ActionResult {
+    bool success = 1;
+    string errmsg = 2;
+};
+
+message ServerInfo {
+    string hostname = 1;
+    int32 port = 2;
+};

@@ -1,5 +1,5 @@
-#ifndef __UTILS_LOGGER_HXX__
-#define __UTILS_LOGGER_HXX__
+#ifndef __IO_LOGGER_HXX__
+#define __IO_LOGGER_HXX__
 
 #include "pieces/BasePiece.hxx"
 
@@ -57,4 +57,4 @@ private:
     Chess::Board* m_board;
 };
 
-#endif // __UTILS_LOGGER_HXX__
+#endif // __IO_LOGGER_HXX__

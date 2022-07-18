@@ -1,0 +1,9 @@
+syntax = 'proto3';
+
+import 'ChessServerTypes.proto';
+
+package Proto;
+
+service ChessServer {
+    rpc ConnectToServer (Empty) returns (ActionResult) {};
+}

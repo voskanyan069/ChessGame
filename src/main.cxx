@@ -1,17 +1,31 @@
-#include "utils/Logger.hxx"
-#include "utils/Query.hxx"
+#include "io/Logger.hxx"
+#include "io/Query.hxx"
 #include "chess/Board.hxx"
 #include "player/Player.hxx"
 #include "player/PlayerMgr.hxx"
 #include "pieces/BasePiece.hxx"
 #include "args/ArgsParser.hxx"
+#include "args/CMDArgument.hxx"
+#include "client/ChessClient.hxx"
 
 #include <iostream>
 
-int main(int argc, char** argv)
+void initArgsParser(ArgsParser& parser)
 {
-    ArgsParser parser;
-    parser.ParseArguments(argc, argv);
+    parser.AddOption<std::string>("host,H", "host address of the server",
+            "localhost");
+    parser.AddOption<int>("port,P", "port of the server", 58001);
+    if (!parser.ParseArguments())
+    {
+        std::string helpMsg;
+        parser.GetHelpMessage(helpMsg);
+        Logger::GetInstance()->PrintHelp(helpMsg);
+        std::exit(1);
+    }
+}
+
+void testBoard()
+{
     Pieces::Position pos;
     Pieces::Position newPos;
     Pieces::BasePiece* pBP;
@@ -30,7 +44,7 @@ int main(int argc, char** argv)
         //pos = Pieces::Position(4, 4);
         pBP = pBoard->GetPiece(pos);
         if (nullptr == pBP)
-            return 1;
+            std::exit(-1);
         Pieces::Positions positions;
         pBP->GetAvailableMoves(positions);
         pBoard->SetAvailableMoves(positions);
@@ -41,5 +55,23 @@ int main(int argc, char** argv)
     }
     delete whitePlayer;
     delete blackPlayer;
+}
+
+void testConnection()
+{
+    std::string hostname = CMDArguments::GetInstance()->Find("host")->Get<std::string>();
+    int port = CMDArguments::GetInstance()->Find("port")->Get<int>();
+    hostname += ":" + std::to_string(port);
+    Remote::ChessClient client(hostname);
+    std::cout << "Connecting to " << hostname << std::endl;
+    client.ConnectToServer();
+}
+
+int main(int argc, char** argv)
+{
+    ArgsParser parser(argc, argv);
+    initArgsParser(parser);
+    testBoard();
+    //testConnection();
     return 0;
 }

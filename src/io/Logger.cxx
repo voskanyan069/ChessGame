@@ -1,4 +1,4 @@
-#include "utils/Logger.hxx"
+#include "io/Logger.hxx"
 #include "chess/Board.hxx"
 #include "pieces/BasePiece.hxx"
 #include "pieces/Pawn.hxx"

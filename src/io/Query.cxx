@@ -1,4 +1,4 @@
-#include "utils/Query.hxx"
+#include "io/Query.hxx"
 #include "utils/Exception.hxx"
 #include "chess/GameMgr.hxx"
 #include "player/Player.hxx"
