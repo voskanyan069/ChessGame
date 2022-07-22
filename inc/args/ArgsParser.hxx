@@ -20,6 +20,12 @@ public:
     void GetHelpMessage(std::string& helpMsg);
 
 public:
+    void AddSwitch(const char* key, const char* desc, bool& value)
+    {
+        m_desc->add_options()
+            (key, po::bool_switch(&value), desc);
+    }
+
     template <typename T>
     void AddOption(const char* key, const char* desc,
             const T& defaultValue)

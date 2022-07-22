@@ -5,5 +5,9 @@ import 'ChessServerTypes.proto';
 package Proto;
 
 service ChessServer {
-    rpc ConnectToServer (Empty) returns (ActionResult) {};
+    rpc IsRoomExists (String) returns (Bool) {};
+    rpc CreateRoom (RoomSettings) returns (ActionResult) {};
+    rpc JoinRoom (RoomSettings) returns (ActionResult) {};
+    rpc MovePiece (MoveRequest) returns (Empty) {};
+    rpc ReadPieceMove (RoomSettings) returns (LastMoveInfo) {};
 }

@@ -2,6 +2,7 @@
 #define __IO_LOGGER_HXX__
 
 #include "pieces/BasePiece.hxx"
+#include "utils/Exception.hxx"
 
 #include <boost/format.hpp>
 
@@ -35,6 +36,7 @@ public:
     void SetStream(std::ostream* os);
 
 public:
+    void Print(const Utils::Exception& error) const;
     template<typename... Arguments>
     void Print(const MessageType& type, const std::string& fmt,
             Arguments&&... args) const

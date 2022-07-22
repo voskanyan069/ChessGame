@@ -50,12 +50,17 @@ void AddDescriptorsImpl() {
   InitDefaults();
   static const char descriptor[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
       "\n\021ChessServer.proto\022\005Proto\032\026ChessServerT"
-      "ypes.proto2E\n\013ChessServer\0226\n\017ConnectToSe"
-      "rver\022\014.Proto.Empty\032\023.Proto.ActionResult\""
-      "\000b\006proto3"
+      "ypes.proto2\233\002\n\013ChessServer\022,\n\014IsRoomExis"
+      "ts\022\r.Proto.String\032\013.Proto.Bool\"\000\0228\n\nCrea"
+      "teRoom\022\023.Proto.RoomSettings\032\023.Proto.Acti"
+      "onResult\"\000\0226\n\010JoinRoom\022\023.Proto.RoomSetti"
+      "ngs\032\023.Proto.ActionResult\"\000\022/\n\tMovePiece\022"
+      "\022.Proto.MoveRequest\032\014.Proto.Empty\"\000\022;\n\rR"
+      "eadPieceMove\022\023.Proto.RoomSettings\032\023.Prot"
+      "o.LastMoveInfo\"\000b\006proto3"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 129);
+      descriptor, 344);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "ChessServer.proto", &protobuf_RegisterTypes);
   ::protobuf_ChessServerTypes_2eproto::AddDescriptors();

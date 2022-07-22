@@ -93,6 +93,11 @@ void Logger::printLines() const
     }
 }
 
+void Logger::Print(const Utils::Exception& error) const
+{
+    Print(ERROR, "%s: %s", error.GetType(), error.GetMessage());
+}
+
 void Logger::PrintHelp(const std::string& helpMsg) const
 {
     std::cout << helpMsg;

@@ -5,8 +5,20 @@
 
 #include <string>
 
+namespace grpc
+{
+    class Status;
+}
+
+namespace Pieces
+{
+    struct Position;
+}
+
 namespace Remote
 {
+    struct Room;
+    struct LastMove;
     class ChessClient;
 };
 
@@ -17,7 +29,15 @@ public:
     ~ChessClient() = default;
 
 public:
-    void ConnectToServer();
+    bool IsRoomExists(const std::string& name);
+    void CreateRoom(const Remote::Room& room);
+    void JoinRoom(const Remote::Room& room);
+    void MovePiece(const Remote::Room& room, const Pieces::Position& oldPos,
+            const Pieces::Position& newPos);
+    void ReadLastMove(const Remote::Room& room, Remote::LastMove& lastMove);
+
+private:
+    void checkRequestStatus(const grpc::Status& status);
 
 private:
     std::unique_ptr<Proto::ChessServer::Stub> m_stub;

@@ -12,14 +12,16 @@ namespace Utils
 class Utils::Exception : public std::exception
 {
 public:
-    Exception(const std::string& message="");
+    Exception(const std::string& message="", const std::string& type="Error");
     ~Exception() = default;
 
 public:
-    std::string GetMessage();
+    std::string GetType() const;
+    std::string GetMessage() const;
     char const* what() const throw();
 
 private:
+    const std::string m_type;
     const std::string m_message;
 };
 

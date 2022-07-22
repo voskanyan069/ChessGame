@@ -1,5 +1,7 @@
 #include "io/Logger.hxx"
 #include "io/Query.hxx"
+#include "utils/Types.hxx"
+#include "utils/Exception.hxx"
 #include "chess/Board.hxx"
 #include "player/Player.hxx"
 #include "player/PlayerMgr.hxx"
@@ -15,6 +17,8 @@ void initArgsParser(ArgsParser& parser)
     parser.AddOption<std::string>("host,H", "host address of the server",
             "localhost");
     parser.AddOption<int>("port,P", "port of the server", 58001);
+    parser.AddOption<std::string>("room,r", "create or join to room", "");
+    parser.AddOption<std::string>("password,p", "password of the room", "");
     if (!parser.ParseArguments())
     {
         std::string helpMsg;
@@ -59,19 +63,102 @@ void testBoard()
 
 void testConnection()
 {
-    std::string hostname = CMDArguments::GetInstance()->Find("host")->Get<std::string>();
-    int port = CMDArguments::GetInstance()->Find("port")->Get<int>();
+    CMDArguments* args = CMDArguments::GetInstance();
+    std::string hostname = args->Find("host")->Get<std::string>();
+    int port = args->Find("port")->Get<int>();
+    Remote::Room room(args->Find("room")->Get<std::string>(),
+            args->Find("password")->Get<std::string>());
     hostname += ":" + std::to_string(port);
     Remote::ChessClient client(hostname);
-    std::cout << "Connecting to " << hostname << std::endl;
-    client.ConnectToServer();
+    Logger::GetInstance()->Print(INFO, "Connecting to %s...", hostname);
+    try
+    {
+        if (client.IsRoomExists(room.name))
+        {
+            Logger::GetInstance()->Print(INFO, "Trying to join %s...",
+                    room.name);
+            client.JoinRoom(room);
+            Logger::GetInstance()->Print(INFO, "Joined to %s", room.name);
+
+            Pieces::Position pos;
+            Pieces::Position newPos;
+            Pieces::BasePiece* pBP;
+            Chess::Board* pBoard = Chess::Board::GetInstance();
+            PlayerMgr* playerMgr = PlayerMgr::GetInstance();
+            Player* whitePlayer = new Player();
+            Player* blackPlayer = new Player();
+            whitePlayer->name = "white";
+            blackPlayer->name = "black";
+            playerMgr->InitPlayer(Pieces::PieceColor::WHITE, whitePlayer);
+            playerMgr->InitPlayer(Pieces::PieceColor::BLACK, blackPlayer);
+            Logger::GetInstance()->PrintBoard();
+            Query::GetInstance()->AskPosition("Current position", pos);
+            pBP = pBoard->GetPiece(pos);
+            if (nullptr == pBP)
+                std::exit(-1);
+            Pieces::Positions positions;
+            pBP->GetAvailableMoves(positions);
+            pBoard->SetAvailableMoves(positions);
+            Logger::GetInstance()->PrintBoard();
+            Query::GetInstance()->AskPosition("New position", newPos);
+            pBP->Move(newPos);
+            client.MovePiece(room, pos, newPos);
+            Logger::GetInstance()->PrintBoard();
+        }
+        else
+        {
+            Logger::GetInstance()->Print(INFO, "Trying to create room %s...",
+                    room.name);
+            client.CreateRoom(room);
+            Logger::GetInstance()->Print(INFO, "Created and joined to %s",
+                    room.name);
+
+            Pieces::Position pos;
+            Pieces::Position newPos;
+            Pieces::BasePiece* pBP;
+            Chess::Board* pBoard = Chess::Board::GetInstance();
+            PlayerMgr* playerMgr = PlayerMgr::GetInstance();
+            Player* whitePlayer = new Player();
+            Player* blackPlayer = new Player();
+            whitePlayer->name = "white";
+            blackPlayer->name = "black";
+            playerMgr->InitPlayer(Pieces::PieceColor::WHITE, whitePlayer);
+            playerMgr->InitPlayer(Pieces::PieceColor::BLACK, blackPlayer);
+            Logger::GetInstance()->PrintBoard();
+            Logger::GetInstance()->Print(INFO, "Waiting for oponent move...\n");
+            Remote::LastMove lastMove;
+            client.ReadLastMove(room, lastMove);
+            Pieces::Positions positions;
+            pBP = pBoard->GetPiece(lastMove.oldPos);
+            pBP->GetAvailableMoves(positions);
+            pBP->Move(lastMove.newPos);
+            Logger::GetInstance()->PrintBoard();
+            Query::GetInstance()->AskPosition("Current position", pos);
+            pBP = pBoard->GetPiece(pos);
+            if (nullptr == pBP)
+                std::exit(-1);
+            positions.clear();
+            pBP->GetAvailableMoves(positions);
+            pBoard->SetAvailableMoves(positions);
+            Logger::GetInstance()->PrintBoard();
+            Query::GetInstance()->AskPosition("New position", newPos);
+            pBP->Move(newPos);
+            client.MovePiece(room, pos, newPos);
+            Logger::GetInstance()->PrintBoard();
+        }
+    }
+    catch (const Utils::Exception& e)
+    {
+        Logger::GetInstance()->Print(e);
+        std::exit(1);
+    }
 }
 
 int main(int argc, char** argv)
 {
     ArgsParser parser(argc, argv);
     initArgsParser(parser);
-    testBoard();
-    //testConnection();
+    //testBoard();
+    testConnection();
     return 0;
 }

@@ -5,12 +5,36 @@ package Proto;
 message Empty {
 };
 
-message ActionResult {
-    bool success = 1;
-    string errmsg = 2;
+message Bool {
+    bool value = 1;
 };
 
-message ServerInfo {
-    string hostname = 1;
-    int32 port = 2;
+message String {
+    string value = 1;
+}
+
+message ActionResult {
+    bool ok = 1;
+    string msg = 2;
+}
+
+message Position {
+    int32 x = 1;
+    int32 y = 2;
+}
+
+message RoomSettings {
+    string name = 1;
+    string password = 2;
 };
+
+message MoveRequest {
+    RoomSettings room = 1;
+    Position oldPosition = 2;
+    Position newPosition = 3;
+};
+
+message LastMoveInfo {
+    Position oldPosition = 1;
+    Position newPosition = 2;
+}

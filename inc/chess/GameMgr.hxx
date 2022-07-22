@@ -20,8 +20,10 @@ private:
 
 public:
     Pieces::PieceColor GetTurn();
+    void SetRoom(const Remote::Room& room);
 
 private:
+    Remote::Room m_room;
     Pieces::PieceColor m_turn;
 };
 
