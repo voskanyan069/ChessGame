@@ -3,10 +3,18 @@
 
 #include <string>
 #include <vector>
+#include <memory>
+
+#include <boost/thread/mutex.hpp>
+#include <boost/thread/condition_variable.hpp>
+
+typedef std::shared_ptr<boost::mutex> BoostMutexSP;
+typedef std::shared_ptr<boost::condition_variable> BoostConditionVariableSP;
 
 namespace Remote
 {
     struct Room;
+    struct ServerRoom;
     struct LastMove;
 }
 
@@ -39,6 +47,32 @@ struct Pieces::Position
     }
 };
 
+struct Remote::LastMove
+{
+    Pieces::Position oldPos;
+    Pieces::Position newPos;
+
+    LastMove(const Pieces::Position& oldPos=(-1, -1),
+             const Pieces::Position& newPos=(-1, -1))
+        : oldPos(oldPos)
+        , newPos(newPos)
+    {
+    }
+
+    bool IsNull()
+    {
+        return oldPos.x == -1;
+    }
+
+    void Clean()
+    {
+        oldPos.x = -1;
+        oldPos.y = -1;
+        newPos.x = -1;
+        newPos.y = -1;
+    }
+};
+
 struct Remote::Room
 {
     std::string name;
@@ -51,17 +85,13 @@ struct Remote::Room
     }
 };
 
-struct Remote::LastMove
+struct Remote::ServerRoom
 {
-    Pieces::Position oldPos;
-    Pieces::Position newPos;
-
-    LastMove(const Pieces::Position& oldPos=(-1, -1),
-             const Pieces::Position& newPos=(-1, -1))
-        : oldPos(oldPos)
-        , newPos(newPos)
-    {
-    }
+    std::string password;
+    bool isLastMoveRead;
+    Remote::LastMove lastMove;
+    BoostMutexSP moveMutex;
+    BoostConditionVariableSP moveConditionVar;    
 };
 
 #endif // __UTILS_TYPES_HXX__

@@ -10,11 +10,10 @@
 #include <map>
 
 #include <grpcpp/grpcpp.h>
-#include <boost/thread/mutex.hpp>
-#include <boost/thread/condition_variable.hpp>
 
 namespace Remote
 {
+    class ServerRoom;
     class ChessServiceImpl;
 };
 
@@ -22,7 +21,7 @@ class Remote::ChessServiceImpl final : public Proto::ChessServer::Service
 {
 public:
     ChessServiceImpl();
-    ~ChessServiceImpl() = default;
+    ~ChessServiceImpl();
 
 public:
     grpc::Status IsRoomExists(grpc::ServerContext* context,
@@ -42,11 +41,7 @@ public:
             Proto::LastMoveInfo* response) override;
 
 private:
-    bool m_isLastMoveRead;
-    boost::mutex m_mutex;
-    boost::condition_variable m_condition;
-    std::map<std::string, std::string> m_mapRooms;
-    std::map<std::string, Remote::LastMove> m_mapLastMove;
+    std::map<std::string, Remote::ServerRoom> m_mapRooms;
 };
 
 #endif // __SERVER_CHESS_SERVICE_IMPL_HXX__

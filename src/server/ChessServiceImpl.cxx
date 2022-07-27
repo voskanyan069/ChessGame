@@ -8,8 +8,12 @@
 #include <grpcpp/grpcpp.h>
 
 Remote::ChessServiceImpl::ChessServiceImpl()
-    : m_isLastMoveRead(false)
 {
+}
+
+Remote::ChessServiceImpl::~ChessServiceImpl()
+{
+    m_mapRooms.clear();
 }
 
 grpc::Status Remote::ChessServiceImpl::IsRoomExists(
@@ -44,7 +48,10 @@ grpc::Status Remote::ChessServiceImpl::CreateRoom(
         response->set_msg("Room with this name already exists");
         return grpc::Status::OK;
     }
-    m_mapRooms[name] = pass;
+    m_mapRooms[name].password = pass;
+    m_mapRooms[name].isLastMoveRead = false;
+    m_mapRooms[name].moveMutex.reset(new boost::mutex());
+    m_mapRooms[name].moveConditionVar.reset(new boost::condition_variable());
     response->set_ok(true);
     std::cout << context->peer() << " has created " << name
         << " room" << std::endl;
@@ -65,7 +72,7 @@ grpc::Status Remote::ChessServiceImpl::JoinRoom(
         response->set_msg("Room with this name does not exists");
         return grpc::Status::OK;
     }
-    if (it->second != pass)
+    if (it->second.password != pass)
     {
         response->set_ok(false);
         response->set_msg("Incorrect passsword of the room");
@@ -89,10 +96,10 @@ grpc::Status Remote::ChessServiceImpl::MovePiece(
     P2C_Converter::ConvertPosition(request->newposition(), newPos);
     Remote::LastMove lm(oldPos, newPos);
     std::pair<std::string, Remote::LastMove> pair = std::make_pair(room, lm);
-    m_mapLastMove.insert(pair);
-    boost::mutex::scoped_lock lock(m_mutex);
-    m_isLastMoveRead = true;
-    m_condition.notify_one();
+    m_mapRooms[room].lastMove = lm;
+    boost::mutex::scoped_lock lock(*(m_mapRooms[room].moveMutex));
+    m_mapRooms[room].isLastMoveRead = true;
+    m_mapRooms[room].moveConditionVar->notify_one();
     return grpc::Status::OK;
 }
 
@@ -101,19 +108,18 @@ grpc::Status Remote::ChessServiceImpl::ReadPieceMove(
         const Proto::RoomSettings* request,
         Proto::LastMoveInfo* response)
 {
-    m_isLastMoveRead = false;
-    boost::mutex::scoped_lock lock(m_mutex);
-    while (!m_isLastMoveRead)
-    {
-        m_condition.wait(lock);
-    }
     std::string room = request->name();
-    const auto& it = m_mapLastMove.find(room);
-    if (m_mapLastMove.end() == it)
+    m_mapRooms[room].isLastMoveRead = false;
+    boost::mutex::scoped_lock lock(*(m_mapRooms[room].moveMutex));
+    while (!m_mapRooms[room].isLastMoveRead)
+    {
+        m_mapRooms[room].moveConditionVar->wait(lock);
+    }
+    if (m_mapRooms[room].lastMove.IsNull())
     {
         return grpc::Status::OK;
     }
-    C2P_Converter::ConvertLastMoveInfo(it->second, *response);
-    m_mapLastMove.erase(room);
+    C2P_Converter::ConvertLastMoveInfo(m_mapRooms[room].lastMove, *response);
+    m_mapRooms[room].lastMove.Clean();
     return grpc::Status::OK;
 }
