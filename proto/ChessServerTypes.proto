@@ -2,6 +2,11 @@ syntax = 'proto3';
 
 package Proto;
 
+enum PlayerType {
+    OWNER = 0;
+    GUEST = 1;
+};
+
 message Empty {
 };
 
@@ -27,6 +32,17 @@ message RoomSettings {
     string name = 1;
     string password = 2;
 };
+
+message RoomWithUsername {
+    RoomSettings room = 1;
+    string username = 2;
+}
+
+message ReadyRequest {
+    RoomSettings room = 1;
+    PlayerType playertype = 2;
+    bool isready = 3;
+}
 
 message MoveRequest {
     RoomSettings room = 1;

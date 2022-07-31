@@ -8,13 +8,16 @@
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/condition_variable.hpp>
 
-typedef std::shared_ptr<boost::mutex> BoostMutexSP;
-typedef std::shared_ptr<boost::condition_variable> BoostConditionVariableSP;
+typedef std::unique_ptr<boost::mutex> BoostMutexUP;
+typedef std::unique_ptr<boost::condition_variable> BoostConditionVariableUP;
 
 namespace Remote
 {
+    typedef enum { OWNER, GUEST } PlayerType;
     struct Room;
+    struct Player;
     struct ServerRoom;
+    struct ServerPlayer;
     struct LastMove;
 }
 
@@ -85,13 +88,29 @@ struct Remote::Room
     }
 };
 
+struct Remote::Player
+{
+    PlayerType playerType;
+    bool isReady;
+};
+
+struct Remote::ServerPlayer
+{
+    std::string username;
+    bool isReady;
+};
+
 struct Remote::ServerRoom
 {
     std::string password;
+    Remote::ServerPlayer ownerPlayer;
+    Remote::ServerPlayer guestPlayer;
     bool isLastMoveRead;
     Remote::LastMove lastMove;
-    BoostMutexSP moveMutex;
-    BoostConditionVariableSP moveConditionVar;    
+    BoostMutexUP waitMutex;
+    BoostConditionVariableUP waitConditionVar;    
+    BoostMutexUP moveMutex;
+    BoostConditionVariableUP moveConditionVar;    
 };
 
 #endif // __UTILS_TYPES_HXX__

@@ -27,8 +27,7 @@ public:
     }
 
     template <typename T>
-    void AddOption(const char* key, const char* desc,
-            const T& defaultValue)
+    void AddOption(const char* key, const char* desc, const T& defaultValue)
     {
         m_desc->add_options()
             (key, po::value<T>()->default_value(defaultValue), desc);

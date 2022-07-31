@@ -24,21 +24,45 @@ public:
     ~ChessServiceImpl();
 
 public:
-    grpc::Status IsRoomExists(grpc::ServerContext* context,
+    grpc::Status IsRoomExists(
+            grpc::ServerContext* context,
             const Proto::String* request,
             Proto::Bool* response) override;
-    grpc::Status CreateRoom(grpc::ServerContext* context,
-            const Proto::RoomSettings* request,
+    grpc::Status CreateRoom(
+            grpc::ServerContext* context,
+            const Proto::RoomWithUsername* request,
             Proto::ActionResult* response) override;
-    grpc::Status JoinRoom(grpc::ServerContext* context,
-            const Proto::RoomSettings* request,
+    grpc::Status JoinRoom(
+            grpc::ServerContext* context,
+            const Proto::RoomWithUsername* request,
             Proto::ActionResult* response) override;
-    grpc::Status MovePiece(grpc::ServerContext* context,
+    grpc::Status GetUsername(
+            grpc::ServerContext* context,
+            const Proto::RoomWithUsername* request,
+            Proto::String* response) override;
+    grpc::Status WaitForReady(
+            grpc::ServerContext* context,
+            const Proto::RoomSettings* request,
+            Proto::Empty* response) override;
+    grpc::Status Ready(
+            grpc::ServerContext* context,
+            const Proto::ReadyRequest* request,
+            Proto::Empty* response) override;
+    grpc::Status MovePiece(
+            grpc::ServerContext* context,
             const Proto::MoveRequest* request,
             Proto::Empty* response) override;
-    grpc::Status ReadPieceMove(grpc::ServerContext* context,
+    grpc::Status ReadPieceMove(
+            grpc::ServerContext* context,
             const Proto::RoomSettings* request,
             Proto::LastMoveInfo* response) override;
+
+private:
+    bool doCheckRoomSettings(const Proto::RoomSettings& settings,
+            std::string& message) const;
+    void initMutexAndConditionVar(
+            std::unique_ptr<boost::mutex>& mutex,
+            std::unique_ptr<boost::condition_variable>& condVar) const;
 
 private:
     std::map<std::string, Remote::ServerRoom> m_mapRooms;

@@ -31,6 +31,7 @@ private:
     Logger();
 
 public:
+    void PrintEndl() const;
     void PrintHelp(const std::string& helpMsg) const;
     void PrintBoard() const;
     void SetStream(std::ostream* os);

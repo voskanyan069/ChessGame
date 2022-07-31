@@ -9,7 +9,8 @@
 namespace Pieces
 {
     class BasePiece;
-}
+    typedef std::vector<Position> Positions;
+};
 
 class Pieces::BasePiece
 {

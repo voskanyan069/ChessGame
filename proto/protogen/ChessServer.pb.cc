@@ -50,17 +50,21 @@ void AddDescriptorsImpl() {
   InitDefaults();
   static const char descriptor[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
       "\n\021ChessServer.proto\022\005Proto\032\026ChessServerT"
-      "ypes.proto2\233\002\n\013ChessServer\022,\n\014IsRoomExis"
-      "ts\022\r.Proto.String\032\013.Proto.Bool\"\000\0228\n\nCrea"
-      "teRoom\022\023.Proto.RoomSettings\032\023.Proto.Acti"
-      "onResult\"\000\0226\n\010JoinRoom\022\023.Proto.RoomSetti"
-      "ngs\032\023.Proto.ActionResult\"\000\022/\n\tMovePiece\022"
-      "\022.Proto.MoveRequest\032\014.Proto.Empty\"\000\022;\n\rR"
-      "eadPieceMove\022\023.Proto.RoomSettings\032\023.Prot"
-      "o.LastMoveInfo\"\000b\006proto3"
+      "ypes.proto2\277\003\n\013ChessServer\022,\n\014IsRoomExis"
+      "ts\022\r.Proto.String\032\013.Proto.Bool\"\000\022<\n\nCrea"
+      "teRoom\022\027.Proto.RoomWithUsername\032\023.Proto."
+      "ActionResult\"\000\022:\n\010JoinRoom\022\027.Proto.RoomW"
+      "ithUsername\032\023.Proto.ActionResult\"\000\0227\n\013Ge"
+      "tUsername\022\027.Proto.RoomWithUsername\032\r.Pro"
+      "to.String\"\000\0223\n\014WaitForReady\022\023.Proto.Room"
+      "Settings\032\014.Proto.Empty\"\000\022,\n\005Ready\022\023.Prot"
+      "o.ReadyRequest\032\014.Proto.Empty\"\000\022/\n\tMovePi"
+      "ece\022\022.Proto.MoveRequest\032\014.Proto.Empty\"\000\022"
+      ";\n\rReadPieceMove\022\023.Proto.RoomSettings\032\023."
+      "Proto.LastMoveInfo\"\000b\006proto3"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 344);
+      descriptor, 508);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "ChessServer.proto", &protobuf_RegisterTypes);
   ::protobuf_ChessServerTypes_2eproto::AddDescriptors();

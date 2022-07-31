@@ -29,6 +29,7 @@
 #include <google/protobuf/message.h>
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
+#include <google/protobuf/generated_enum_reflection.h>
 #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
 #define PROTOBUF_INTERNAL_EXPORT_protobuf_ChessServerTypes_2eproto 
@@ -38,7 +39,7 @@ namespace protobuf_ChessServerTypes_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[8];
+  static const ::google::protobuf::internal::ParseTable schema[10];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
@@ -64,9 +65,15 @@ extern MoveRequestDefaultTypeInternal _MoveRequest_default_instance_;
 class Position;
 class PositionDefaultTypeInternal;
 extern PositionDefaultTypeInternal _Position_default_instance_;
+class ReadyRequest;
+class ReadyRequestDefaultTypeInternal;
+extern ReadyRequestDefaultTypeInternal _ReadyRequest_default_instance_;
 class RoomSettings;
 class RoomSettingsDefaultTypeInternal;
 extern RoomSettingsDefaultTypeInternal _RoomSettings_default_instance_;
+class RoomWithUsername;
+class RoomWithUsernameDefaultTypeInternal;
+extern RoomWithUsernameDefaultTypeInternal _RoomWithUsername_default_instance_;
 class String;
 class StringDefaultTypeInternal;
 extern StringDefaultTypeInternal _String_default_instance_;
@@ -79,12 +86,35 @@ template<> ::Proto::Empty* Arena::CreateMaybeMessage<::Proto::Empty>(Arena*);
 template<> ::Proto::LastMoveInfo* Arena::CreateMaybeMessage<::Proto::LastMoveInfo>(Arena*);
 template<> ::Proto::MoveRequest* Arena::CreateMaybeMessage<::Proto::MoveRequest>(Arena*);
 template<> ::Proto::Position* Arena::CreateMaybeMessage<::Proto::Position>(Arena*);
+template<> ::Proto::ReadyRequest* Arena::CreateMaybeMessage<::Proto::ReadyRequest>(Arena*);
 template<> ::Proto::RoomSettings* Arena::CreateMaybeMessage<::Proto::RoomSettings>(Arena*);
+template<> ::Proto::RoomWithUsername* Arena::CreateMaybeMessage<::Proto::RoomWithUsername>(Arena*);
 template<> ::Proto::String* Arena::CreateMaybeMessage<::Proto::String>(Arena*);
 }  // namespace protobuf
 }  // namespace google
 namespace Proto {
 
+enum PlayerType {
+  OWNER = 0,
+  GUEST = 1,
+  PlayerType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  PlayerType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool PlayerType_IsValid(int value);
+const PlayerType PlayerType_MIN = OWNER;
+const PlayerType PlayerType_MAX = GUEST;
+const int PlayerType_ARRAYSIZE = PlayerType_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* PlayerType_descriptor();
+inline const ::std::string& PlayerType_Name(PlayerType value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    PlayerType_descriptor(), value);
+}
+inline bool PlayerType_Parse(
+    const ::std::string& name, PlayerType* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<PlayerType>(
+    PlayerType_descriptor(), name, value);
+}
 // ===================================================================
 
 class Empty : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:Proto.Empty) */ {
@@ -751,6 +781,253 @@ class RoomSettings : public ::google::protobuf::Message /* @@protoc_insertion_po
 };
 // -------------------------------------------------------------------
 
+class RoomWithUsername : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:Proto.RoomWithUsername) */ {
+ public:
+  RoomWithUsername();
+  virtual ~RoomWithUsername();
+
+  RoomWithUsername(const RoomWithUsername& from);
+
+  inline RoomWithUsername& operator=(const RoomWithUsername& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  RoomWithUsername(RoomWithUsername&& from) noexcept
+    : RoomWithUsername() {
+    *this = ::std::move(from);
+  }
+
+  inline RoomWithUsername& operator=(RoomWithUsername&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const RoomWithUsername& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const RoomWithUsername* internal_default_instance() {
+    return reinterpret_cast<const RoomWithUsername*>(
+               &_RoomWithUsername_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    6;
+
+  void Swap(RoomWithUsername* other);
+  friend void swap(RoomWithUsername& a, RoomWithUsername& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline RoomWithUsername* New() const final {
+    return CreateMaybeMessage<RoomWithUsername>(NULL);
+  }
+
+  RoomWithUsername* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<RoomWithUsername>(arena);
+  }
+  void CopyFrom(const ::google::protobuf::Message& from) final;
+  void MergeFrom(const ::google::protobuf::Message& from) final;
+  void CopyFrom(const RoomWithUsername& from);
+  void MergeFrom(const RoomWithUsername& from);
+  void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) final;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const final;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(RoomWithUsername* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // string username = 2;
+  void clear_username();
+  static const int kUsernameFieldNumber = 2;
+  const ::std::string& username() const;
+  void set_username(const ::std::string& value);
+  #if LANG_CXX11
+  void set_username(::std::string&& value);
+  #endif
+  void set_username(const char* value);
+  void set_username(const char* value, size_t size);
+  ::std::string* mutable_username();
+  ::std::string* release_username();
+  void set_allocated_username(::std::string* username);
+
+  // .Proto.RoomSettings room = 1;
+  bool has_room() const;
+  void clear_room();
+  static const int kRoomFieldNumber = 1;
+  private:
+  const ::Proto::RoomSettings& _internal_room() const;
+  public:
+  const ::Proto::RoomSettings& room() const;
+  ::Proto::RoomSettings* release_room();
+  ::Proto::RoomSettings* mutable_room();
+  void set_allocated_room(::Proto::RoomSettings* room);
+
+  // @@protoc_insertion_point(class_scope:Proto.RoomWithUsername)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::internal::ArenaStringPtr username_;
+  ::Proto::RoomSettings* room_;
+  mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  friend struct ::protobuf_ChessServerTypes_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
+class ReadyRequest : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:Proto.ReadyRequest) */ {
+ public:
+  ReadyRequest();
+  virtual ~ReadyRequest();
+
+  ReadyRequest(const ReadyRequest& from);
+
+  inline ReadyRequest& operator=(const ReadyRequest& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  ReadyRequest(ReadyRequest&& from) noexcept
+    : ReadyRequest() {
+    *this = ::std::move(from);
+  }
+
+  inline ReadyRequest& operator=(ReadyRequest&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const ReadyRequest& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const ReadyRequest* internal_default_instance() {
+    return reinterpret_cast<const ReadyRequest*>(
+               &_ReadyRequest_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    7;
+
+  void Swap(ReadyRequest* other);
+  friend void swap(ReadyRequest& a, ReadyRequest& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline ReadyRequest* New() const final {
+    return CreateMaybeMessage<ReadyRequest>(NULL);
+  }
+
+  ReadyRequest* New(::google::protobuf::Arena* arena) const final {
+    return CreateMaybeMessage<ReadyRequest>(arena);
+  }
+  void CopyFrom(const ::google::protobuf::Message& from) final;
+  void MergeFrom(const ::google::protobuf::Message& from) final;
+  void CopyFrom(const ReadyRequest& from);
+  void MergeFrom(const ReadyRequest& from);
+  void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) final;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const final;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(ReadyRequest* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // .Proto.RoomSettings room = 1;
+  bool has_room() const;
+  void clear_room();
+  static const int kRoomFieldNumber = 1;
+  private:
+  const ::Proto::RoomSettings& _internal_room() const;
+  public:
+  const ::Proto::RoomSettings& room() const;
+  ::Proto::RoomSettings* release_room();
+  ::Proto::RoomSettings* mutable_room();
+  void set_allocated_room(::Proto::RoomSettings* room);
+
+  // .Proto.PlayerType playertype = 2;
+  void clear_playertype();
+  static const int kPlayertypeFieldNumber = 2;
+  ::Proto::PlayerType playertype() const;
+  void set_playertype(::Proto::PlayerType value);
+
+  // bool isready = 3;
+  void clear_isready();
+  static const int kIsreadyFieldNumber = 3;
+  bool isready() const;
+  void set_isready(bool value);
+
+  // @@protoc_insertion_point(class_scope:Proto.ReadyRequest)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::Proto::RoomSettings* room_;
+  int playertype_;
+  bool isready_;
+  mutable ::google::protobuf::internal::CachedSize _cached_size_;
+  friend struct ::protobuf_ChessServerTypes_2eproto::TableStruct;
+};
+// -------------------------------------------------------------------
+
 class MoveRequest : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:Proto.MoveRequest) */ {
  public:
   MoveRequest();
@@ -786,7 +1063,7 @@ class MoveRequest : public ::google::protobuf::Message /* @@protoc_insertion_poi
                &_MoveRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    6;
+    8;
 
   void Swap(MoveRequest* other);
   friend void swap(MoveRequest& a, MoveRequest& b) {
@@ -921,7 +1198,7 @@ class LastMoveInfo : public ::google::protobuf::Message /* @@protoc_insertion_po
                &_LastMoveInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    7;
+    9;
 
   void Swap(LastMoveInfo* other);
   friend void swap(LastMoveInfo& a, LastMoveInfo& b) {
@@ -1307,6 +1584,203 @@ inline void RoomSettings::set_allocated_password(::std::string* password) {
 
 // -------------------------------------------------------------------
 
+// RoomWithUsername
+
+// .Proto.RoomSettings room = 1;
+inline bool RoomWithUsername::has_room() const {
+  return this != internal_default_instance() && room_ != NULL;
+}
+inline void RoomWithUsername::clear_room() {
+  if (GetArenaNoVirtual() == NULL && room_ != NULL) {
+    delete room_;
+  }
+  room_ = NULL;
+}
+inline const ::Proto::RoomSettings& RoomWithUsername::_internal_room() const {
+  return *room_;
+}
+inline const ::Proto::RoomSettings& RoomWithUsername::room() const {
+  const ::Proto::RoomSettings* p = room_;
+  // @@protoc_insertion_point(field_get:Proto.RoomWithUsername.room)
+  return p != NULL ? *p : *reinterpret_cast<const ::Proto::RoomSettings*>(
+      &::Proto::_RoomSettings_default_instance_);
+}
+inline ::Proto::RoomSettings* RoomWithUsername::release_room() {
+  // @@protoc_insertion_point(field_release:Proto.RoomWithUsername.room)
+  
+  ::Proto::RoomSettings* temp = room_;
+  room_ = NULL;
+  return temp;
+}
+inline ::Proto::RoomSettings* RoomWithUsername::mutable_room() {
+  
+  if (room_ == NULL) {
+    auto* p = CreateMaybeMessage<::Proto::RoomSettings>(GetArenaNoVirtual());
+    room_ = p;
+  }
+  // @@protoc_insertion_point(field_mutable:Proto.RoomWithUsername.room)
+  return room_;
+}
+inline void RoomWithUsername::set_allocated_room(::Proto::RoomSettings* room) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete room_;
+  }
+  if (room) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      room = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, room, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  room_ = room;
+  // @@protoc_insertion_point(field_set_allocated:Proto.RoomWithUsername.room)
+}
+
+// string username = 2;
+inline void RoomWithUsername::clear_username() {
+  username_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& RoomWithUsername::username() const {
+  // @@protoc_insertion_point(field_get:Proto.RoomWithUsername.username)
+  return username_.GetNoArena();
+}
+inline void RoomWithUsername::set_username(const ::std::string& value) {
+  
+  username_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:Proto.RoomWithUsername.username)
+}
+#if LANG_CXX11
+inline void RoomWithUsername::set_username(::std::string&& value) {
+  
+  username_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:Proto.RoomWithUsername.username)
+}
+#endif
+inline void RoomWithUsername::set_username(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  username_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:Proto.RoomWithUsername.username)
+}
+inline void RoomWithUsername::set_username(const char* value, size_t size) {
+  
+  username_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:Proto.RoomWithUsername.username)
+}
+inline ::std::string* RoomWithUsername::mutable_username() {
+  
+  // @@protoc_insertion_point(field_mutable:Proto.RoomWithUsername.username)
+  return username_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* RoomWithUsername::release_username() {
+  // @@protoc_insertion_point(field_release:Proto.RoomWithUsername.username)
+  
+  return username_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void RoomWithUsername::set_allocated_username(::std::string* username) {
+  if (username != NULL) {
+    
+  } else {
+    
+  }
+  username_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), username);
+  // @@protoc_insertion_point(field_set_allocated:Proto.RoomWithUsername.username)
+}
+
+// -------------------------------------------------------------------
+
+// ReadyRequest
+
+// .Proto.RoomSettings room = 1;
+inline bool ReadyRequest::has_room() const {
+  return this != internal_default_instance() && room_ != NULL;
+}
+inline void ReadyRequest::clear_room() {
+  if (GetArenaNoVirtual() == NULL && room_ != NULL) {
+    delete room_;
+  }
+  room_ = NULL;
+}
+inline const ::Proto::RoomSettings& ReadyRequest::_internal_room() const {
+  return *room_;
+}
+inline const ::Proto::RoomSettings& ReadyRequest::room() const {
+  const ::Proto::RoomSettings* p = room_;
+  // @@protoc_insertion_point(field_get:Proto.ReadyRequest.room)
+  return p != NULL ? *p : *reinterpret_cast<const ::Proto::RoomSettings*>(
+      &::Proto::_RoomSettings_default_instance_);
+}
+inline ::Proto::RoomSettings* ReadyRequest::release_room() {
+  // @@protoc_insertion_point(field_release:Proto.ReadyRequest.room)
+  
+  ::Proto::RoomSettings* temp = room_;
+  room_ = NULL;
+  return temp;
+}
+inline ::Proto::RoomSettings* ReadyRequest::mutable_room() {
+  
+  if (room_ == NULL) {
+    auto* p = CreateMaybeMessage<::Proto::RoomSettings>(GetArenaNoVirtual());
+    room_ = p;
+  }
+  // @@protoc_insertion_point(field_mutable:Proto.ReadyRequest.room)
+  return room_;
+}
+inline void ReadyRequest::set_allocated_room(::Proto::RoomSettings* room) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete room_;
+  }
+  if (room) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      room = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, room, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  room_ = room;
+  // @@protoc_insertion_point(field_set_allocated:Proto.ReadyRequest.room)
+}
+
+// .Proto.PlayerType playertype = 2;
+inline void ReadyRequest::clear_playertype() {
+  playertype_ = 0;
+}
+inline ::Proto::PlayerType ReadyRequest::playertype() const {
+  // @@protoc_insertion_point(field_get:Proto.ReadyRequest.playertype)
+  return static_cast< ::Proto::PlayerType >(playertype_);
+}
+inline void ReadyRequest::set_playertype(::Proto::PlayerType value) {
+  
+  playertype_ = value;
+  // @@protoc_insertion_point(field_set:Proto.ReadyRequest.playertype)
+}
+
+// bool isready = 3;
+inline void ReadyRequest::clear_isready() {
+  isready_ = false;
+}
+inline bool ReadyRequest::isready() const {
+  // @@protoc_insertion_point(field_get:Proto.ReadyRequest.isready)
+  return isready_;
+}
+inline void ReadyRequest::set_isready(bool value) {
+  
+  isready_ = value;
+  // @@protoc_insertion_point(field_set:Proto.ReadyRequest.isready)
+}
+
+// -------------------------------------------------------------------
+
 // MoveRequest
 
 // .Proto.RoomSettings room = 1;
@@ -1600,10 +2074,26 @@ inline void LastMoveInfo::set_allocated_newposition(::Proto::Position* newpositi
 
 // -------------------------------------------------------------------
 
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 
 // @@protoc_insertion_point(namespace_scope)
 
 }  // namespace Proto
+
+namespace google {
+namespace protobuf {
+
+template <> struct is_proto_enum< ::Proto::PlayerType> : ::std::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::Proto::PlayerType>() {
+  return ::Proto::PlayerType_descriptor();
+}
+
+}  // namespace protobuf
+}  // namespace google
 
 // @@protoc_insertion_point(global_scope)
 

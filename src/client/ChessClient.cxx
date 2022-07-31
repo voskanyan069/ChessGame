@@ -10,21 +10,24 @@
 
 #include <grpcpp/grpcpp.h>
 
-Remote::ChessClient::ChessClient(const std::string& hostname)
-    : m_stub(Proto::ChessServer::NewStub(grpc::CreateChannel(
-                    hostname, grpc::InsecureChannelCredentials())))
+Remote::ChessClient::ChessClient(const std::string& hostname,
+        const std::string& username)
+    : m_username(username)
+    , m_stub(Proto::ChessServer::NewStub(grpc::CreateChannel(
+                      hostname, grpc::InsecureChannelCredentials())))
 {
 }
 
-void Remote::ChessClient::checkRequestStatus(const grpc::Status& status)
+void Remote::ChessClient::checkRequestStatus(const grpc::Status& status,
+        const std::string& errorType) const
 {
     if (!status.ok())
     {
-        throw Utils::Exception(status.error_message(), "Request failed");
+        throw Utils::Exception(status.error_message(), errorType);
     }
 }
 
-bool Remote::ChessClient::IsRoomExists(const std::string& name)
+bool Remote::ChessClient::IsRoomExists(const std::string& name) const
 {
     grpc::ClientContext context;
     Proto::String request;
@@ -35,38 +38,58 @@ bool Remote::ChessClient::IsRoomExists(const std::string& name)
     return response.value();
 }
 
-void Remote::ChessClient::CreateRoom(const Remote::Room& room)
+void Remote::ChessClient::CreateRoom(const Remote::Room& room) const
 {
     grpc::ClientContext context;
-    Proto::RoomSettings request;
+    Proto::RoomWithUsername request;
     Proto::ActionResult response;
-    request.set_name(room.name);
-    request.set_password(room.password);
+    request.set_username(m_username);
+    request.mutable_room()->set_name(room.name);
+    request.mutable_room()->set_password(room.password);
     grpc::Status status = m_stub->CreateRoom(&context, request, &response);
     checkRequestStatus(status);
-    if (!response.ok())
-    {
-        throw Utils::Exception(response.msg(), "Server error");
-    }
 }
 
-void Remote::ChessClient::JoinRoom(const Remote::Room& room)
+void Remote::ChessClient::JoinRoom(const Remote::Room& room) const
+{
+    grpc::ClientContext context;
+    Proto::RoomWithUsername request;
+    Proto::ActionResult response;
+    request.set_username(m_username);
+    request.mutable_room()->set_name(room.name);
+    request.mutable_room()->set_password(room.password);
+    grpc::Status status = m_stub->JoinRoom(&context, request, &response);
+    checkRequestStatus(status);
+}
+
+void Remote::ChessClient::WaitForReady(const Remote::Room& room) const
 {
     grpc::ClientContext context;
     Proto::RoomSettings request;
-    Proto::ActionResult response;
+    Proto::Empty response;
     request.set_name(room.name);
     request.set_password(room.password);
-    grpc::Status status = m_stub->JoinRoom(&context, request, &response);
+    grpc::Status status = m_stub->WaitForReady(&context, request, &response);
     checkRequestStatus(status);
-    if (!response.ok())
-    {
-        throw Utils::Exception(response.msg(), "Server error");
-    }
+}
+
+void Remote::ChessClient::Ready(const Remote::Room& room,
+        const Remote::Player& player) const
+{
+    grpc::ClientContext context;
+    Proto::ReadyRequest request;
+    Proto::Empty response;
+    request.set_isready(player.isReady);
+    request.set_playertype((player.playerType == Remote::PlayerType::OWNER) ?
+            Proto::PlayerType::OWNER : Proto::PlayerType::GUEST);
+    request.mutable_room()->set_name(room.name);
+    request.mutable_room()->set_password(room.password);
+    grpc::Status status = m_stub->Ready(&context, request, &response);
+    checkRequestStatus(status);
 }
 
 void Remote::ChessClient::MovePiece(const Remote::Room& room,
-        const Pieces::Position& oldPos, const Pieces::Position& newPos)
+        const Pieces::Position& oldPos, const Pieces::Position& newPos) const
 {
     grpc::ClientContext context;
     Proto::MoveRequest request;
@@ -81,7 +104,7 @@ void Remote::ChessClient::MovePiece(const Remote::Room& room,
 }
 
 void Remote::ChessClient::ReadLastMove(const Remote::Room& room,
-        Remote::LastMove& lastMove)
+        Remote::LastMove& lastMove) const
 {
     grpc::ClientContext context;
     Proto::RoomSettings request;
@@ -91,4 +114,18 @@ void Remote::ChessClient::ReadLastMove(const Remote::Room& room,
     grpc::Status status = m_stub->ReadPieceMove(&context, request, &response);
     checkRequestStatus(status);
     P2C_Converter::ConvertLastMoveInfo(response, lastMove);
+}
+
+std::string Remote::ChessClient::GetOpponentUsername(
+        const Remote::Room& room) const
+{
+    grpc::ClientContext context;
+    Proto::RoomWithUsername request;
+    Proto::String response;
+    request.set_username(m_username);
+    request.mutable_room()->set_name(room.name);
+    request.mutable_room()->set_password(room.password);
+    grpc::Status status = m_stub->GetUsername(&context, request, &response);
+    checkRequestStatus(status);
+    return response.value();
 }

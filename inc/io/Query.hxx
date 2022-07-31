@@ -20,6 +20,11 @@ private:
 
 public:
     void AskPosition(const std::string& msg, Pieces::Position& pos) const;
+    bool AskForReady() const;
+
+private:
+    std::string createMsgBool(const std::string& msg, bool defaultVal) const;
+    bool processMsgBool(const std::string& input, bool& value) const;
 };
 
 #endif // __IO_QUERY_HXX__

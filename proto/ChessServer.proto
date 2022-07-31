@@ -6,8 +6,11 @@ package Proto;
 
 service ChessServer {
     rpc IsRoomExists (String) returns (Bool) {};
-    rpc CreateRoom (RoomSettings) returns (ActionResult) {};
-    rpc JoinRoom (RoomSettings) returns (ActionResult) {};
+    rpc CreateRoom (RoomWithUsername) returns (ActionResult) {};
+    rpc JoinRoom (RoomWithUsername) returns (ActionResult) {};
+    rpc GetUsername (RoomWithUsername) returns (String) {};
+    rpc WaitForReady (RoomSettings) returns (Empty) {};
+    rpc Ready (ReadyRequest) returns (Empty) {};
     rpc MovePiece (MoveRequest) returns (Empty) {};
     rpc ReadPieceMove (RoomSettings) returns (LastMoveInfo) {};
 }
