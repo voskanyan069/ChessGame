@@ -18,11 +18,6 @@ message String {
     string value = 1;
 }
 
-message ActionResult {
-    bool ok = 1;
-    string msg = 2;
-}
-
 message Position {
     int32 x = 1;
     int32 y = 2;

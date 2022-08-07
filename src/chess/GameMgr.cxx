@@ -10,7 +10,6 @@
 #include "player/PlayerMgr.hxx"
 
 #include <iostream>
-#include <unistd.h>
 
 Chess::GameMgr* Chess::GameMgr::GetInstance()
 {
@@ -35,11 +34,9 @@ Chess::GameMgr::GameMgr()
 
 Chess::GameMgr::~GameMgr()
 {
-    if (nullptr != m_client)
-    {
-        delete m_client;
-    }
-    delete m_board;
+    delete m_client;
+    delete m_ownerPlayer;
+    delete m_guestPlayer;
 }
 
 bool Chess::GameMgr::askForReady() const
@@ -56,9 +53,16 @@ bool Chess::GameMgr::askForReady() const
 
 void Chess::GameMgr::readyAndWait(const Remote::Player& player) const
 {
-    m_client->Ready(m_room, player);
-    Logger::GetInstance()->Print(INFO, "Waiting for ready opponent...");
-    m_client->WaitForReady(m_room);
+    try
+    {
+        m_client->Ready(m_room, player);
+        Logger::GetInstance()->Print(INFO, "Waiting for ready opponent...");
+        m_client->WaitForReady(m_room);
+    }
+    catch (const Utils::Exception& e)
+    {
+        Logger::GetInstance()->Print(e);
+    }
 }
 
 void Chess::GameMgr::joinRoom() const
@@ -149,43 +153,77 @@ void Chess::GameMgr::waitForUpdates(Pieces::Positions& positions) const
     positions.clear();
 }
 
+bool Chess::GameMgr::movePiece(Pieces::BasePiece* piece,
+        const Pieces::Position& newPos)
+{
+    Pieces::Position pos = piece->GetPosition();
+    try
+    {
+        piece->Move(newPos);
+        m_client->MovePiece(m_room, pos, newPos);
+        return true;
+    }
+    catch (const Utils::Exception& e)
+    {
+        Logger::GetInstance()->PrintEndl();
+        Logger::GetInstance()->Print(ERROR, "%s", e.GetMessage());
+        Logger::GetInstance()->PrintEndl();
+        return false;
+    }
+}
+
+void Chess::GameMgr::askCurrentPosition(Pieces::BasePiece*& piece,
+        Pieces::Position& pos, Pieces::Positions& positions)
+{
+    Query::GetInstance()->AskPosition("Current position", pos);
+    piece = m_board->GetPiece(pos);
+    if (!checkPiece(piece))
+    {
+        askCurrentPosition(piece, pos, positions);
+        return;
+    }
+    piece->GetAvailableMoves(positions);
+    m_board->SetAvailableMoves(positions);
+    Logger::GetInstance()->PrintBoard();
+}
+
+void Chess::GameMgr::askNewPosition(Pieces::BasePiece* piece,
+        Pieces::Position& newPos)
+{
+    Query::GetInstance()->AskPosition("New position", newPos);
+    if (!movePiece(piece, newPos))
+    {
+        askNewPosition(piece, newPos);
+        return;
+    }
+}
+
+void Chess::GameMgr::updateFrame(
+        Pieces::BasePiece* piece,
+        Pieces::Position& pos,
+        Pieces::Position& newPos,
+        Pieces::Positions& positions)
+{
+    if (!m_isUserGuest)
+        waitForUpdates(positions);
+    Logger::GetInstance()->PrintBoard();
+    askCurrentPosition(piece, pos, positions);
+    askNewPosition(piece, newPos);
+    if (m_isUserGuest)
+        waitForUpdates(positions);
+    Logger::GetInstance()->PrintBoard();
+}
+
 void Chess::GameMgr::StartGame()
 {
     Pieces::Position pos;
     Pieces::Position newPos;
-    Pieces::BasePiece* piece;
     Pieces::Positions positions;
+    Pieces::BasePiece* piece = nullptr;
     m_isGameOnline = true;
     while (m_isGameOnline)
     {
-        if (!m_isUserGuest)
-            waitForUpdates(positions);
-        Logger::GetInstance()->PrintBoard();
-ask_current_position:
-        Query::GetInstance()->AskPosition("Current position", pos);
-        piece = m_board->GetPiece(pos);
-        if (!checkPiece(piece))
-            goto ask_current_position;
-        piece->GetAvailableMoves(positions);
-        m_board->SetAvailableMoves(positions);
-        Logger::GetInstance()->PrintBoard();
-ask_new_position:
-        Query::GetInstance()->AskPosition("New position", newPos);
-        try
-        {
-            piece->Move(newPos);
-            m_client->MovePiece(m_room, pos, newPos);
-        }
-        catch (const Utils::Exception& e)
-        {
-            Logger::GetInstance()->PrintEndl();
-            Logger::GetInstance()->Print(ERROR, "%s", e.GetMessage());
-            Logger::GetInstance()->PrintEndl();
-            goto ask_new_position;
-        }
-        if (m_isUserGuest)
-            waitForUpdates(positions);
-        Logger::GetInstance()->PrintBoard();
+        updateFrame(piece, pos, newPos, positions);
     }
 }
 

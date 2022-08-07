@@ -98,6 +98,16 @@ struct Remote::ServerPlayer
 {
     std::string username;
     bool isReady;
+
+    inline bool operator==(const ServerPlayer& other)
+    {
+        return username == other.username;
+    }
+
+    inline bool operator!=(const ServerPlayer& other)
+    {
+        return username != other.username;
+    }
 };
 
 struct Remote::ServerRoom

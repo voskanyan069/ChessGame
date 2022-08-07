@@ -31,13 +31,13 @@ private:
     Logger();
 
 public:
-    void PrintEndl() const;
-    void PrintHelp(const std::string& helpMsg) const;
-    void PrintBoard() const;
     void SetStream(std::ostream* os);
 
 public:
     void Print(const Utils::Exception& error) const;
+    void PrintEndl() const;
+    void PrintHelp(const std::string& helpMsg) const;
+    void PrintBoard() const;
     template<typename... Arguments>
     void Print(const MessageType& type, const std::string& fmt,
             Arguments&&... args) const

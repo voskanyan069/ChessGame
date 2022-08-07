@@ -50,21 +50,21 @@ void AddDescriptorsImpl() {
   InitDefaults();
   static const char descriptor[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
       "\n\021ChessServer.proto\022\005Proto\032\026ChessServerT"
-      "ypes.proto2\277\003\n\013ChessServer\022,\n\014IsRoomExis"
-      "ts\022\r.Proto.String\032\013.Proto.Bool\"\000\022<\n\nCrea"
-      "teRoom\022\027.Proto.RoomWithUsername\032\023.Proto."
-      "ActionResult\"\000\022:\n\010JoinRoom\022\027.Proto.RoomW"
-      "ithUsername\032\023.Proto.ActionResult\"\000\0227\n\013Ge"
-      "tUsername\022\027.Proto.RoomWithUsername\032\r.Pro"
-      "to.String\"\000\0223\n\014WaitForReady\022\023.Proto.Room"
-      "Settings\032\014.Proto.Empty\"\000\022,\n\005Ready\022\023.Prot"
-      "o.ReadyRequest\032\014.Proto.Empty\"\000\022/\n\tMovePi"
-      "ece\022\022.Proto.MoveRequest\032\014.Proto.Empty\"\000\022"
-      ";\n\rReadPieceMove\022\023.Proto.RoomSettings\032\023."
-      "Proto.LastMoveInfo\"\000b\006proto3"
+      "ypes.proto2\261\003\n\013ChessServer\022,\n\014IsRoomExis"
+      "ts\022\r.Proto.String\032\013.Proto.Bool\"\000\0225\n\nCrea"
+      "teRoom\022\027.Proto.RoomWithUsername\032\014.Proto."
+      "Empty\"\000\0223\n\010JoinRoom\022\027.Proto.RoomWithUser"
+      "name\032\014.Proto.Empty\"\000\0227\n\013GetUsername\022\027.Pr"
+      "oto.RoomWithUsername\032\r.Proto.String\"\000\0223\n"
+      "\014WaitForReady\022\023.Proto.RoomSettings\032\014.Pro"
+      "to.Empty\"\000\022,\n\005Ready\022\023.Proto.ReadyRequest"
+      "\032\014.Proto.Empty\"\000\022/\n\tMovePiece\022\022.Proto.Mo"
+      "veRequest\032\014.Proto.Empty\"\000\022;\n\rReadPieceMo"
+      "ve\022\023.Proto.RoomSettings\032\023.Proto.LastMove"
+      "Info\"\000b\006proto3"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 508);
+      descriptor, 494);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "ChessServer.proto", &protobuf_RegisterTypes);
   ::protobuf_ChessServerTypes_2eproto::AddDescriptors();

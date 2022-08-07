@@ -56,6 +56,12 @@ private:
     bool checkPiece(Pieces::BasePiece* piece) const;
     void refreshBoard(Pieces::BasePiece* piece, Pieces::Positions& positions);
     void waitForUpdates(Pieces::Positions& positions) const;
+    bool movePiece(Pieces::BasePiece* piece, const Pieces::Position& newPos);
+    void askCurrentPosition(Pieces::BasePiece*& piece, Pieces::Position& pos,
+            Pieces::Positions& positions);
+    void askNewPosition(Pieces::BasePiece* piece, Pieces::Position& newPos);
+    void updateFrame(Pieces::BasePiece* piece, Pieces::Position& pos,
+            Pieces::Position& newPos, Pieces::Positions& positions);
 
 private:
     bool m_isGameOnline;

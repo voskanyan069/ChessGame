@@ -39,7 +39,7 @@ namespace protobuf_ChessServerTypes_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[10];
+  static const ::google::protobuf::internal::ParseTable schema[9];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
@@ -47,9 +47,6 @@ struct TableStruct {
 void AddDescriptors();
 }  // namespace protobuf_ChessServerTypes_2eproto
 namespace Proto {
-class ActionResult;
-class ActionResultDefaultTypeInternal;
-extern ActionResultDefaultTypeInternal _ActionResult_default_instance_;
 class Bool;
 class BoolDefaultTypeInternal;
 extern BoolDefaultTypeInternal _Bool_default_instance_;
@@ -80,7 +77,6 @@ extern StringDefaultTypeInternal _String_default_instance_;
 }  // namespace Proto
 namespace google {
 namespace protobuf {
-template<> ::Proto::ActionResult* Arena::CreateMaybeMessage<::Proto::ActionResult>(Arena*);
 template<> ::Proto::Bool* Arena::CreateMaybeMessage<::Proto::Bool>(Arena*);
 template<> ::Proto::Empty* Arena::CreateMaybeMessage<::Proto::Empty>(Arena*);
 template<> ::Proto::LastMoveInfo* Arena::CreateMaybeMessage<::Proto::LastMoveInfo>(Arena*);
@@ -427,124 +423,6 @@ class String : public ::google::protobuf::Message /* @@protoc_insertion_point(cl
 };
 // -------------------------------------------------------------------
 
-class ActionResult : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:Proto.ActionResult) */ {
- public:
-  ActionResult();
-  virtual ~ActionResult();
-
-  ActionResult(const ActionResult& from);
-
-  inline ActionResult& operator=(const ActionResult& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  #if LANG_CXX11
-  ActionResult(ActionResult&& from) noexcept
-    : ActionResult() {
-    *this = ::std::move(from);
-  }
-
-  inline ActionResult& operator=(ActionResult&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-  #endif
-  static const ::google::protobuf::Descriptor* descriptor();
-  static const ActionResult& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const ActionResult* internal_default_instance() {
-    return reinterpret_cast<const ActionResult*>(
-               &_ActionResult_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages =
-    3;
-
-  void Swap(ActionResult* other);
-  friend void swap(ActionResult& a, ActionResult& b) {
-    a.Swap(&b);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline ActionResult* New() const final {
-    return CreateMaybeMessage<ActionResult>(NULL);
-  }
-
-  ActionResult* New(::google::protobuf::Arena* arena) const final {
-    return CreateMaybeMessage<ActionResult>(arena);
-  }
-  void CopyFrom(const ::google::protobuf::Message& from) final;
-  void MergeFrom(const ::google::protobuf::Message& from) final;
-  void CopyFrom(const ActionResult& from);
-  void MergeFrom(const ActionResult& from);
-  void Clear() final;
-  bool IsInitialized() const final;
-
-  size_t ByteSizeLong() const final;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input) final;
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const final;
-  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
-      bool deterministic, ::google::protobuf::uint8* target) const final;
-  int GetCachedSize() const final { return _cached_size_.Get(); }
-
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const final;
-  void InternalSwap(ActionResult* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return NULL;
-  }
-  inline void* MaybeArenaPtr() const {
-    return NULL;
-  }
-  public:
-
-  ::google::protobuf::Metadata GetMetadata() const final;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // string msg = 2;
-  void clear_msg();
-  static const int kMsgFieldNumber = 2;
-  const ::std::string& msg() const;
-  void set_msg(const ::std::string& value);
-  #if LANG_CXX11
-  void set_msg(::std::string&& value);
-  #endif
-  void set_msg(const char* value);
-  void set_msg(const char* value, size_t size);
-  ::std::string* mutable_msg();
-  ::std::string* release_msg();
-  void set_allocated_msg(::std::string* msg);
-
-  // bool ok = 1;
-  void clear_ok();
-  static const int kOkFieldNumber = 1;
-  bool ok() const;
-  void set_ok(bool value);
-
-  // @@protoc_insertion_point(class_scope:Proto.ActionResult)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::internal::ArenaStringPtr msg_;
-  bool ok_;
-  mutable ::google::protobuf::internal::CachedSize _cached_size_;
-  friend struct ::protobuf_ChessServerTypes_2eproto::TableStruct;
-};
-// -------------------------------------------------------------------
-
 class Position : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:Proto.Position) */ {
  public:
   Position();
@@ -580,7 +458,7 @@ class Position : public ::google::protobuf::Message /* @@protoc_insertion_point(
                &_Position_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    4;
+    3;
 
   void Swap(Position* other);
   friend void swap(Position& a, Position& b) {
@@ -690,7 +568,7 @@ class RoomSettings : public ::google::protobuf::Message /* @@protoc_insertion_po
                &_RoomSettings_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    5;
+    4;
 
   void Swap(RoomSettings* other);
   friend void swap(RoomSettings& a, RoomSettings& b) {
@@ -816,7 +694,7 @@ class RoomWithUsername : public ::google::protobuf::Message /* @@protoc_insertio
                &_RoomWithUsername_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    6;
+    5;
 
   void Swap(RoomWithUsername* other);
   friend void swap(RoomWithUsername& a, RoomWithUsername& b) {
@@ -940,7 +818,7 @@ class ReadyRequest : public ::google::protobuf::Message /* @@protoc_insertion_po
                &_ReadyRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    7;
+    6;
 
   void Swap(ReadyRequest* other);
   friend void swap(ReadyRequest& a, ReadyRequest& b) {
@@ -1063,7 +941,7 @@ class MoveRequest : public ::google::protobuf::Message /* @@protoc_insertion_poi
                &_MoveRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    8;
+    7;
 
   void Swap(MoveRequest* other);
   friend void swap(MoveRequest& a, MoveRequest& b) {
@@ -1198,7 +1076,7 @@ class LastMoveInfo : public ::google::protobuf::Message /* @@protoc_insertion_po
                &_LastMoveInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    9;
+    8;
 
   void Swap(LastMoveInfo* other);
   friend void swap(LastMoveInfo& a, LastMoveInfo& b) {
@@ -1367,77 +1245,6 @@ inline void String::set_allocated_value(::std::string* value) {
   }
   value_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
   // @@protoc_insertion_point(field_set_allocated:Proto.String.value)
-}
-
-// -------------------------------------------------------------------
-
-// ActionResult
-
-// bool ok = 1;
-inline void ActionResult::clear_ok() {
-  ok_ = false;
-}
-inline bool ActionResult::ok() const {
-  // @@protoc_insertion_point(field_get:Proto.ActionResult.ok)
-  return ok_;
-}
-inline void ActionResult::set_ok(bool value) {
-  
-  ok_ = value;
-  // @@protoc_insertion_point(field_set:Proto.ActionResult.ok)
-}
-
-// string msg = 2;
-inline void ActionResult::clear_msg() {
-  msg_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline const ::std::string& ActionResult::msg() const {
-  // @@protoc_insertion_point(field_get:Proto.ActionResult.msg)
-  return msg_.GetNoArena();
-}
-inline void ActionResult::set_msg(const ::std::string& value) {
-  
-  msg_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:Proto.ActionResult.msg)
-}
-#if LANG_CXX11
-inline void ActionResult::set_msg(::std::string&& value) {
-  
-  msg_.SetNoArena(
-    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:Proto.ActionResult.msg)
-}
-#endif
-inline void ActionResult::set_msg(const char* value) {
-  GOOGLE_DCHECK(value != NULL);
-  
-  msg_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:Proto.ActionResult.msg)
-}
-inline void ActionResult::set_msg(const char* value, size_t size) {
-  
-  msg_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
-      ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:Proto.ActionResult.msg)
-}
-inline ::std::string* ActionResult::mutable_msg() {
-  
-  // @@protoc_insertion_point(field_mutable:Proto.ActionResult.msg)
-  return msg_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline ::std::string* ActionResult::release_msg() {
-  // @@protoc_insertion_point(field_release:Proto.ActionResult.msg)
-  
-  return msg_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-}
-inline void ActionResult::set_allocated_msg(::std::string* msg) {
-  if (msg != NULL) {
-    
-  } else {
-    
-  }
-  msg_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), msg);
-  // @@protoc_insertion_point(field_set_allocated:Proto.ActionResult.msg)
 }
 
 // -------------------------------------------------------------------
@@ -2060,8 +1867,6 @@ inline void LastMoveInfo::set_allocated_newposition(::Proto::Position* newpositi
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
-// -------------------------------------------------------------------
-
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

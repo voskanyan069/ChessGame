@@ -61,36 +61,36 @@ void ChessServer::Stub::experimental_async::IsRoomExists(::grpc::ClientContext* 
   return ::grpc::internal::ClientAsyncResponseReaderFactory< ::Proto::Bool>::Create(channel_.get(), cq, rpcmethod_IsRoomExists_, context, request, false);
 }
 
-::grpc::Status ChessServer::Stub::CreateRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::Proto::ActionResult* response) {
+::grpc::Status ChessServer::Stub::CreateRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::Proto::Empty* response) {
   return ::grpc::internal::BlockingUnaryCall(channel_.get(), rpcmethod_CreateRoom_, context, request, response);
 }
 
-void ChessServer::Stub::experimental_async::CreateRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername* request, ::Proto::ActionResult* response, std::function<void(::grpc::Status)> f) {
+void ChessServer::Stub::experimental_async::CreateRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response, std::function<void(::grpc::Status)> f) {
   return ::grpc::internal::CallbackUnaryCall(stub_->channel_.get(), stub_->rpcmethod_CreateRoom_, context, request, response, std::move(f));
 }
 
-::grpc::ClientAsyncResponseReader< ::Proto::ActionResult>* ChessServer::Stub::AsyncCreateRoomRaw(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) {
-  return ::grpc::internal::ClientAsyncResponseReaderFactory< ::Proto::ActionResult>::Create(channel_.get(), cq, rpcmethod_CreateRoom_, context, request, true);
+::grpc::ClientAsyncResponseReader< ::Proto::Empty>* ChessServer::Stub::AsyncCreateRoomRaw(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderFactory< ::Proto::Empty>::Create(channel_.get(), cq, rpcmethod_CreateRoom_, context, request, true);
 }
 
-::grpc::ClientAsyncResponseReader< ::Proto::ActionResult>* ChessServer::Stub::PrepareAsyncCreateRoomRaw(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) {
-  return ::grpc::internal::ClientAsyncResponseReaderFactory< ::Proto::ActionResult>::Create(channel_.get(), cq, rpcmethod_CreateRoom_, context, request, false);
+::grpc::ClientAsyncResponseReader< ::Proto::Empty>* ChessServer::Stub::PrepareAsyncCreateRoomRaw(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderFactory< ::Proto::Empty>::Create(channel_.get(), cq, rpcmethod_CreateRoom_, context, request, false);
 }
 
-::grpc::Status ChessServer::Stub::JoinRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::Proto::ActionResult* response) {
+::grpc::Status ChessServer::Stub::JoinRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::Proto::Empty* response) {
   return ::grpc::internal::BlockingUnaryCall(channel_.get(), rpcmethod_JoinRoom_, context, request, response);
 }
 
-void ChessServer::Stub::experimental_async::JoinRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername* request, ::Proto::ActionResult* response, std::function<void(::grpc::Status)> f) {
+void ChessServer::Stub::experimental_async::JoinRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response, std::function<void(::grpc::Status)> f) {
   return ::grpc::internal::CallbackUnaryCall(stub_->channel_.get(), stub_->rpcmethod_JoinRoom_, context, request, response, std::move(f));
 }
 
-::grpc::ClientAsyncResponseReader< ::Proto::ActionResult>* ChessServer::Stub::AsyncJoinRoomRaw(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) {
-  return ::grpc::internal::ClientAsyncResponseReaderFactory< ::Proto::ActionResult>::Create(channel_.get(), cq, rpcmethod_JoinRoom_, context, request, true);
+::grpc::ClientAsyncResponseReader< ::Proto::Empty>* ChessServer::Stub::AsyncJoinRoomRaw(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderFactory< ::Proto::Empty>::Create(channel_.get(), cq, rpcmethod_JoinRoom_, context, request, true);
 }
 
-::grpc::ClientAsyncResponseReader< ::Proto::ActionResult>* ChessServer::Stub::PrepareAsyncJoinRoomRaw(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) {
-  return ::grpc::internal::ClientAsyncResponseReaderFactory< ::Proto::ActionResult>::Create(channel_.get(), cq, rpcmethod_JoinRoom_, context, request, false);
+::grpc::ClientAsyncResponseReader< ::Proto::Empty>* ChessServer::Stub::PrepareAsyncJoinRoomRaw(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderFactory< ::Proto::Empty>::Create(channel_.get(), cq, rpcmethod_JoinRoom_, context, request, false);
 }
 
 ::grpc::Status ChessServer::Stub::GetUsername(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::Proto::String* response) {
@@ -182,12 +182,12 @@ ChessServer::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       ChessServer_method_names[1],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
-      new ::grpc::internal::RpcMethodHandler< ChessServer::Service, ::Proto::RoomWithUsername, ::Proto::ActionResult>(
+      new ::grpc::internal::RpcMethodHandler< ChessServer::Service, ::Proto::RoomWithUsername, ::Proto::Empty>(
           std::mem_fn(&ChessServer::Service::CreateRoom), this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       ChessServer_method_names[2],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
-      new ::grpc::internal::RpcMethodHandler< ChessServer::Service, ::Proto::RoomWithUsername, ::Proto::ActionResult>(
+      new ::grpc::internal::RpcMethodHandler< ChessServer::Service, ::Proto::RoomWithUsername, ::Proto::Empty>(
           std::mem_fn(&ChessServer::Service::JoinRoom), this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       ChessServer_method_names[3],
@@ -226,14 +226,14 @@ ChessServer::Service::~Service() {
   return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
 }
 
-::grpc::Status ChessServer::Service::CreateRoom(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::ActionResult* response) {
+::grpc::Status ChessServer::Service::CreateRoom(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response) {
   (void) context;
   (void) request;
   (void) response;
   return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
 }
 
-::grpc::Status ChessServer::Service::JoinRoom(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::ActionResult* response) {
+::grpc::Status ChessServer::Service::JoinRoom(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response) {
   (void) context;
   (void) request;
   (void) response;

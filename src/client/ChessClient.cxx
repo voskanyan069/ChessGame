@@ -1,4 +1,5 @@
 #include "client/ChessClient.hxx"
+#include "io/Logger.hxx"
 #include "utils/Types.hxx"
 #include "utils/P2C_Converter.hxx"
 #include "utils/C2P_Converter.hxx"
@@ -23,6 +24,12 @@ void Remote::ChessClient::checkRequestStatus(const grpc::Status& status,
 {
     if (!status.ok())
     {
+        std::string errorMsg = status.error_message();
+        if (grpc::StatusCode::UNAVAILABLE == status.error_code())
+        {
+            Logger::GetInstance()->Print(ERROR, "Request failed: %s", errorMsg);
+            std::exit(-1);
+        }
         throw Utils::Exception(status.error_message(), errorType);
     }
 }
@@ -42,7 +49,7 @@ void Remote::ChessClient::CreateRoom(const Remote::Room& room) const
 {
     grpc::ClientContext context;
     Proto::RoomWithUsername request;
-    Proto::ActionResult response;
+    Proto::Empty response;
     request.set_username(m_username);
     request.mutable_room()->set_name(room.name);
     request.mutable_room()->set_password(room.password);
@@ -54,7 +61,7 @@ void Remote::ChessClient::JoinRoom(const Remote::Room& room) const
 {
     grpc::ClientContext context;
     Proto::RoomWithUsername request;
-    Proto::ActionResult response;
+    Proto::Empty response;
     request.set_username(m_username);
     request.mutable_room()->set_name(room.name);
     request.mutable_room()->set_password(room.password);

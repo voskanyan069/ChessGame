@@ -31,11 +31,11 @@ public:
     grpc::Status CreateRoom(
             grpc::ServerContext* context,
             const Proto::RoomWithUsername* request,
-            Proto::ActionResult* response) override;
+            Proto::Empty* response) override;
     grpc::Status JoinRoom(
             grpc::ServerContext* context,
             const Proto::RoomWithUsername* request,
-            Proto::ActionResult* response) override;
+            Proto::Empty* response) override;
     grpc::Status GetUsername(
             grpc::ServerContext* context,
             const Proto::RoomWithUsername* request,

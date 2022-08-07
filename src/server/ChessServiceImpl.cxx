@@ -62,15 +62,19 @@ void Remote::ChessServiceImpl::initMutexAndConditionVar(
 grpc::Status Remote::ChessServiceImpl::CreateRoom(
         grpc::ServerContext* context,
         const Proto::RoomWithUsername* request,
-        Proto::ActionResult* response)
+        Proto::Empty* response)
 {
     std::string name = request->room().name();
+    if (name.empty())
+    {
+        return grpc::Status(grpc::StatusCode::CANCELLED,
+                "Room name is not correct");
+    }
     const auto& it = m_mapRooms.find(name);
     if (m_mapRooms.end() != it)
     {
-        response->set_ok(false);
-        response->set_msg("Room with this name already exists");
-        return grpc::Status::OK;
+        return grpc::Status(grpc::StatusCode::CANCELLED,
+                "Room with this name already exists");
     }
     Remote::ServerRoom& room = m_mapRooms[name];
     room.ownerPlayer.username = request->username();
@@ -80,7 +84,6 @@ grpc::Status Remote::ChessServiceImpl::CreateRoom(
     room.isLastMoveRead = false;
     initMutexAndConditionVar(room.waitMutex, room.waitConditionVar);
     initMutexAndConditionVar(room.moveMutex, room.moveConditionVar);
-    response->set_ok(true);
     std::cout << context->peer() << " has created " << name
         << " room" << std::endl;
     return grpc::Status::OK;
@@ -89,18 +92,20 @@ grpc::Status Remote::ChessServiceImpl::CreateRoom(
 grpc::Status Remote::ChessServiceImpl::JoinRoom(
         grpc::ServerContext* context,
         const Proto::RoomWithUsername* request,
-        Proto::ActionResult* response)
+        Proto::Empty* response)
 {
     std::string errMsg = "";
     if (!doCheckRoomSettings(request->room(), errMsg))
     {
-        response->set_ok(false);
-        response->set_msg(errMsg);
-        return grpc::Status::CANCELLED;
+        return grpc::Status(grpc::StatusCode::CANCELLED, errMsg);
     }
     Remote::ServerRoom& room = m_mapRooms[request->room().name()];
     room.guestPlayer.username = request->username();
-    response->set_ok(true);
+    if (room.ownerPlayer == room.guestPlayer)
+    {
+        return grpc::Status(grpc::StatusCode::CANCELLED,
+                "The username is already busy");
+    }
     std::cout << context->peer() << " has joined to " << request->room().name()
         << " room" << std::endl;
     return grpc::Status::OK;
@@ -114,7 +119,7 @@ grpc::Status Remote::ChessServiceImpl::GetUsername(
     std::string errMsg = "";
     if (!doCheckRoomSettings(request->room(), errMsg))
     {
-        return grpc::Status::CANCELLED;
+        return grpc::Status(grpc::StatusCode::CANCELLED, errMsg);
     }
     Remote::ServerRoom& room = m_mapRooms[request->room().name()];
     std::string username = request->username();
@@ -137,7 +142,7 @@ grpc::Status Remote::ChessServiceImpl::WaitForReady(
     std::string errMsg = "";
     if (!doCheckRoomSettings(*request, errMsg))
     {
-        return grpc::Status::CANCELLED;
+        return grpc::Status(grpc::StatusCode::CANCELLED, errMsg);
     }
     Remote::ServerRoom& room = m_mapRooms[request->name()];
     boost::mutex::scoped_lock lock(*(room.waitMutex));
@@ -156,7 +161,7 @@ grpc::Status Remote::ChessServiceImpl::Ready(
     std::string errMsg = "";
     if (!doCheckRoomSettings(request->room(), errMsg))
     {
-        return grpc::Status::CANCELLED;
+        return grpc::Status(grpc::StatusCode::CANCELLED, errMsg);
     }
     Remote::ServerRoom& room = m_mapRooms[request->room().name()];
     if (Proto::PlayerType::OWNER == request->playertype())
@@ -179,7 +184,7 @@ grpc::Status Remote::ChessServiceImpl::MovePiece(
     std::string errMsg = "";
     if (!doCheckRoomSettings(request->room(), errMsg))
     {
-        return grpc::Status::CANCELLED;
+        return grpc::Status(grpc::StatusCode::CANCELLED, errMsg);
     }
     Remote::ServerRoom& room = m_mapRooms[request->room().name()];
     Pieces::Position oldPos;
@@ -200,7 +205,7 @@ grpc::Status Remote::ChessServiceImpl::ReadPieceMove(
     std::string errMsg = "";
     if (!doCheckRoomSettings(*request, errMsg))
     {
-        return grpc::Status::CANCELLED;
+        return grpc::Status(grpc::StatusCode::CANCELLED, errMsg);
     }
     Remote::ServerRoom& room = m_mapRooms[request->name()];
     room.isLastMoveRead = false;

@@ -42,19 +42,19 @@ class ChessServer final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Proto::Bool>> PrepareAsyncIsRoomExists(::grpc::ClientContext* context, const ::Proto::String& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Proto::Bool>>(PrepareAsyncIsRoomExistsRaw(context, request, cq));
     }
-    virtual ::grpc::Status CreateRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::Proto::ActionResult* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Proto::ActionResult>> AsyncCreateRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Proto::ActionResult>>(AsyncCreateRoomRaw(context, request, cq));
+    virtual ::grpc::Status CreateRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::Proto::Empty* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Proto::Empty>> AsyncCreateRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Proto::Empty>>(AsyncCreateRoomRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Proto::ActionResult>> PrepareAsyncCreateRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Proto::ActionResult>>(PrepareAsyncCreateRoomRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Proto::Empty>> PrepareAsyncCreateRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Proto::Empty>>(PrepareAsyncCreateRoomRaw(context, request, cq));
     }
-    virtual ::grpc::Status JoinRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::Proto::ActionResult* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Proto::ActionResult>> AsyncJoinRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Proto::ActionResult>>(AsyncJoinRoomRaw(context, request, cq));
+    virtual ::grpc::Status JoinRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::Proto::Empty* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Proto::Empty>> AsyncJoinRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Proto::Empty>>(AsyncJoinRoomRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Proto::ActionResult>> PrepareAsyncJoinRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Proto::ActionResult>>(PrepareAsyncJoinRoomRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Proto::Empty>> PrepareAsyncJoinRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Proto::Empty>>(PrepareAsyncJoinRoomRaw(context, request, cq));
     }
     virtual ::grpc::Status GetUsername(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::Proto::String* response) = 0;
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Proto::String>> AsyncGetUsername(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) {
@@ -95,8 +95,8 @@ class ChessServer final {
      public:
       virtual ~experimental_async_interface() {}
       virtual void IsRoomExists(::grpc::ClientContext* context, const ::Proto::String* request, ::Proto::Bool* response, std::function<void(::grpc::Status)>) = 0;
-      virtual void CreateRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername* request, ::Proto::ActionResult* response, std::function<void(::grpc::Status)>) = 0;
-      virtual void JoinRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername* request, ::Proto::ActionResult* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void CreateRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void JoinRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) = 0;
       virtual void GetUsername(::grpc::ClientContext* context, const ::Proto::RoomWithUsername* request, ::Proto::String* response, std::function<void(::grpc::Status)>) = 0;
       virtual void WaitForReady(::grpc::ClientContext* context, const ::Proto::RoomSettings* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) = 0;
       virtual void Ready(::grpc::ClientContext* context, const ::Proto::ReadyRequest* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) = 0;
@@ -107,10 +107,10 @@ class ChessServer final {
   private:
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::Proto::Bool>* AsyncIsRoomExistsRaw(::grpc::ClientContext* context, const ::Proto::String& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::Proto::Bool>* PrepareAsyncIsRoomExistsRaw(::grpc::ClientContext* context, const ::Proto::String& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::Proto::ActionResult>* AsyncCreateRoomRaw(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::Proto::ActionResult>* PrepareAsyncCreateRoomRaw(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::Proto::ActionResult>* AsyncJoinRoomRaw(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::Proto::ActionResult>* PrepareAsyncJoinRoomRaw(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::Proto::Empty>* AsyncCreateRoomRaw(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::Proto::Empty>* PrepareAsyncCreateRoomRaw(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::Proto::Empty>* AsyncJoinRoomRaw(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::Proto::Empty>* PrepareAsyncJoinRoomRaw(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::Proto::String>* AsyncGetUsernameRaw(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::Proto::String>* PrepareAsyncGetUsernameRaw(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::Proto::Empty>* AsyncWaitForReadyRaw(::grpc::ClientContext* context, const ::Proto::RoomSettings& request, ::grpc::CompletionQueue* cq) = 0;
@@ -132,19 +132,19 @@ class ChessServer final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Proto::Bool>> PrepareAsyncIsRoomExists(::grpc::ClientContext* context, const ::Proto::String& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Proto::Bool>>(PrepareAsyncIsRoomExistsRaw(context, request, cq));
     }
-    ::grpc::Status CreateRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::Proto::ActionResult* response) override;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Proto::ActionResult>> AsyncCreateRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Proto::ActionResult>>(AsyncCreateRoomRaw(context, request, cq));
+    ::grpc::Status CreateRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::Proto::Empty* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Proto::Empty>> AsyncCreateRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Proto::Empty>>(AsyncCreateRoomRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Proto::ActionResult>> PrepareAsyncCreateRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Proto::ActionResult>>(PrepareAsyncCreateRoomRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Proto::Empty>> PrepareAsyncCreateRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Proto::Empty>>(PrepareAsyncCreateRoomRaw(context, request, cq));
     }
-    ::grpc::Status JoinRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::Proto::ActionResult* response) override;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Proto::ActionResult>> AsyncJoinRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Proto::ActionResult>>(AsyncJoinRoomRaw(context, request, cq));
+    ::grpc::Status JoinRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::Proto::Empty* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Proto::Empty>> AsyncJoinRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Proto::Empty>>(AsyncJoinRoomRaw(context, request, cq));
     }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Proto::ActionResult>> PrepareAsyncJoinRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Proto::ActionResult>>(PrepareAsyncJoinRoomRaw(context, request, cq));
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Proto::Empty>> PrepareAsyncJoinRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Proto::Empty>>(PrepareAsyncJoinRoomRaw(context, request, cq));
     }
     ::grpc::Status GetUsername(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::Proto::String* response) override;
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Proto::String>> AsyncGetUsername(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) {
@@ -185,8 +185,8 @@ class ChessServer final {
       public StubInterface::experimental_async_interface {
      public:
       void IsRoomExists(::grpc::ClientContext* context, const ::Proto::String* request, ::Proto::Bool* response, std::function<void(::grpc::Status)>) override;
-      void CreateRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername* request, ::Proto::ActionResult* response, std::function<void(::grpc::Status)>) override;
-      void JoinRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername* request, ::Proto::ActionResult* response, std::function<void(::grpc::Status)>) override;
+      void CreateRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) override;
+      void JoinRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) override;
       void GetUsername(::grpc::ClientContext* context, const ::Proto::RoomWithUsername* request, ::Proto::String* response, std::function<void(::grpc::Status)>) override;
       void WaitForReady(::grpc::ClientContext* context, const ::Proto::RoomSettings* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) override;
       void Ready(::grpc::ClientContext* context, const ::Proto::ReadyRequest* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) override;
@@ -205,10 +205,10 @@ class ChessServer final {
     class experimental_async async_stub_{this};
     ::grpc::ClientAsyncResponseReader< ::Proto::Bool>* AsyncIsRoomExistsRaw(::grpc::ClientContext* context, const ::Proto::String& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::Proto::Bool>* PrepareAsyncIsRoomExistsRaw(::grpc::ClientContext* context, const ::Proto::String& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::Proto::ActionResult>* AsyncCreateRoomRaw(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::Proto::ActionResult>* PrepareAsyncCreateRoomRaw(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::Proto::ActionResult>* AsyncJoinRoomRaw(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::Proto::ActionResult>* PrepareAsyncJoinRoomRaw(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::Proto::Empty>* AsyncCreateRoomRaw(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::Proto::Empty>* PrepareAsyncCreateRoomRaw(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::Proto::Empty>* AsyncJoinRoomRaw(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::Proto::Empty>* PrepareAsyncJoinRoomRaw(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::Proto::String>* AsyncGetUsernameRaw(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::Proto::String>* PrepareAsyncGetUsernameRaw(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::Proto::Empty>* AsyncWaitForReadyRaw(::grpc::ClientContext* context, const ::Proto::RoomSettings& request, ::grpc::CompletionQueue* cq) override;
@@ -235,8 +235,8 @@ class ChessServer final {
     Service();
     virtual ~Service();
     virtual ::grpc::Status IsRoomExists(::grpc::ServerContext* context, const ::Proto::String* request, ::Proto::Bool* response);
-    virtual ::grpc::Status CreateRoom(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::ActionResult* response);
-    virtual ::grpc::Status JoinRoom(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::ActionResult* response);
+    virtual ::grpc::Status CreateRoom(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response);
+    virtual ::grpc::Status JoinRoom(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response);
     virtual ::grpc::Status GetUsername(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::String* response);
     virtual ::grpc::Status WaitForReady(::grpc::ServerContext* context, const ::Proto::RoomSettings* request, ::Proto::Empty* response);
     virtual ::grpc::Status Ready(::grpc::ServerContext* context, const ::Proto::ReadyRequest* request, ::Proto::Empty* response);
@@ -275,11 +275,11 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status CreateRoom(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::ActionResult* response) override {
+    ::grpc::Status CreateRoom(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestCreateRoom(::grpc::ServerContext* context, ::Proto::RoomWithUsername* request, ::grpc::ServerAsyncResponseWriter< ::Proto::ActionResult>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+    void RequestCreateRoom(::grpc::ServerContext* context, ::Proto::RoomWithUsername* request, ::grpc::ServerAsyncResponseWriter< ::Proto::Empty>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
       ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
@@ -295,11 +295,11 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status JoinRoom(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::ActionResult* response) override {
+    ::grpc::Status JoinRoom(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestJoinRoom(::grpc::ServerContext* context, ::Proto::RoomWithUsername* request, ::grpc::ServerAsyncResponseWriter< ::Proto::ActionResult>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+    void RequestJoinRoom(::grpc::ServerContext* context, ::Proto::RoomWithUsername* request, ::grpc::ServerAsyncResponseWriter< ::Proto::Empty>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
       ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
@@ -433,7 +433,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status CreateRoom(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::ActionResult* response) override {
+    ::grpc::Status CreateRoom(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -450,7 +450,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status JoinRoom(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::ActionResult* response) override {
+    ::grpc::Status JoinRoom(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -572,7 +572,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status CreateRoom(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::ActionResult* response) override {
+    ::grpc::Status CreateRoom(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -592,7 +592,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status JoinRoom(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::ActionResult* response) override {
+    ::grpc::Status JoinRoom(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -727,18 +727,18 @@ class ChessServer final {
    public:
     WithStreamedUnaryMethod_CreateRoom() {
       ::grpc::Service::MarkMethodStreamed(1,
-        new ::grpc::internal::StreamedUnaryHandler< ::Proto::RoomWithUsername, ::Proto::ActionResult>(std::bind(&WithStreamedUnaryMethod_CreateRoom<BaseClass>::StreamedCreateRoom, this, std::placeholders::_1, std::placeholders::_2)));
+        new ::grpc::internal::StreamedUnaryHandler< ::Proto::RoomWithUsername, ::Proto::Empty>(std::bind(&WithStreamedUnaryMethod_CreateRoom<BaseClass>::StreamedCreateRoom, this, std::placeholders::_1, std::placeholders::_2)));
     }
     ~WithStreamedUnaryMethod_CreateRoom() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status CreateRoom(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::ActionResult* response) override {
+    ::grpc::Status CreateRoom(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     // replace default version of method with streamed unary
-    virtual ::grpc::Status StreamedCreateRoom(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::Proto::RoomWithUsername,::Proto::ActionResult>* server_unary_streamer) = 0;
+    virtual ::grpc::Status StreamedCreateRoom(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::Proto::RoomWithUsername,::Proto::Empty>* server_unary_streamer) = 0;
   };
   template <class BaseClass>
   class WithStreamedUnaryMethod_JoinRoom : public BaseClass {
@@ -747,18 +747,18 @@ class ChessServer final {
    public:
     WithStreamedUnaryMethod_JoinRoom() {
       ::grpc::Service::MarkMethodStreamed(2,
-        new ::grpc::internal::StreamedUnaryHandler< ::Proto::RoomWithUsername, ::Proto::ActionResult>(std::bind(&WithStreamedUnaryMethod_JoinRoom<BaseClass>::StreamedJoinRoom, this, std::placeholders::_1, std::placeholders::_2)));
+        new ::grpc::internal::StreamedUnaryHandler< ::Proto::RoomWithUsername, ::Proto::Empty>(std::bind(&WithStreamedUnaryMethod_JoinRoom<BaseClass>::StreamedJoinRoom, this, std::placeholders::_1, std::placeholders::_2)));
     }
     ~WithStreamedUnaryMethod_JoinRoom() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status JoinRoom(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::ActionResult* response) override {
+    ::grpc::Status JoinRoom(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     // replace default version of method with streamed unary
-    virtual ::grpc::Status StreamedJoinRoom(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::Proto::RoomWithUsername,::Proto::ActionResult>* server_unary_streamer) = 0;
+    virtual ::grpc::Status StreamedJoinRoom(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::Proto::RoomWithUsername,::Proto::Empty>* server_unary_streamer) = 0;
   };
   template <class BaseClass>
   class WithStreamedUnaryMethod_GetUsername : public BaseClass {

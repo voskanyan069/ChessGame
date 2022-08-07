@@ -20,7 +20,7 @@ void initArgsParser(ArgsParser& parser)
             "localhost");
     parser.AddOption<int>("port,P", "port of the server", 58001);
     parser.AddOption<std::string>("room,r", "create or join to room", "admin");
-    parser.AddOption<std::string>("password,p", "password of the room","admin");
+    parser.AddOption<std::string>("password,p", "password of the room","");
     parser.AddOption<std::string>("username,u", "player username", getlogin());
     if (!parser.ParseArguments())
     {
