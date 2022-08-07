@@ -43,7 +43,7 @@ public:
             Arguments&&... args) const
     {
         setConsoleColor(type);
-        *m_os <<  boost::str((boost::format(fmt) % ... % args));
+        *m_os << boost::str((boost::format(fmt) % ... % args));
         resetConsole();
     }
 

@@ -90,7 +90,15 @@ bool Chess::GameMgr::checkPiece(Pieces::BasePiece* piece) const
     {
         Logger::GetInstance()->PrintEndl();
         Logger::GetInstance()->Print(ERROR,
-                "Piece in selected position doesn't exists");
+                "Error: Piece in selected position doesn't exists");
+        Logger::GetInstance()->PrintEndl();
+        return false;
+    }
+    if (piece->GetColor() != m_turn)
+    {
+        Logger::GetInstance()->PrintEndl();
+        Logger::GetInstance()->Print(ERROR,
+                "Error: The color of the piece is not correct");
         Logger::GetInstance()->PrintEndl();
         return false;
     }
@@ -109,6 +117,11 @@ void Chess::GameMgr::setPlayersUsername()
     guName = m_isUserGuest ? m_myUsername:m_client->GetOpponentUsername(m_room);
     m_ownerPlayer->name = owName;
     m_guestPlayer->name = guName;
+}
+
+void Chess::GameMgr::switchPlayerOrder()
+{
+    m_turn = (m_turn == Pieces::WHITE) ? Pieces::BLACK : Pieces::WHITE;
 }
 
 void Chess::GameMgr::initClient()
@@ -166,7 +179,7 @@ bool Chess::GameMgr::movePiece(Pieces::BasePiece* piece,
     catch (const Utils::Exception& e)
     {
         Logger::GetInstance()->PrintEndl();
-        Logger::GetInstance()->Print(ERROR, "%s", e.GetMessage());
+        Logger::GetInstance()->Print(e);
         Logger::GetInstance()->PrintEndl();
         return false;
     }
@@ -175,7 +188,18 @@ bool Chess::GameMgr::movePiece(Pieces::BasePiece* piece,
 void Chess::GameMgr::askCurrentPosition(Pieces::BasePiece*& piece,
         Pieces::Position& pos, Pieces::Positions& positions)
 {
-    Query::GetInstance()->AskPosition("Current position", pos);
+    try
+    {
+        Query::GetInstance()->AskPosition("Current position", pos);
+    }
+    catch (const Utils::Exception& e)
+    {
+        Logger::GetInstance()->PrintEndl();
+        Logger::GetInstance()->Print(e);
+        Logger::GetInstance()->PrintEndl();
+        askCurrentPosition(piece, pos, positions);
+        return;
+    }
     piece = m_board->GetPiece(pos);
     if (!checkPiece(piece))
     {
@@ -190,12 +214,24 @@ void Chess::GameMgr::askCurrentPosition(Pieces::BasePiece*& piece,
 void Chess::GameMgr::askNewPosition(Pieces::BasePiece* piece,
         Pieces::Position& newPos)
 {
-    Query::GetInstance()->AskPosition("New position", newPos);
+    try
+    {
+        Query::GetInstance()->AskPosition("New position", newPos);
+    }
+    catch (const Utils::Exception& e)
+    {
+        Logger::GetInstance()->PrintEndl();
+        Logger::GetInstance()->Print(e);
+        Logger::GetInstance()->PrintEndl();
+        askNewPosition(piece, newPos);
+        return;
+    }
     if (!movePiece(piece, newPos))
     {
         askNewPosition(piece, newPos);
         return;
     }
+    switchPlayerOrder();
 }
 
 void Chess::GameMgr::updateFrame(
@@ -205,12 +241,18 @@ void Chess::GameMgr::updateFrame(
         Pieces::Positions& positions)
 {
     if (!m_isUserGuest)
+    {
         waitForUpdates(positions);
+        switchPlayerOrder();
+    }
     Logger::GetInstance()->PrintBoard();
     askCurrentPosition(piece, pos, positions);
     askNewPosition(piece, newPos);
     if (m_isUserGuest)
+    {
         waitForUpdates(positions);
+        switchPlayerOrder();
+    }
     Logger::GetInstance()->PrintBoard();
 }
 

@@ -103,6 +103,7 @@ void Pieces::BasePiece::Move(const Pieces::Position& position)
             {
                 continue;
             }
+            delete pieces[pos.x][pos.y];
         }
         pieces[position.x][position.y] = std::move(
                 pieces[m_position.x][m_position.y]);

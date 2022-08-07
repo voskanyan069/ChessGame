@@ -48,8 +48,9 @@ private:
     void initClient();
     void initRoom();
     void initMyUsername();
-    void joinRoom() const;
     void setPlayersUsername();
+    void switchPlayerOrder();
+    void joinRoom() const;
     void createRoom() const;
     bool askForReady() const;
     void readyAndWait(const Remote::Player& player) const;
