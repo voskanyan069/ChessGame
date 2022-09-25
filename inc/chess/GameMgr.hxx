@@ -40,8 +40,10 @@ public:
     void InitModel();
     Pieces::PieceColor GetTurn() const;
     void SetRoom(const Remote::Room& room);
+    void SetKingHittable(const Pieces::PieceColor& color, bool status) const;
     void ConnectToServer();
     void StartGame();
+    void CloseEngine();
 
 private:
     void initPlayers();
@@ -55,23 +57,28 @@ private:
     bool askForReady() const;
     void readyAndWait(const Remote::Player& player) const;
     bool checkPiece(Pieces::BasePiece* piece) const;
+    void setSignalHandler(Pieces::BasePiece*& piece,
+            Pieces::Positions& positions);
+    void resetSignalHandler();
     void refreshBoard(Pieces::BasePiece* piece, Pieces::Positions& positions);
     void waitForUpdates(Pieces::Positions& positions) const;
     bool movePiece(Pieces::BasePiece* piece, const Pieces::Position& newPos);
-    void askCurrentPosition(Pieces::BasePiece*& piece, Pieces::Position& pos,
+    void askCurrentPosition(Pieces::BasePiece*& piece,
             Pieces::Positions& positions);
-    void askNewPosition(Pieces::BasePiece* piece, Pieces::Position& newPos);
-    void updateFrame(Pieces::BasePiece* piece, Pieces::Position& pos,
-            Pieces::Position& newPos, Pieces::Positions& positions);
+    void askNewPosition(Pieces::BasePiece* piece);
+    void updateFrame();
 
 private:
     bool m_isGameOnline;
+    bool m_isSkipWait;
     bool m_isUserGuest;
+    bool m_isSignalRegistered;
     std::string m_myUsername;
     Remote::Room m_room;
     Remote::ChessClient* m_client;
     Pieces::PieceColor m_turn;
     Chess::Board* m_board;
+    Player* m_thisPlayer;
     Player* m_ownerPlayer;
     Player* m_guestPlayer;
     PlayerMgr* m_playerMgr;

@@ -1,6 +1,8 @@
 #ifndef __PLAYER_PLAYER_MGR_HXX__
 #define __PLAYER_PLAYER_MGR_HXX__
 
+#include <string>
+
 class Player;
 
 class PlayerMgr
@@ -15,7 +17,8 @@ private:
 
 public:
     void InitPlayer(unsigned int index, Player* player);
-    Player* Get(unsigned int index);
+    Player* Get(int index);
+    Player* Get(const std::string& username);
 
 private:
     Player** m_players;

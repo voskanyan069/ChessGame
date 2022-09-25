@@ -119,8 +119,10 @@ void Chess::Board::initBoard()
     }
     initEmptyFields();
     initPieces();
-    //m_board[4][4] = Pieces::CreatePiece<
-    //    Pieces::Queen>(Pieces::WHITE, Pieces::Position(4, 4));
+//#warning (INIT BOARD COMMENT LINES)
+//    m_board[4][4] = Pieces::CreatePiece<
+//        Pieces::King>(Pieces::WHITE, Pieces::Position(4, 4));
+
     //m_board[1][3] = Pieces::CreatePiece<
     //    Pieces::King>(Pieces::BLACK, Pieces::Position(1, 3));
     //m_board[5][5] = Pieces::CreatePiece<
@@ -141,15 +143,56 @@ bool Chess::Board::IsFree(const Pieces::Position& pos) const
 bool Chess::Board::IsEnemy(const Pieces::Position& piecePos,
         const Pieces::Position& newPos) const
 {
+    if (IsFree(piecePos) || IsFree(newPos))
+    {
+        return false;
+    }
     return GetPiece(piecePos)->GetColor() != GetPiece(newPos)->GetColor();
+}
+
+bool Chess::Board::IsKingHittable(const Pieces::PieceColor& color) const
+{
+    for (int i = 0; i < 8; ++i)
+    {
+        for (int j = 0; j < 8; ++j)
+        {
+            Pieces::Position pos(i, j);
+            if (IsFree(pos))
+            {
+                continue;
+            }
+            Pieces::BasePiece* pPiece = GetPiece(pos);
+            if ("King" == pPiece->GetPieceName() && color == pPiece->GetColor())
+            {
+                return pPiece->IsHittable();
+            }
+        }
+    }
+}
+
+void Chess::Board::SetKingHittable(const Pieces::PieceColor& color,
+        bool status)
+{
+    for (int i = 0; i < 8; ++i)
+    {
+        for (int j = 0; j < 8; ++j)
+        {
+            Pieces::Position pos(i, j);
+            if (IsFree(pos))
+            {
+                continue;
+            }
+            Pieces::BasePiece* pPiece = GetPiece(pos);
+            if ("King" == pPiece->GetPieceName() && color == pPiece->GetColor())
+            {
+                return pPiece->SetHittable(status);
+            }
+        }
+    }
 }
 
 Pieces::BasePiece* Chess::Board::GetPiece(const Pieces::Position& pos) const
 {
-    if (nullptr == m_board[pos.x][pos.y])
-    {
-        return nullptr;
-    }
     return m_board[pos.x][pos.y];
 }
 
@@ -157,7 +200,7 @@ void Chess::Board::SetAvailableMoves(const Pieces::Positions& positions) const
 {
     for (auto& pos : positions)
     {
-        if (nullptr == GetPiece(pos))
+        if (IsFree(pos))
         {
             Pieces::BasePiece* available = new Pieces::EmptyPiece(
                     Pieces::Position(pos.x, pos.y));
@@ -177,7 +220,7 @@ void Chess::Board::DestroyEmpties()
     {
         for (int j = 0; j < 8; ++j)
         {
-            if (nullptr == m_board[i][j])
+            if (IsFree(Pieces::Position(i, j)))
             {
                 continue;
             }

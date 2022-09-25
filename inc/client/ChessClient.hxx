@@ -1,6 +1,7 @@
 #ifndef __CLIENT_CHESS_CLIENT_HXX__
 #define __CLIENT_CHESS_CLIENT_HXX__
 
+#include "utils/Types.hxx"
 #include "protogen/ChessServer.grpc.pb.h"
 
 #include <string>
@@ -10,16 +11,8 @@ namespace grpc
     class Status;
 }
 
-namespace Pieces
-{
-    struct Position;
-}
-
 namespace Remote
 {
-    struct Room;
-    struct Player;
-    struct LastMove;
     class ChessClient;
 };
 
@@ -40,8 +33,12 @@ public:
     void ReadLastMove(const Remote::Room& room,
             Remote::LastMove& lastMove) const;
     std::string GetOpponentUsername(const Remote::Room& room) const;
+    void SetKingHittable(const Remote::Room& room,
+            const Pieces::PieceColor& color, bool status) const;
 
 private:
+    void convertPieceColor(const Pieces::PieceColor& color,
+            Proto::PieceColor& pieceColor) const;
     void checkRequestStatus(const grpc::Status& status,
             const std::string& errorType="Request failed") const;
 

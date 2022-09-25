@@ -21,6 +21,7 @@ public:
 
 public:
     void SetHittable(bool isHittable);
+    bool IsHittable() const;
     const std::string& GetPieceName() const;
     const std::string& GetPieceChar() const;
     PieceColor GetColor() const;
@@ -33,7 +34,18 @@ protected:
     void setPieceChar(const Pieces::PieceColor& color,
             const std::string& white, const std::string& black);
 
+private:
+    void resetPieceHittableStatus(const Pieces::Position& pos) const;
+    bool comparePositions(const Pieces::Position& pos,
+            const Pieces::Position& newPos) const;
+    bool isKingHittable() const;
+    void changeEnemyKingHittableStatus();
+    bool cleanPositionIfEnemy(const Pieces::Position& pos) const;
+    void movePiece(const Pieces::Position& pos);
+    bool checkMoveResult(bool bResult, const std::string& sMsg) const;
+
 protected:
+    bool m_isHittable;
     std::string m_pieceName;
     std::string m_pieceChar;
     std::string m_pieceInitialChar;

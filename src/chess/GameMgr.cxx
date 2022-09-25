@@ -1,12 +1,12 @@
 #include "chess/GameMgr.hxx"
 #include "chess/Board.hxx"
+#include "sys/SignalHandler.hxx"
 #include "utils/Types.hxx"
 #include "io/Query.hxx"
 #include "io/Logger.hxx"
 #include "args/CMDArgument.hxx"
 #include "client/ChessClient.hxx"
 #include "pieces/BasePiece.hxx"
-#include "player/Player.hxx"
 #include "player/PlayerMgr.hxx"
 
 #include <iostream>
@@ -20,10 +20,13 @@ Chess::GameMgr* Chess::GameMgr::GetInstance()
 Chess::GameMgr::GameMgr()
     : m_isGameOnline(false)
     , m_isUserGuest(false)
+    , m_isSignalRegistered(false)
+    , m_isSkipWait(false)
     , m_myUsername("")
     , m_turn(Pieces::PieceColor::WHITE)
     , m_room("", "")
     , m_client(nullptr)
+    , m_thisPlayer(nullptr)
     , m_ownerPlayer(nullptr)
     , m_guestPlayer(nullptr)
     , m_board(Chess::Board::GetInstance())
@@ -35,6 +38,7 @@ Chess::GameMgr::GameMgr()
 Chess::GameMgr::~GameMgr()
 {
     delete m_client;
+    delete m_thisPlayer;
     delete m_ownerPlayer;
     delete m_guestPlayer;
 }
@@ -105,6 +109,30 @@ bool Chess::GameMgr::checkPiece(Pieces::BasePiece* piece) const
     return true;
 }
 
+void Chess::GameMgr::setSignalHandler(Pieces::BasePiece*& piece,
+        Pieces::Positions& positions)
+{
+    resetSignalHandler();
+    std::function<void(int)> handler = [&] (int signal) {
+        m_isSkipWait = true;
+        Logger::GetInstance()->PrintEndl();
+        if (m_turn == m_thisPlayer->color)
+        {
+            StartGame();
+        }
+        else
+        {
+            CloseEngine();
+        }
+    };
+    Sys::SignalHandler::SetCtrlCHandler(handler);
+}
+
+void Chess::GameMgr::resetSignalHandler()
+{
+    Sys::SignalHandler::DeleteSignalHandler(SIGINT);
+}
+
 void Chess::GameMgr::refreshBoard(Pieces::BasePiece* piece,
         Pieces::Positions& positions)
 {
@@ -117,6 +145,8 @@ void Chess::GameMgr::setPlayersUsername()
     guName = m_isUserGuest ? m_myUsername:m_client->GetOpponentUsername(m_room);
     m_ownerPlayer->name = owName;
     m_guestPlayer->name = guName;
+    m_ownerPlayer->color = Pieces::PieceColor::WHITE;
+    m_guestPlayer->color = Pieces::PieceColor::BLACK;
 }
 
 void Chess::GameMgr::switchPlayerOrder()
@@ -160,6 +190,8 @@ void Chess::GameMgr::waitForUpdates(Pieces::Positions& positions) const
     Logger::GetInstance()->PrintBoard();
     Logger::GetInstance()->Print(INFO, "Waiting for opponent move...");
     m_client->ReadLastMove(m_room, lastMove);
+    m_board->SetKingHittable(lastMove.hittableKingColor,
+            lastMove.isKingHittable);
     piece = m_board->GetPiece(lastMove.oldPos);
     piece->GetAvailableMoves(positions);
     piece->Move(lastMove.newPos);
@@ -186,8 +218,9 @@ bool Chess::GameMgr::movePiece(Pieces::BasePiece* piece,
 }
 
 void Chess::GameMgr::askCurrentPosition(Pieces::BasePiece*& piece,
-        Pieces::Position& pos, Pieces::Positions& positions)
+        Pieces::Positions& positions)
 {
+    Pieces::Position pos;
     try
     {
         Query::GetInstance()->AskPosition("Current position", pos);
@@ -197,13 +230,13 @@ void Chess::GameMgr::askCurrentPosition(Pieces::BasePiece*& piece,
         Logger::GetInstance()->PrintEndl();
         Logger::GetInstance()->Print(e);
         Logger::GetInstance()->PrintEndl();
-        askCurrentPosition(piece, pos, positions);
+        askCurrentPosition(piece, positions);
         return;
     }
     piece = m_board->GetPiece(pos);
     if (!checkPiece(piece))
     {
-        askCurrentPosition(piece, pos, positions);
+        askCurrentPosition(piece, positions);
         return;
     }
     piece->GetAvailableMoves(positions);
@@ -211,9 +244,9 @@ void Chess::GameMgr::askCurrentPosition(Pieces::BasePiece*& piece,
     Logger::GetInstance()->PrintBoard();
 }
 
-void Chess::GameMgr::askNewPosition(Pieces::BasePiece* piece,
-        Pieces::Position& newPos)
+void Chess::GameMgr::askNewPosition(Pieces::BasePiece* piece)
 {
+    Pieces::Position newPos;
     try
     {
         Query::GetInstance()->AskPosition("New position", newPos);
@@ -223,50 +256,52 @@ void Chess::GameMgr::askNewPosition(Pieces::BasePiece* piece,
         Logger::GetInstance()->PrintEndl();
         Logger::GetInstance()->Print(e);
         Logger::GetInstance()->PrintEndl();
-        askNewPosition(piece, newPos);
+        askNewPosition(piece);
         return;
     }
     if (!movePiece(piece, newPos))
     {
-        askNewPosition(piece, newPos);
-        return;
+        askNewPosition(piece);
     }
     switchPlayerOrder();
 }
 
-void Chess::GameMgr::updateFrame(
-        Pieces::BasePiece* piece,
-        Pieces::Position& pos,
-        Pieces::Position& newPos,
-        Pieces::Positions& positions)
+void Chess::GameMgr::updateFrame()
 {
-    if (!m_isUserGuest)
+    Pieces::Positions positions;
+    Pieces::BasePiece* piece = nullptr;
+    Logger::GetInstance()->Print(INFO, "guestC: %d", m_guestPlayer->color);
+    Logger::GetInstance()->Print(INFO, "ownerC: %d", m_ownerPlayer->color);
+    Logger::GetInstance()->Print(INFO, "name  : %s", m_thisPlayer->name);
+    Logger::GetInstance()->Print(INFO, "color : %d", m_thisPlayer->color);
+    if (!m_isSkipWait && m_turn != m_thisPlayer->color)
     {
         waitForUpdates(positions);
         switchPlayerOrder();
     }
     Logger::GetInstance()->PrintBoard();
-    askCurrentPosition(piece, pos, positions);
-    askNewPosition(piece, newPos);
-    if (m_isUserGuest)
-    {
-        waitForUpdates(positions);
-        switchPlayerOrder();
-    }
+    askCurrentPosition(piece, positions);
+    setSignalHandler(piece, positions);
+    askNewPosition(piece);
+    resetSignalHandler();
+    m_isSkipWait = false;
     Logger::GetInstance()->PrintBoard();
 }
 
 void Chess::GameMgr::StartGame()
 {
-    Pieces::Position pos;
-    Pieces::Position newPos;
-    Pieces::Positions positions;
-    Pieces::BasePiece* piece = nullptr;
     m_isGameOnline = true;
     while (m_isGameOnline)
     {
-        updateFrame(piece, pos, newPos, positions);
+        updateFrame();
     }
+}
+
+void Chess::GameMgr::CloseEngine()
+{
+    m_isGameOnline = false;
+    Logger::GetInstance()->Print(WARN, "Closing game...");
+    std::exit(-1);
 }
 
 Pieces::PieceColor Chess::GameMgr::GetTurn() const
@@ -285,6 +320,20 @@ void Chess::GameMgr::InitModel()
     initClient();
     initRoom();
     initPlayers();
+}
+
+void Chess::GameMgr::SetKingHittable(const Pieces::PieceColor& color,
+        bool status) const
+{
+    try
+    {
+        m_client->SetKingHittable(m_room, color, status);
+    }
+    catch (const Utils::Exception& e)
+    {
+        Logger::GetInstance()->Print(e);
+        std::exit(1);
+    }
 }
 
 void Chess::GameMgr::ConnectToServer()
@@ -308,4 +357,5 @@ void Chess::GameMgr::ConnectToServer()
         std::exit(1);
     }
     setPlayersUsername();
+    m_thisPlayer = m_playerMgr->Get(m_myUsername);
 }

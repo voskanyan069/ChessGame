@@ -34,6 +34,24 @@ void Remote::ChessClient::checkRequestStatus(const grpc::Status& status,
     }
 }
 
+void Remote::ChessClient::convertPieceColor(const Pieces::PieceColor& color,
+        Proto::PieceColor& pieceColor) const
+{
+    switch (color)
+    {
+    case Pieces::PieceColor::WHITE:
+        {
+            pieceColor = Proto::PieceColor::WHITE;
+            break;
+        }
+    case Pieces::PieceColor::BLACK:
+        {
+            pieceColor = Proto::PieceColor::BLACK;
+            break;
+        }
+    }
+}
+
 bool Remote::ChessClient::IsRoomExists(const std::string& name) const
 {
     grpc::ClientContext context;
@@ -135,4 +153,20 @@ std::string Remote::ChessClient::GetOpponentUsername(
     grpc::Status status = m_stub->GetUsername(&context, request, &response);
     checkRequestStatus(status);
     return response.value();
+}
+
+void Remote::ChessClient::SetKingHittable(const Remote::Room& room,
+        const Pieces::PieceColor& color, bool newStatus) const
+{
+    grpc::ClientContext context;
+    Proto::RoomWithIsKingHittable request;
+    Proto::Empty response;
+    Proto::PieceColor pieceColor;
+    convertPieceColor(color, pieceColor);
+    request.mutable_iskinghittable()->set_color(pieceColor);
+    request.mutable_iskinghittable()->set_status(newStatus);
+    request.mutable_room()->set_name(room.name);
+    request.mutable_room()->set_password(room.password);
+    grpc::Status status = m_stub->SetKingHittable(&context, request, &response);
+    checkRequestStatus(status);
 }

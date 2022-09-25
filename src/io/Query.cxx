@@ -1,7 +1,7 @@
 #include "io/Query.hxx"
+#include "utils/Types.hxx"
 #include "utils/Exception.hxx"
 #include "chess/GameMgr.hxx"
-#include "player/Player.hxx"
 #include "player/PlayerMgr.hxx"
 #include "pieces/PieceMgr.hxx"
 #include "pieces/BasePiece.hxx"

@@ -1,6 +1,8 @@
 #include "player/PlayerMgr.hxx"
-#include "player/Player.hxx"
+#include "utils/Types.hxx"
 #include "utils/Exception.hxx"
+
+#include <string>
 
 PlayerMgr* PlayerMgr::GetInstance()
 {
@@ -22,11 +24,24 @@ void PlayerMgr::InitPlayer(unsigned int index, Player* player)
     m_players[index] = std::move(player);
 }
 
-Player* PlayerMgr::Get(unsigned int index)
+Player* PlayerMgr::Get(int index)
 {
-    if (2 < index)
+    if (2 < index || 0 > index)
     {
         throw Utils::Exception("Out of bound");
     }
     return m_players[index];
+}
+
+Player* PlayerMgr::Get(const std::string& username)
+{
+    for (int i = 0; i < 2; ++i)
+    {
+        Player* player = m_players[i];
+        if (username == player->name)
+        {
+            return player;
+        }
+    }
+    return nullptr;
 }
