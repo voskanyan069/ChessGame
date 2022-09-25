@@ -5,89 +5,61 @@
 
 #include <algorithm>
 
-#include <google/protobuf/stubs/common.h>
-#include <google/protobuf/stubs/port.h>
 #include <google/protobuf/io/coded_stream.h>
-#include <google/protobuf/wire_format_lite_inl.h>
+#include <google/protobuf/extension_set.h>
+#include <google/protobuf/wire_format_lite.h>
 #include <google/protobuf/descriptor.h>
 #include <google/protobuf/generated_message_reflection.h>
 #include <google/protobuf/reflection_ops.h>
 #include <google/protobuf/wire_format.h>
-// This is a temporary google only hack
-#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
-#include "third_party/protobuf/version.h"
-#endif
 // @@protoc_insertion_point(includes)
-
+#include <google/protobuf/port_def.inc>
 namespace Proto {
 }  // namespace Proto
-namespace protobuf_ChessServer_2eproto {
-void InitDefaults() {
-}
+static constexpr ::PROTOBUF_NAMESPACE_ID::Metadata* file_level_metadata_ChessServer_2eproto = nullptr;
+static constexpr ::PROTOBUF_NAMESPACE_ID::EnumDescriptor const** file_level_enum_descriptors_ChessServer_2eproto = nullptr;
+static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_ChessServer_2eproto = nullptr;
+const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_ChessServer_2eproto::offsets[1] = {};
+static constexpr ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema* schemas = nullptr;
+static constexpr ::PROTOBUF_NAMESPACE_ID::Message* const* file_default_instances = nullptr;
 
-const ::google::protobuf::uint32 TableStruct::offsets[1] = {};
-static const ::google::protobuf::internal::MigrationSchema* schemas = NULL;
-static const ::google::protobuf::Message* const* file_default_instances = NULL;
+const char descriptor_table_protodef_ChessServer_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
+  "\n\021ChessServer.proto\022\005Proto\032\026ChessServerT"
+  "ypes.proto2\363\003\n\013ChessServer\022,\n\014IsRoomExis"
+  "ts\022\r.Proto.String\032\013.Proto.Bool\"\000\0225\n\nCrea"
+  "teRoom\022\027.Proto.RoomWithUsername\032\014.Proto."
+  "Empty\"\000\0223\n\010JoinRoom\022\027.Proto.RoomWithUser"
+  "name\032\014.Proto.Empty\"\000\0227\n\013GetUsername\022\027.Pr"
+  "oto.RoomWithUsername\032\r.Proto.String\"\000\0223\n"
+  "\014WaitForReady\022\023.Proto.RoomSettings\032\014.Pro"
+  "to.Empty\"\000\022,\n\005Ready\022\023.Proto.ReadyRequest"
+  "\032\014.Proto.Empty\"\000\022/\n\tMovePiece\022\022.Proto.Mo"
+  "veRequest\032\014.Proto.Empty\"\000\022;\n\rReadPieceMo"
+  "ve\022\023.Proto.RoomSettings\032\023.Proto.LastMove"
+  "Info\"\000\022@\n\017SetKingHittable\022\035.Proto.RoomWi"
+  "thIsKingHittable\032\014.Proto.Empty\"\000b\006proto3"
+  ;
+static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_ChessServer_2eproto_deps[1] = {
+  &::descriptor_table_ChessServerTypes_2eproto,
+};
+static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_ChessServer_2eproto_sccs[1] = {
+};
+static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_ChessServer_2eproto_once;
+const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_ChessServer_2eproto = {
+  false, false, descriptor_table_protodef_ChessServer_2eproto, "ChessServer.proto", 560,
+  &descriptor_table_ChessServer_2eproto_once, descriptor_table_ChessServer_2eproto_sccs, descriptor_table_ChessServer_2eproto_deps, 0, 1,
+  schemas, file_default_instances, TableStruct_ChessServer_2eproto::offsets,
+  file_level_metadata_ChessServer_2eproto, 0, file_level_enum_descriptors_ChessServer_2eproto, file_level_service_descriptors_ChessServer_2eproto,
+};
 
-void protobuf_AssignDescriptors() {
-  AddDescriptors();
-  AssignDescriptors(
-      "ChessServer.proto", schemas, file_default_instances, TableStruct::offsets,
-      NULL, NULL, NULL);
-}
-
-void protobuf_AssignDescriptorsOnce() {
-  static ::google::protobuf::internal::once_flag once;
-  ::google::protobuf::internal::call_once(once, protobuf_AssignDescriptors);
-}
-
-void protobuf_RegisterTypes(const ::std::string&) GOOGLE_PROTOBUF_ATTRIBUTE_COLD;
-void protobuf_RegisterTypes(const ::std::string&) {
-  protobuf_AssignDescriptorsOnce();
-}
-
-void AddDescriptorsImpl() {
-  InitDefaults();
-  static const char descriptor[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
-      "\n\021ChessServer.proto\022\005Proto\032\026ChessServerT"
-      "ypes.proto2\261\003\n\013ChessServer\022,\n\014IsRoomExis"
-      "ts\022\r.Proto.String\032\013.Proto.Bool\"\000\0225\n\nCrea"
-      "teRoom\022\027.Proto.RoomWithUsername\032\014.Proto."
-      "Empty\"\000\0223\n\010JoinRoom\022\027.Proto.RoomWithUser"
-      "name\032\014.Proto.Empty\"\000\0227\n\013GetUsername\022\027.Pr"
-      "oto.RoomWithUsername\032\r.Proto.String\"\000\0223\n"
-      "\014WaitForReady\022\023.Proto.RoomSettings\032\014.Pro"
-      "to.Empty\"\000\022,\n\005Ready\022\023.Proto.ReadyRequest"
-      "\032\014.Proto.Empty\"\000\022/\n\tMovePiece\022\022.Proto.Mo"
-      "veRequest\032\014.Proto.Empty\"\000\022;\n\rReadPieceMo"
-      "ve\022\023.Proto.RoomSettings\032\023.Proto.LastMove"
-      "Info\"\000b\006proto3"
-  };
-  ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 494);
-  ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
-    "ChessServer.proto", &protobuf_RegisterTypes);
-  ::protobuf_ChessServerTypes_2eproto::AddDescriptors();
-}
-
-void AddDescriptors() {
-  static ::google::protobuf::internal::once_flag once;
-  ::google::protobuf::internal::call_once(once, AddDescriptorsImpl);
-}
-// Force AddDescriptors() to be called at dynamic initialization time.
-struct StaticDescriptorInitializer {
-  StaticDescriptorInitializer() {
-    AddDescriptors();
-  }
-} static_descriptor_initializer;
-}  // namespace protobuf_ChessServer_2eproto
+// Force running AddDescriptors() at dynamic initialization time.
+static bool dynamic_init_dummy_ChessServer_2eproto = (static_cast<void>(::PROTOBUF_NAMESPACE_ID::internal::AddDescriptors(&descriptor_table_ChessServer_2eproto)), true);
 namespace Proto {
 
 // @@protoc_insertion_point(namespace_scope)
 }  // namespace Proto
-namespace google {
-namespace protobuf {
-}  // namespace protobuf
-}  // namespace google
+PROTOBUF_NAMESPACE_OPEN
+PROTOBUF_NAMESPACE_CLOSE
 
 // @@protoc_insertion_point(global_scope)
+#include <google/protobuf/port_undef.inc>
