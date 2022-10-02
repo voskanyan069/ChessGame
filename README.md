@@ -13,5 +13,5 @@
 - Implement checkmate
 - Close session when one of players leave room
 - Close session when signal received (ctrl-c, termination)
-- Error when in room already 2 players
-- [CRITICAL] Fix signal handling when returing from new position (Desc: Cannot catch SIGINT second time)
+- ~~Error when in room already 2 players~~
+- Add spectator mode
