@@ -100,6 +100,11 @@ grpc::Status Remote::ChessServiceImpl::JoinRoom(
         return grpc::Status(grpc::StatusCode::CANCELLED, errMsg);
     }
     Remote::ServerRoom& room = m_mapRooms[request->room().name()];
+    if (!room.ownerPlayer.username.empty() &&
+        !room.guestPlayer.username.empty())
+    {
+        return grpc::Status(grpc::StatusCode::CANCELLED,"The room is not free");
+    }
     room.guestPlayer.username = request->username();
     if (room.ownerPlayer == room.guestPlayer)
     {
