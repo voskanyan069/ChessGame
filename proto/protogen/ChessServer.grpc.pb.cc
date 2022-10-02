@@ -22,6 +22,7 @@
 namespace Proto {
 
 static const char* ChessServer_method_names[] = {
+  "/Proto.ChessServer/GetRooms",
   "/Proto.ChessServer/IsRoomExists",
   "/Proto.ChessServer/CreateRoom",
   "/Proto.ChessServer/JoinRoom",
@@ -40,16 +41,45 @@ std::unique_ptr< ChessServer::Stub> ChessServer::NewStub(const std::shared_ptr< 
 }
 
 ChessServer::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel)
-  : channel_(channel), rpcmethod_IsRoomExists_(ChessServer_method_names[0], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_CreateRoom_(ChessServer_method_names[1], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_JoinRoom_(ChessServer_method_names[2], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_GetUsername_(ChessServer_method_names[3], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_WaitForReady_(ChessServer_method_names[4], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_Ready_(ChessServer_method_names[5], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_MovePiece_(ChessServer_method_names[6], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_ReadPieceMove_(ChessServer_method_names[7], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_SetKingHittable_(ChessServer_method_names[8], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  : channel_(channel), rpcmethod_GetRooms_(ChessServer_method_names[0], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_IsRoomExists_(ChessServer_method_names[1], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_CreateRoom_(ChessServer_method_names[2], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_JoinRoom_(ChessServer_method_names[3], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_GetUsername_(ChessServer_method_names[4], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_WaitForReady_(ChessServer_method_names[5], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_Ready_(ChessServer_method_names[6], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_MovePiece_(ChessServer_method_names[7], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_ReadPieceMove_(ChessServer_method_names[8], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_SetKingHittable_(ChessServer_method_names[9], ::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
+
+::grpc::Status ChessServer::Stub::GetRooms(::grpc::ClientContext* context, const ::Proto::Empty& request, ::Proto::RoomsInfo* response) {
+  return ::grpc::internal::BlockingUnaryCall(channel_.get(), rpcmethod_GetRooms_, context, request, response);
+}
+
+void ChessServer::Stub::experimental_async::GetRooms(::grpc::ClientContext* context, const ::Proto::Empty* request, ::Proto::RoomsInfo* response, std::function<void(::grpc::Status)> f) {
+  ::grpc_impl::internal::CallbackUnaryCall(stub_->channel_.get(), stub_->rpcmethod_GetRooms_, context, request, response, std::move(f));
+}
+
+void ChessServer::Stub::experimental_async::GetRooms(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::RoomsInfo* response, std::function<void(::grpc::Status)> f) {
+  ::grpc_impl::internal::CallbackUnaryCall(stub_->channel_.get(), stub_->rpcmethod_GetRooms_, context, request, response, std::move(f));
+}
+
+void ChessServer::Stub::experimental_async::GetRooms(::grpc::ClientContext* context, const ::Proto::Empty* request, ::Proto::RoomsInfo* response, ::grpc::experimental::ClientUnaryReactor* reactor) {
+  ::grpc_impl::internal::ClientCallbackUnaryFactory::Create(stub_->channel_.get(), stub_->rpcmethod_GetRooms_, context, request, response, reactor);
+}
+
+void ChessServer::Stub::experimental_async::GetRooms(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::RoomsInfo* response, ::grpc::experimental::ClientUnaryReactor* reactor) {
+  ::grpc_impl::internal::ClientCallbackUnaryFactory::Create(stub_->channel_.get(), stub_->rpcmethod_GetRooms_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::Proto::RoomsInfo>* ChessServer::Stub::AsyncGetRoomsRaw(::grpc::ClientContext* context, const ::Proto::Empty& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc_impl::internal::ClientAsyncResponseReaderFactory< ::Proto::RoomsInfo>::Create(channel_.get(), cq, rpcmethod_GetRooms_, context, request, true);
+}
+
+::grpc::ClientAsyncResponseReader< ::Proto::RoomsInfo>* ChessServer::Stub::PrepareAsyncGetRoomsRaw(::grpc::ClientContext* context, const ::Proto::Empty& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc_impl::internal::ClientAsyncResponseReaderFactory< ::Proto::RoomsInfo>::Create(channel_.get(), cq, rpcmethod_GetRooms_, context, request, false);
+}
 
 ::grpc::Status ChessServer::Stub::IsRoomExists(::grpc::ClientContext* context, const ::Proto::String& request, ::Proto::Bool* response) {
   return ::grpc::internal::BlockingUnaryCall(channel_.get(), rpcmethod_IsRoomExists_, context, request, response);
@@ -307,22 +337,22 @@ ChessServer::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       ChessServer_method_names[0],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< ChessServer::Service, ::Proto::Empty, ::Proto::RoomsInfo>(
+          [](ChessServer::Service* service,
+             ::grpc_impl::ServerContext* ctx,
+             const ::Proto::Empty* req,
+             ::Proto::RoomsInfo* resp) {
+               return service->GetRooms(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      ChessServer_method_names[1],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< ChessServer::Service, ::Proto::String, ::Proto::Bool>(
           [](ChessServer::Service* service,
              ::grpc_impl::ServerContext* ctx,
              const ::Proto::String* req,
              ::Proto::Bool* resp) {
                return service->IsRoomExists(ctx, req, resp);
-             }, this)));
-  AddMethod(new ::grpc::internal::RpcServiceMethod(
-      ChessServer_method_names[1],
-      ::grpc::internal::RpcMethod::NORMAL_RPC,
-      new ::grpc::internal::RpcMethodHandler< ChessServer::Service, ::Proto::RoomWithUsername, ::Proto::Empty>(
-          [](ChessServer::Service* service,
-             ::grpc_impl::ServerContext* ctx,
-             const ::Proto::RoomWithUsername* req,
-             ::Proto::Empty* resp) {
-               return service->CreateRoom(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       ChessServer_method_names[2],
@@ -332,10 +362,20 @@ ChessServer::Service::Service() {
              ::grpc_impl::ServerContext* ctx,
              const ::Proto::RoomWithUsername* req,
              ::Proto::Empty* resp) {
-               return service->JoinRoom(ctx, req, resp);
+               return service->CreateRoom(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       ChessServer_method_names[3],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< ChessServer::Service, ::Proto::RoomWithUsername, ::Proto::Empty>(
+          [](ChessServer::Service* service,
+             ::grpc_impl::ServerContext* ctx,
+             const ::Proto::RoomWithUsername* req,
+             ::Proto::Empty* resp) {
+               return service->JoinRoom(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      ChessServer_method_names[4],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< ChessServer::Service, ::Proto::RoomWithUsername, ::Proto::String>(
           [](ChessServer::Service* service,
@@ -345,7 +385,7 @@ ChessServer::Service::Service() {
                return service->GetUsername(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      ChessServer_method_names[4],
+      ChessServer_method_names[5],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< ChessServer::Service, ::Proto::RoomSettings, ::Proto::Empty>(
           [](ChessServer::Service* service,
@@ -355,7 +395,7 @@ ChessServer::Service::Service() {
                return service->WaitForReady(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      ChessServer_method_names[5],
+      ChessServer_method_names[6],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< ChessServer::Service, ::Proto::ReadyRequest, ::Proto::Empty>(
           [](ChessServer::Service* service,
@@ -365,7 +405,7 @@ ChessServer::Service::Service() {
                return service->Ready(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      ChessServer_method_names[6],
+      ChessServer_method_names[7],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< ChessServer::Service, ::Proto::MoveRequest, ::Proto::Empty>(
           [](ChessServer::Service* service,
@@ -375,7 +415,7 @@ ChessServer::Service::Service() {
                return service->MovePiece(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      ChessServer_method_names[7],
+      ChessServer_method_names[8],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< ChessServer::Service, ::Proto::RoomSettings, ::Proto::LastMoveInfo>(
           [](ChessServer::Service* service,
@@ -385,7 +425,7 @@ ChessServer::Service::Service() {
                return service->ReadPieceMove(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      ChessServer_method_names[8],
+      ChessServer_method_names[9],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< ChessServer::Service, ::Proto::RoomWithIsKingHittable, ::Proto::Empty>(
           [](ChessServer::Service* service,
@@ -397,6 +437,13 @@ ChessServer::Service::Service() {
 }
 
 ChessServer::Service::~Service() {
+}
+
+::grpc::Status ChessServer::Service::GetRooms(::grpc::ServerContext* context, const ::Proto::Empty* request, ::Proto::RoomsInfo* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
 }
 
 ::grpc::Status ChessServer::Service::IsRoomExists(::grpc::ServerContext* context, const ::Proto::String* request, ::Proto::Bool* response) {

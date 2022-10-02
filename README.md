@@ -13,7 +13,7 @@
 - Implement checkmate
 - Close session when one of players leave room
 - Allow to join other players when someone press not ready
-- Add GetRooms() rpc
+- ~~Add GetRooms() rpc~~
 - ~~Close session when signal received (ctrl-c, termination)~~
 - ~~Error when in room already 2 players~~
 - Add spectator mode

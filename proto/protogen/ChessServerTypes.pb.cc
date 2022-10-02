@@ -34,6 +34,10 @@ class PositionDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Position> _instance;
 } _Position_default_instance_;
+class RoomsInfoDefaultTypeInternal {
+ public:
+  ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<RoomsInfo> _instance;
+} _RoomsInfo_default_instance_;
 class RoomSettingsDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<RoomSettings> _instance;
@@ -211,6 +215,20 @@ static void InitDefaultsscc_info_RoomWithUsername_ChessServerTypes_2eproto() {
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_RoomWithUsername_ChessServerTypes_2eproto}, {
       &scc_info_RoomSettings_ChessServerTypes_2eproto.base,}};
 
+static void InitDefaultsscc_info_RoomsInfo_ChessServerTypes_2eproto() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+  {
+    void* ptr = &::Proto::_RoomsInfo_default_instance_;
+    new (ptr) ::Proto::RoomsInfo();
+    ::PROTOBUF_NAMESPACE_ID::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::Proto::RoomsInfo::InitAsDefaultInstance();
+}
+
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_RoomsInfo_ChessServerTypes_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_RoomsInfo_ChessServerTypes_2eproto}, {}};
+
 static void InitDefaultsscc_info_String_ChessServerTypes_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
@@ -225,7 +243,7 @@ static void InitDefaultsscc_info_String_ChessServerTypes_2eproto() {
 ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_String_ChessServerTypes_2eproto =
     {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_String_ChessServerTypes_2eproto}, {}};
 
-static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_ChessServerTypes_2eproto[11];
+static ::PROTOBUF_NAMESPACE_ID::Metadata file_level_metadata_ChessServerTypes_2eproto[12];
 static const ::PROTOBUF_NAMESPACE_ID::EnumDescriptor* file_level_enum_descriptors_ChessServerTypes_2eproto[2];
 static constexpr ::PROTOBUF_NAMESPACE_ID::ServiceDescriptor const** file_level_service_descriptors_ChessServerTypes_2eproto = nullptr;
 
@@ -254,6 +272,12 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_ChessServerTypes_2eproto::offs
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::Proto::Position, x_),
   PROTOBUF_FIELD_OFFSET(::Proto::Position, y_),
+  ~0u,  // no _has_bits_
+  PROTOBUF_FIELD_OFFSET(::Proto::RoomsInfo, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::Proto::RoomsInfo, names_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::Proto::RoomSettings, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -312,13 +336,14 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 5, -1, sizeof(::Proto::Bool)},
   { 11, -1, sizeof(::Proto::String)},
   { 17, -1, sizeof(::Proto::Position)},
-  { 24, -1, sizeof(::Proto::RoomSettings)},
-  { 31, -1, sizeof(::Proto::RoomWithUsername)},
-  { 38, -1, sizeof(::Proto::ReadyRequest)},
-  { 46, -1, sizeof(::Proto::MoveRequest)},
-  { 54, -1, sizeof(::Proto::IsKingHittable)},
-  { 61, -1, sizeof(::Proto::LastMoveInfo)},
-  { 69, -1, sizeof(::Proto::RoomWithIsKingHittable)},
+  { 24, -1, sizeof(::Proto::RoomsInfo)},
+  { 30, -1, sizeof(::Proto::RoomSettings)},
+  { 37, -1, sizeof(::Proto::RoomWithUsername)},
+  { 44, -1, sizeof(::Proto::ReadyRequest)},
+  { 52, -1, sizeof(::Proto::MoveRequest)},
+  { 60, -1, sizeof(::Proto::IsKingHittable)},
+  { 67, -1, sizeof(::Proto::LastMoveInfo)},
+  { 75, -1, sizeof(::Proto::RoomWithIsKingHittable)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -326,6 +351,7 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Proto::_Bool_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Proto::_String_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Proto::_Position_default_instance_),
+  reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Proto::_RoomsInfo_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Proto::_RoomSettings_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Proto::_RoomWithUsername_default_instance_),
   reinterpret_cast<const ::PROTOBUF_NAMESPACE_ID::Message*>(&::Proto::_ReadyRequest_default_instance_),
@@ -339,29 +365,30 @@ const char descriptor_table_protodef_ChessServerTypes_2eproto[] PROTOBUF_SECTION
   "\n\026ChessServerTypes.proto\022\005Proto\"\007\n\005Empty"
   "\"\025\n\004Bool\022\r\n\005value\030\001 \001(\010\"\027\n\006String\022\r\n\005val"
   "ue\030\001 \001(\t\" \n\010Position\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001"
-  "(\005\".\n\014RoomSettings\022\014\n\004name\030\001 \001(\t\022\020\n\010pass"
-  "word\030\002 \001(\t\"G\n\020RoomWithUsername\022!\n\004room\030\001"
-  " \001(\0132\023.Proto.RoomSettings\022\020\n\010username\030\002 "
-  "\001(\t\"i\n\014ReadyRequest\022!\n\004room\030\001 \001(\0132\023.Prot"
-  "o.RoomSettings\022%\n\nplayertype\030\002 \001(\0162\021.Pro"
-  "to.PlayerType\022\017\n\007isready\030\003 \001(\010\"|\n\013MoveRe"
-  "quest\022!\n\004room\030\001 \001(\0132\023.Proto.RoomSettings"
-  "\022$\n\013oldPosition\030\002 \001(\0132\017.Proto.Position\022$"
-  "\n\013newPosition\030\003 \001(\0132\017.Proto.Position\"B\n\016"
-  "IsKingHittable\022 \n\005color\030\002 \001(\0162\021.Proto.Pi"
-  "eceColor\022\016\n\006status\030\003 \001(\010\"\211\001\n\014LastMoveInf"
-  "o\022$\n\013oldPosition\030\001 \001(\0132\017.Proto.Position\022"
-  "$\n\013newPosition\030\002 \001(\0132\017.Proto.Position\022-\n"
-  "\016iskinghittable\030\003 \001(\0132\025.Proto.IsKingHitt"
-  "able\"j\n\026RoomWithIsKingHittable\022!\n\004room\030\001"
-  " \001(\0132\023.Proto.RoomSettings\022-\n\016iskinghitta"
-  "ble\030\002 \001(\0132\025.Proto.IsKingHittable*\"\n\nPlay"
-  "erType\022\t\n\005OWNER\020\000\022\t\n\005GUEST\020\001*\"\n\nPieceCol"
-  "or\022\t\n\005WHITE\020\000\022\t\n\005BLACK\020\001b\006proto3"
+  "(\005\"\032\n\tRoomsInfo\022\r\n\005names\030\001 \003(\t\".\n\014RoomSe"
+  "ttings\022\014\n\004name\030\001 \001(\t\022\020\n\010password\030\002 \001(\t\"G"
+  "\n\020RoomWithUsername\022!\n\004room\030\001 \001(\0132\023.Proto"
+  ".RoomSettings\022\020\n\010username\030\002 \001(\t\"i\n\014Ready"
+  "Request\022!\n\004room\030\001 \001(\0132\023.Proto.RoomSettin"
+  "gs\022%\n\nplayertype\030\002 \001(\0162\021.Proto.PlayerTyp"
+  "e\022\017\n\007isready\030\003 \001(\010\"|\n\013MoveRequest\022!\n\004roo"
+  "m\030\001 \001(\0132\023.Proto.RoomSettings\022$\n\013oldPosit"
+  "ion\030\002 \001(\0132\017.Proto.Position\022$\n\013newPositio"
+  "n\030\003 \001(\0132\017.Proto.Position\"B\n\016IsKingHittab"
+  "le\022 \n\005color\030\002 \001(\0162\021.Proto.PieceColor\022\016\n\006"
+  "status\030\003 \001(\010\"\211\001\n\014LastMoveInfo\022$\n\013oldPosi"
+  "tion\030\001 \001(\0132\017.Proto.Position\022$\n\013newPositi"
+  "on\030\002 \001(\0132\017.Proto.Position\022-\n\016iskinghitta"
+  "ble\030\003 \001(\0132\025.Proto.IsKingHittable\"j\n\026Room"
+  "WithIsKingHittable\022!\n\004room\030\001 \001(\0132\023.Proto"
+  ".RoomSettings\022-\n\016iskinghittable\030\002 \001(\0132\025."
+  "Proto.IsKingHittable*\"\n\nPlayerType\022\t\n\005OW"
+  "NER\020\000\022\t\n\005GUEST\020\001*\"\n\nPieceColor\022\t\n\005WHITE\020"
+  "\000\022\t\n\005BLACK\020\001b\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_ChessServerTypes_2eproto_deps[1] = {
 };
-static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_ChessServerTypes_2eproto_sccs[11] = {
+static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_ChessServerTypes_2eproto_sccs[12] = {
   &scc_info_Bool_ChessServerTypes_2eproto.base,
   &scc_info_Empty_ChessServerTypes_2eproto.base,
   &scc_info_IsKingHittable_ChessServerTypes_2eproto.base,
@@ -372,14 +399,15 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_Che
   &scc_info_RoomSettings_ChessServerTypes_2eproto.base,
   &scc_info_RoomWithIsKingHittable_ChessServerTypes_2eproto.base,
   &scc_info_RoomWithUsername_ChessServerTypes_2eproto.base,
+  &scc_info_RoomsInfo_ChessServerTypes_2eproto.base,
   &scc_info_String_ChessServerTypes_2eproto.base,
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_ChessServerTypes_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_ChessServerTypes_2eproto = {
-  false, false, descriptor_table_protodef_ChessServerTypes_2eproto, "ChessServerTypes.proto", 872,
-  &descriptor_table_ChessServerTypes_2eproto_once, descriptor_table_ChessServerTypes_2eproto_sccs, descriptor_table_ChessServerTypes_2eproto_deps, 11, 0,
+  false, false, descriptor_table_protodef_ChessServerTypes_2eproto, "ChessServerTypes.proto", 900,
+  &descriptor_table_ChessServerTypes_2eproto_once, descriptor_table_ChessServerTypes_2eproto_sccs, descriptor_table_ChessServerTypes_2eproto_deps, 12, 0,
   schemas, file_default_instances, TableStruct_ChessServerTypes_2eproto::offsets,
-  file_level_metadata_ChessServerTypes_2eproto, 11, file_level_enum_descriptors_ChessServerTypes_2eproto, file_level_service_descriptors_ChessServerTypes_2eproto,
+  file_level_metadata_ChessServerTypes_2eproto, 12, file_level_enum_descriptors_ChessServerTypes_2eproto, file_level_service_descriptors_ChessServerTypes_2eproto,
 };
 
 // Force running AddDescriptors() at dynamic initialization time.
@@ -1210,6 +1238,214 @@ void Position::InternalSwap(Position* other) {
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata Position::GetMetadata() const {
+  return GetMetadataStatic();
+}
+
+
+// ===================================================================
+
+void RoomsInfo::InitAsDefaultInstance() {
+}
+class RoomsInfo::_Internal {
+ public:
+};
+
+RoomsInfo::RoomsInfo(::PROTOBUF_NAMESPACE_ID::Arena* arena)
+  : ::PROTOBUF_NAMESPACE_ID::Message(arena),
+  names_(arena) {
+  SharedCtor();
+  RegisterArenaDtor(arena);
+  // @@protoc_insertion_point(arena_constructor:Proto.RoomsInfo)
+}
+RoomsInfo::RoomsInfo(const RoomsInfo& from)
+  : ::PROTOBUF_NAMESPACE_ID::Message(),
+      names_(from.names_) {
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:Proto.RoomsInfo)
+}
+
+void RoomsInfo::SharedCtor() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_RoomsInfo_ChessServerTypes_2eproto.base);
+}
+
+RoomsInfo::~RoomsInfo() {
+  // @@protoc_insertion_point(destructor:Proto.RoomsInfo)
+  SharedDtor();
+  _internal_metadata_.Delete<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+void RoomsInfo::SharedDtor() {
+  GOOGLE_DCHECK(GetArena() == nullptr);
+}
+
+void RoomsInfo::ArenaDtor(void* object) {
+  RoomsInfo* _this = reinterpret_cast< RoomsInfo* >(object);
+  (void)_this;
+}
+void RoomsInfo::RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena*) {
+}
+void RoomsInfo::SetCachedSize(int size) const {
+  _cached_size_.Set(size);
+}
+const RoomsInfo& RoomsInfo::default_instance() {
+  ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&::scc_info_RoomsInfo_ChessServerTypes_2eproto.base);
+  return *internal_default_instance();
+}
+
+
+void RoomsInfo::Clear() {
+// @@protoc_insertion_point(message_clear_start:Proto.RoomsInfo)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  names_.Clear();
+  _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
+}
+
+const char* RoomsInfo::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
+#define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  ::PROTOBUF_NAMESPACE_ID::Arena* arena = GetArena(); (void)arena;
+  while (!ctx->Done(&ptr)) {
+    ::PROTOBUF_NAMESPACE_ID::uint32 tag;
+    ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
+    CHK_(ptr);
+    switch (tag >> 3) {
+      // repeated string names = 1;
+      case 1:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            auto str = _internal_add_names();
+            ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+            CHK_(::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "Proto.RoomsInfo.names"));
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<10>(ptr));
+        } else goto handle_unusual;
+        continue;
+      default: {
+      handle_unusual:
+        if ((tag & 7) == 4 || tag == 0) {
+          ctx->SetLastTag(tag);
+          goto success;
+        }
+        ptr = UnknownFieldParse(tag,
+            _internal_metadata_.mutable_unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(),
+            ptr, ctx);
+        CHK_(ptr != nullptr);
+        continue;
+      }
+    }  // switch
+  }  // while
+success:
+  return ptr;
+failure:
+  ptr = nullptr;
+  goto success;
+#undef CHK_
+}
+
+::PROTOBUF_NAMESPACE_ID::uint8* RoomsInfo::_InternalSerialize(
+    ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Proto.RoomsInfo)
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // repeated string names = 1;
+  for (int i = 0, n = this->_internal_names_size(); i < n; i++) {
+    const auto& s = this->_internal_names(i);
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      s.data(), static_cast<int>(s.length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "Proto.RoomsInfo.names");
+    target = stream->WriteString(1, s, target);
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
+        _internal_metadata_.unknown_fields<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(::PROTOBUF_NAMESPACE_ID::UnknownFieldSet::default_instance), target, stream);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:Proto.RoomsInfo)
+  return target;
+}
+
+size_t RoomsInfo::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:Proto.RoomsInfo)
+  size_t total_size = 0;
+
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  // repeated string names = 1;
+  total_size += 1 *
+      ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(names_.size());
+  for (int i = 0, n = names_.size(); i < n; i++) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+      names_.Get(i));
+  }
+
+  if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
+    return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
+        _internal_metadata_, total_size, &_cached_size_);
+  }
+  int cached_size = ::PROTOBUF_NAMESPACE_ID::internal::ToCachedSize(total_size);
+  SetCachedSize(cached_size);
+  return total_size;
+}
+
+void RoomsInfo::MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:Proto.RoomsInfo)
+  GOOGLE_DCHECK_NE(&from, this);
+  const RoomsInfo* source =
+      ::PROTOBUF_NAMESPACE_ID::DynamicCastToGenerated<RoomsInfo>(
+          &from);
+  if (source == nullptr) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:Proto.RoomsInfo)
+    ::PROTOBUF_NAMESPACE_ID::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:Proto.RoomsInfo)
+    MergeFrom(*source);
+  }
+}
+
+void RoomsInfo::MergeFrom(const RoomsInfo& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:Proto.RoomsInfo)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(from._internal_metadata_);
+  ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  names_.MergeFrom(from.names_);
+}
+
+void RoomsInfo::CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:Proto.RoomsInfo)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void RoomsInfo::CopyFrom(const RoomsInfo& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:Proto.RoomsInfo)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool RoomsInfo::IsInitialized() const {
+  return true;
+}
+
+void RoomsInfo::InternalSwap(RoomsInfo* other) {
+  using std::swap;
+  _internal_metadata_.Swap<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>(&other->_internal_metadata_);
+  names_.InternalSwap(&other->names_);
+}
+
+::PROTOBUF_NAMESPACE_ID::Metadata RoomsInfo::GetMetadata() const {
   return GetMetadataStatic();
 }
 
@@ -3107,6 +3343,9 @@ template<> PROTOBUF_NOINLINE ::Proto::String* Arena::CreateMaybeMessage< ::Proto
 }
 template<> PROTOBUF_NOINLINE ::Proto::Position* Arena::CreateMaybeMessage< ::Proto::Position >(Arena* arena) {
   return Arena::CreateMessageInternal< ::Proto::Position >(arena);
+}
+template<> PROTOBUF_NOINLINE ::Proto::RoomsInfo* Arena::CreateMaybeMessage< ::Proto::RoomsInfo >(Arena* arena) {
+  return Arena::CreateMessageInternal< ::Proto::RoomsInfo >(arena);
 }
 template<> PROTOBUF_NOINLINE ::Proto::RoomSettings* Arena::CreateMaybeMessage< ::Proto::RoomSettings >(Arena* arena) {
   return Arena::CreateMessageInternal< ::Proto::RoomSettings >(arena);

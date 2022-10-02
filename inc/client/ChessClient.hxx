@@ -5,6 +5,7 @@
 #include "protogen/ChessServer.grpc.pb.h"
 
 #include <string>
+#include <vector>
 
 namespace grpc
 {
@@ -23,6 +24,7 @@ public:
     ~ChessClient() = default;
 
 public:
+    void GetRooms(std::vector<std::string>& vRoomNames) const;
     bool IsRoomExists(const std::string& name) const;
     void CreateRoom(const Remote::Room& room) const;
     void JoinRoom(const Remote::Room& room) const;

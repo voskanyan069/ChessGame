@@ -359,6 +359,20 @@ void Chess::GameMgr::SetKingHittable(const Pieces::PieceColor& color,
     }
 }
 
+void Chess::GameMgr::GetRooms()
+{
+    std::vector<std::string> vRoomNames;
+    m_client->GetRooms(vRoomNames);
+    Logger::GetInstance()->PrintEndl();
+    Logger::GetInstance()->Print(INFO, "Available rooms in the server:");
+    Logger::GetInstance()->PrintEndl();
+    for (int i = 0; i < vRoomNames.size(); ++i)
+    {
+        Logger::GetInstance()->Print(INFO, "%d: %s", 1 + i, vRoomNames.at(i));
+    }
+    Logger::GetInstance()->PrintEndl();
+}
+
 void Chess::GameMgr::ConnectToServer()
 {
     try

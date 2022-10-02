@@ -33,6 +33,18 @@ bool Remote::ChessServiceImpl::doCheckRoomSettings(
     return true;
 }
 
+grpc::Status Remote::ChessServiceImpl::GetRooms(
+        grpc::ServerContext* context,
+        const Proto::Empty* request,
+        Proto::RoomsInfo* response)
+{
+    for (const auto& room : m_mapRooms)
+    {
+        response->add_names(room.first);
+    }
+    return grpc::Status::OK;
+}
+
 grpc::Status Remote::ChessServiceImpl::IsRoomExists(
         grpc::ServerContext* context,
         const Proto::String* request,

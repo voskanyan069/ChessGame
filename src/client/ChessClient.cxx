@@ -52,6 +52,19 @@ void Remote::ChessClient::convertPieceColor(const Pieces::PieceColor& color,
     }
 }
 
+void Remote::ChessClient::GetRooms(std::vector<std::string>& vRoomNames) const
+{
+    grpc::ClientContext context;
+    Proto::Empty request;
+    Proto::RoomsInfo response;
+    grpc::Status status = m_stub->GetRooms(&context, request, &response);
+    checkRequestStatus(status);
+    for (int i = 0; i < response.names().size(); ++i)
+    {
+        vRoomNames.push_back(response.names(i));
+    }
+}
+
 bool Remote::ChessClient::IsRoomExists(const std::string& name) const
 {
     grpc::ClientContext context;

@@ -24,6 +24,10 @@ public:
     ~ChessServiceImpl();
 
 public:
+    grpc::Status GetRooms(
+            grpc::ServerContext* context,
+            const Proto::Empty* request,
+            Proto::RoomsInfo* response) override;
     grpc::Status IsRoomExists(
             grpc::ServerContext* context,
             const Proto::String* request,

@@ -41,6 +41,7 @@ public:
     Pieces::PieceColor GetTurn() const;
     void SetRoom(const Remote::Room& room);
     void SetKingHittable(const Pieces::PieceColor& color, bool status) const;
+    void GetRooms();
     void ConnectToServer();
     void DisconnectFromServer();
     void StartGame();

@@ -36,6 +36,13 @@ class ChessServer final {
   class StubInterface {
    public:
     virtual ~StubInterface() {}
+    virtual ::grpc::Status GetRooms(::grpc::ClientContext* context, const ::Proto::Empty& request, ::Proto::RoomsInfo* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Proto::RoomsInfo>> AsyncGetRooms(::grpc::ClientContext* context, const ::Proto::Empty& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Proto::RoomsInfo>>(AsyncGetRoomsRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Proto::RoomsInfo>> PrepareAsyncGetRooms(::grpc::ClientContext* context, const ::Proto::Empty& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Proto::RoomsInfo>>(PrepareAsyncGetRoomsRaw(context, request, cq));
+    }
     virtual ::grpc::Status IsRoomExists(::grpc::ClientContext* context, const ::Proto::String& request, ::Proto::Bool* response) = 0;
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Proto::Bool>> AsyncIsRoomExists(::grpc::ClientContext* context, const ::Proto::String& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Proto::Bool>>(AsyncIsRoomExistsRaw(context, request, cq));
@@ -102,6 +109,18 @@ class ChessServer final {
     class experimental_async_interface {
      public:
       virtual ~experimental_async_interface() {}
+      virtual void GetRooms(::grpc::ClientContext* context, const ::Proto::Empty* request, ::Proto::RoomsInfo* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void GetRooms(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::RoomsInfo* response, std::function<void(::grpc::Status)>) = 0;
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      virtual void GetRooms(::grpc::ClientContext* context, const ::Proto::Empty* request, ::Proto::RoomsInfo* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      #else
+      virtual void GetRooms(::grpc::ClientContext* context, const ::Proto::Empty* request, ::Proto::RoomsInfo* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
+      #endif
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      virtual void GetRooms(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::RoomsInfo* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      #else
+      virtual void GetRooms(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::RoomsInfo* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
+      #endif
       virtual void IsRoomExists(::grpc::ClientContext* context, const ::Proto::String* request, ::Proto::Bool* response, std::function<void(::grpc::Status)>) = 0;
       virtual void IsRoomExists(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Bool* response, std::function<void(::grpc::Status)>) = 0;
       #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -219,6 +238,8 @@ class ChessServer final {
     #endif
     virtual class experimental_async_interface* experimental_async() { return nullptr; }
   private:
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::Proto::RoomsInfo>* AsyncGetRoomsRaw(::grpc::ClientContext* context, const ::Proto::Empty& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::Proto::RoomsInfo>* PrepareAsyncGetRoomsRaw(::grpc::ClientContext* context, const ::Proto::Empty& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::Proto::Bool>* AsyncIsRoomExistsRaw(::grpc::ClientContext* context, const ::Proto::String& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::Proto::Bool>* PrepareAsyncIsRoomExistsRaw(::grpc::ClientContext* context, const ::Proto::String& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::Proto::Empty>* AsyncCreateRoomRaw(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) = 0;
@@ -241,6 +262,13 @@ class ChessServer final {
   class Stub final : public StubInterface {
    public:
     Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel);
+    ::grpc::Status GetRooms(::grpc::ClientContext* context, const ::Proto::Empty& request, ::Proto::RoomsInfo* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Proto::RoomsInfo>> AsyncGetRooms(::grpc::ClientContext* context, const ::Proto::Empty& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Proto::RoomsInfo>>(AsyncGetRoomsRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Proto::RoomsInfo>> PrepareAsyncGetRooms(::grpc::ClientContext* context, const ::Proto::Empty& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Proto::RoomsInfo>>(PrepareAsyncGetRoomsRaw(context, request, cq));
+    }
     ::grpc::Status IsRoomExists(::grpc::ClientContext* context, const ::Proto::String& request, ::Proto::Bool* response) override;
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Proto::Bool>> AsyncIsRoomExists(::grpc::ClientContext* context, const ::Proto::String& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Proto::Bool>>(AsyncIsRoomExistsRaw(context, request, cq));
@@ -307,6 +335,18 @@ class ChessServer final {
     class experimental_async final :
       public StubInterface::experimental_async_interface {
      public:
+      void GetRooms(::grpc::ClientContext* context, const ::Proto::Empty* request, ::Proto::RoomsInfo* response, std::function<void(::grpc::Status)>) override;
+      void GetRooms(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::RoomsInfo* response, std::function<void(::grpc::Status)>) override;
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      void GetRooms(::grpc::ClientContext* context, const ::Proto::Empty* request, ::Proto::RoomsInfo* response, ::grpc::ClientUnaryReactor* reactor) override;
+      #else
+      void GetRooms(::grpc::ClientContext* context, const ::Proto::Empty* request, ::Proto::RoomsInfo* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
+      #endif
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      void GetRooms(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::RoomsInfo* response, ::grpc::ClientUnaryReactor* reactor) override;
+      #else
+      void GetRooms(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::RoomsInfo* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
+      #endif
       void IsRoomExists(::grpc::ClientContext* context, const ::Proto::String* request, ::Proto::Bool* response, std::function<void(::grpc::Status)>) override;
       void IsRoomExists(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Bool* response, std::function<void(::grpc::Status)>) override;
       #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -426,6 +466,8 @@ class ChessServer final {
    private:
     std::shared_ptr< ::grpc::ChannelInterface> channel_;
     class experimental_async async_stub_{this};
+    ::grpc::ClientAsyncResponseReader< ::Proto::RoomsInfo>* AsyncGetRoomsRaw(::grpc::ClientContext* context, const ::Proto::Empty& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::Proto::RoomsInfo>* PrepareAsyncGetRoomsRaw(::grpc::ClientContext* context, const ::Proto::Empty& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::Proto::Bool>* AsyncIsRoomExistsRaw(::grpc::ClientContext* context, const ::Proto::String& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::Proto::Bool>* PrepareAsyncIsRoomExistsRaw(::grpc::ClientContext* context, const ::Proto::String& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::Proto::Empty>* AsyncCreateRoomRaw(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) override;
@@ -444,6 +486,7 @@ class ChessServer final {
     ::grpc::ClientAsyncResponseReader< ::Proto::LastMoveInfo>* PrepareAsyncReadPieceMoveRaw(::grpc::ClientContext* context, const ::Proto::RoomSettings& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::Proto::Empty>* AsyncSetKingHittableRaw(::grpc::ClientContext* context, const ::Proto::RoomWithIsKingHittable& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::Proto::Empty>* PrepareAsyncSetKingHittableRaw(::grpc::ClientContext* context, const ::Proto::RoomWithIsKingHittable& request, ::grpc::CompletionQueue* cq) override;
+    const ::grpc::internal::RpcMethod rpcmethod_GetRooms_;
     const ::grpc::internal::RpcMethod rpcmethod_IsRoomExists_;
     const ::grpc::internal::RpcMethod rpcmethod_CreateRoom_;
     const ::grpc::internal::RpcMethod rpcmethod_JoinRoom_;
@@ -460,6 +503,7 @@ class ChessServer final {
    public:
     Service();
     virtual ~Service();
+    virtual ::grpc::Status GetRooms(::grpc::ServerContext* context, const ::Proto::Empty* request, ::Proto::RoomsInfo* response);
     virtual ::grpc::Status IsRoomExists(::grpc::ServerContext* context, const ::Proto::String* request, ::Proto::Bool* response);
     virtual ::grpc::Status CreateRoom(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response);
     virtual ::grpc::Status JoinRoom(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response);
@@ -471,12 +515,32 @@ class ChessServer final {
     virtual ::grpc::Status SetKingHittable(::grpc::ServerContext* context, const ::Proto::RoomWithIsKingHittable* request, ::Proto::Empty* response);
   };
   template <class BaseClass>
+  class WithAsyncMethod_GetRooms : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_GetRooms() {
+      ::grpc::Service::MarkMethodAsync(0);
+    }
+    ~WithAsyncMethod_GetRooms() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetRooms(::grpc::ServerContext* /*context*/, const ::Proto::Empty* /*request*/, ::Proto::RoomsInfo* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestGetRooms(::grpc::ServerContext* context, ::Proto::Empty* request, ::grpc::ServerAsyncResponseWriter< ::Proto::RoomsInfo>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
   class WithAsyncMethod_IsRoomExists : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_IsRoomExists() {
-      ::grpc::Service::MarkMethodAsync(0);
+      ::grpc::Service::MarkMethodAsync(1);
     }
     ~WithAsyncMethod_IsRoomExists() override {
       BaseClassMustBeDerivedFromService(this);
@@ -487,7 +551,7 @@ class ChessServer final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestIsRoomExists(::grpc::ServerContext* context, ::Proto::String* request, ::grpc::ServerAsyncResponseWriter< ::Proto::Bool>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -496,7 +560,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_CreateRoom() {
-      ::grpc::Service::MarkMethodAsync(1);
+      ::grpc::Service::MarkMethodAsync(2);
     }
     ~WithAsyncMethod_CreateRoom() override {
       BaseClassMustBeDerivedFromService(this);
@@ -507,7 +571,7 @@ class ChessServer final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestCreateRoom(::grpc::ServerContext* context, ::Proto::RoomWithUsername* request, ::grpc::ServerAsyncResponseWriter< ::Proto::Empty>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -516,7 +580,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_JoinRoom() {
-      ::grpc::Service::MarkMethodAsync(2);
+      ::grpc::Service::MarkMethodAsync(3);
     }
     ~WithAsyncMethod_JoinRoom() override {
       BaseClassMustBeDerivedFromService(this);
@@ -527,7 +591,7 @@ class ChessServer final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestJoinRoom(::grpc::ServerContext* context, ::Proto::RoomWithUsername* request, ::grpc::ServerAsyncResponseWriter< ::Proto::Empty>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -536,7 +600,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_GetUsername() {
-      ::grpc::Service::MarkMethodAsync(3);
+      ::grpc::Service::MarkMethodAsync(4);
     }
     ~WithAsyncMethod_GetUsername() override {
       BaseClassMustBeDerivedFromService(this);
@@ -547,7 +611,7 @@ class ChessServer final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestGetUsername(::grpc::ServerContext* context, ::Proto::RoomWithUsername* request, ::grpc::ServerAsyncResponseWriter< ::Proto::String>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(4, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -556,7 +620,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_WaitForReady() {
-      ::grpc::Service::MarkMethodAsync(4);
+      ::grpc::Service::MarkMethodAsync(5);
     }
     ~WithAsyncMethod_WaitForReady() override {
       BaseClassMustBeDerivedFromService(this);
@@ -567,7 +631,7 @@ class ChessServer final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestWaitForReady(::grpc::ServerContext* context, ::Proto::RoomSettings* request, ::grpc::ServerAsyncResponseWriter< ::Proto::Empty>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(4, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(5, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -576,7 +640,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_Ready() {
-      ::grpc::Service::MarkMethodAsync(5);
+      ::grpc::Service::MarkMethodAsync(6);
     }
     ~WithAsyncMethod_Ready() override {
       BaseClassMustBeDerivedFromService(this);
@@ -587,7 +651,7 @@ class ChessServer final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestReady(::grpc::ServerContext* context, ::Proto::ReadyRequest* request, ::grpc::ServerAsyncResponseWriter< ::Proto::Empty>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(5, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(6, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -596,7 +660,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_MovePiece() {
-      ::grpc::Service::MarkMethodAsync(6);
+      ::grpc::Service::MarkMethodAsync(7);
     }
     ~WithAsyncMethod_MovePiece() override {
       BaseClassMustBeDerivedFromService(this);
@@ -607,7 +671,7 @@ class ChessServer final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestMovePiece(::grpc::ServerContext* context, ::Proto::MoveRequest* request, ::grpc::ServerAsyncResponseWriter< ::Proto::Empty>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(6, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(7, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -616,7 +680,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_ReadPieceMove() {
-      ::grpc::Service::MarkMethodAsync(7);
+      ::grpc::Service::MarkMethodAsync(8);
     }
     ~WithAsyncMethod_ReadPieceMove() override {
       BaseClassMustBeDerivedFromService(this);
@@ -627,7 +691,7 @@ class ChessServer final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestReadPieceMove(::grpc::ServerContext* context, ::Proto::RoomSettings* request, ::grpc::ServerAsyncResponseWriter< ::Proto::LastMoveInfo>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(7, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(8, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -636,7 +700,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_SetKingHittable() {
-      ::grpc::Service::MarkMethodAsync(8);
+      ::grpc::Service::MarkMethodAsync(9);
     }
     ~WithAsyncMethod_SetKingHittable() override {
       BaseClassMustBeDerivedFromService(this);
@@ -647,10 +711,57 @@ class ChessServer final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestSetKingHittable(::grpc::ServerContext* context, ::Proto::RoomWithIsKingHittable* request, ::grpc::ServerAsyncResponseWriter< ::Proto::Empty>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(8, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(9, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
-  typedef WithAsyncMethod_IsRoomExists<WithAsyncMethod_CreateRoom<WithAsyncMethod_JoinRoom<WithAsyncMethod_GetUsername<WithAsyncMethod_WaitForReady<WithAsyncMethod_Ready<WithAsyncMethod_MovePiece<WithAsyncMethod_ReadPieceMove<WithAsyncMethod_SetKingHittable<Service > > > > > > > > > AsyncService;
+  typedef WithAsyncMethod_GetRooms<WithAsyncMethod_IsRoomExists<WithAsyncMethod_CreateRoom<WithAsyncMethod_JoinRoom<WithAsyncMethod_GetUsername<WithAsyncMethod_WaitForReady<WithAsyncMethod_Ready<WithAsyncMethod_MovePiece<WithAsyncMethod_ReadPieceMove<WithAsyncMethod_SetKingHittable<Service > > > > > > > > > > AsyncService;
+  template <class BaseClass>
+  class ExperimentalWithCallbackMethod_GetRooms : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    ExperimentalWithCallbackMethod_GetRooms() {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::Service::
+    #else
+      ::grpc::Service::experimental().
+    #endif
+        MarkMethodCallback(0,
+          new ::grpc_impl::internal::CallbackUnaryHandler< ::Proto::Empty, ::Proto::RoomsInfo>(
+            [this](
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+                   ::grpc::CallbackServerContext*
+    #else
+                   ::grpc::experimental::CallbackServerContext*
+    #endif
+                     context, const ::Proto::Empty* request, ::Proto::RoomsInfo* response) { return this->GetRooms(context, request, response); }));}
+    void SetMessageAllocatorFor_GetRooms(
+        ::grpc::experimental::MessageAllocator< ::Proto::Empty, ::Proto::RoomsInfo>* allocator) {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(0);
+    #else
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(0);
+    #endif
+      static_cast<::grpc_impl::internal::CallbackUnaryHandler< ::Proto::Empty, ::Proto::RoomsInfo>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~ExperimentalWithCallbackMethod_GetRooms() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetRooms(::grpc::ServerContext* /*context*/, const ::Proto::Empty* /*request*/, ::Proto::RoomsInfo* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+    virtual ::grpc::ServerUnaryReactor* GetRooms(
+      ::grpc::CallbackServerContext* /*context*/, const ::Proto::Empty* /*request*/, ::Proto::RoomsInfo* /*response*/)
+    #else
+    virtual ::grpc::experimental::ServerUnaryReactor* GetRooms(
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::Proto::Empty* /*request*/, ::Proto::RoomsInfo* /*response*/)
+    #endif
+      { return nullptr; }
+  };
   template <class BaseClass>
   class ExperimentalWithCallbackMethod_IsRoomExists : public BaseClass {
    private:
@@ -662,7 +773,7 @@ class ChessServer final {
     #else
       ::grpc::Service::experimental().
     #endif
-        MarkMethodCallback(0,
+        MarkMethodCallback(1,
           new ::grpc_impl::internal::CallbackUnaryHandler< ::Proto::String, ::Proto::Bool>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -674,9 +785,9 @@ class ChessServer final {
     void SetMessageAllocatorFor_IsRoomExists(
         ::grpc::experimental::MessageAllocator< ::Proto::String, ::Proto::Bool>* allocator) {
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(0);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(1);
     #else
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(0);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(1);
     #endif
       static_cast<::grpc_impl::internal::CallbackUnaryHandler< ::Proto::String, ::Proto::Bool>*>(handler)
               ->SetMessageAllocator(allocator);
@@ -709,7 +820,7 @@ class ChessServer final {
     #else
       ::grpc::Service::experimental().
     #endif
-        MarkMethodCallback(1,
+        MarkMethodCallback(2,
           new ::grpc_impl::internal::CallbackUnaryHandler< ::Proto::RoomWithUsername, ::Proto::Empty>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -721,9 +832,9 @@ class ChessServer final {
     void SetMessageAllocatorFor_CreateRoom(
         ::grpc::experimental::MessageAllocator< ::Proto::RoomWithUsername, ::Proto::Empty>* allocator) {
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(1);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(2);
     #else
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(1);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(2);
     #endif
       static_cast<::grpc_impl::internal::CallbackUnaryHandler< ::Proto::RoomWithUsername, ::Proto::Empty>*>(handler)
               ->SetMessageAllocator(allocator);
@@ -756,7 +867,7 @@ class ChessServer final {
     #else
       ::grpc::Service::experimental().
     #endif
-        MarkMethodCallback(2,
+        MarkMethodCallback(3,
           new ::grpc_impl::internal::CallbackUnaryHandler< ::Proto::RoomWithUsername, ::Proto::Empty>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -768,9 +879,9 @@ class ChessServer final {
     void SetMessageAllocatorFor_JoinRoom(
         ::grpc::experimental::MessageAllocator< ::Proto::RoomWithUsername, ::Proto::Empty>* allocator) {
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(2);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(3);
     #else
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(2);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(3);
     #endif
       static_cast<::grpc_impl::internal::CallbackUnaryHandler< ::Proto::RoomWithUsername, ::Proto::Empty>*>(handler)
               ->SetMessageAllocator(allocator);
@@ -803,7 +914,7 @@ class ChessServer final {
     #else
       ::grpc::Service::experimental().
     #endif
-        MarkMethodCallback(3,
+        MarkMethodCallback(4,
           new ::grpc_impl::internal::CallbackUnaryHandler< ::Proto::RoomWithUsername, ::Proto::String>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -815,9 +926,9 @@ class ChessServer final {
     void SetMessageAllocatorFor_GetUsername(
         ::grpc::experimental::MessageAllocator< ::Proto::RoomWithUsername, ::Proto::String>* allocator) {
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(3);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(4);
     #else
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(3);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(4);
     #endif
       static_cast<::grpc_impl::internal::CallbackUnaryHandler< ::Proto::RoomWithUsername, ::Proto::String>*>(handler)
               ->SetMessageAllocator(allocator);
@@ -850,7 +961,7 @@ class ChessServer final {
     #else
       ::grpc::Service::experimental().
     #endif
-        MarkMethodCallback(4,
+        MarkMethodCallback(5,
           new ::grpc_impl::internal::CallbackUnaryHandler< ::Proto::RoomSettings, ::Proto::Empty>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -862,9 +973,9 @@ class ChessServer final {
     void SetMessageAllocatorFor_WaitForReady(
         ::grpc::experimental::MessageAllocator< ::Proto::RoomSettings, ::Proto::Empty>* allocator) {
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(4);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(5);
     #else
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(4);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(5);
     #endif
       static_cast<::grpc_impl::internal::CallbackUnaryHandler< ::Proto::RoomSettings, ::Proto::Empty>*>(handler)
               ->SetMessageAllocator(allocator);
@@ -897,7 +1008,7 @@ class ChessServer final {
     #else
       ::grpc::Service::experimental().
     #endif
-        MarkMethodCallback(5,
+        MarkMethodCallback(6,
           new ::grpc_impl::internal::CallbackUnaryHandler< ::Proto::ReadyRequest, ::Proto::Empty>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -909,9 +1020,9 @@ class ChessServer final {
     void SetMessageAllocatorFor_Ready(
         ::grpc::experimental::MessageAllocator< ::Proto::ReadyRequest, ::Proto::Empty>* allocator) {
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(5);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(6);
     #else
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(5);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(6);
     #endif
       static_cast<::grpc_impl::internal::CallbackUnaryHandler< ::Proto::ReadyRequest, ::Proto::Empty>*>(handler)
               ->SetMessageAllocator(allocator);
@@ -944,7 +1055,7 @@ class ChessServer final {
     #else
       ::grpc::Service::experimental().
     #endif
-        MarkMethodCallback(6,
+        MarkMethodCallback(7,
           new ::grpc_impl::internal::CallbackUnaryHandler< ::Proto::MoveRequest, ::Proto::Empty>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -956,9 +1067,9 @@ class ChessServer final {
     void SetMessageAllocatorFor_MovePiece(
         ::grpc::experimental::MessageAllocator< ::Proto::MoveRequest, ::Proto::Empty>* allocator) {
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(6);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(7);
     #else
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(6);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(7);
     #endif
       static_cast<::grpc_impl::internal::CallbackUnaryHandler< ::Proto::MoveRequest, ::Proto::Empty>*>(handler)
               ->SetMessageAllocator(allocator);
@@ -991,7 +1102,7 @@ class ChessServer final {
     #else
       ::grpc::Service::experimental().
     #endif
-        MarkMethodCallback(7,
+        MarkMethodCallback(8,
           new ::grpc_impl::internal::CallbackUnaryHandler< ::Proto::RoomSettings, ::Proto::LastMoveInfo>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -1003,9 +1114,9 @@ class ChessServer final {
     void SetMessageAllocatorFor_ReadPieceMove(
         ::grpc::experimental::MessageAllocator< ::Proto::RoomSettings, ::Proto::LastMoveInfo>* allocator) {
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(7);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(8);
     #else
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(7);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(8);
     #endif
       static_cast<::grpc_impl::internal::CallbackUnaryHandler< ::Proto::RoomSettings, ::Proto::LastMoveInfo>*>(handler)
               ->SetMessageAllocator(allocator);
@@ -1038,7 +1149,7 @@ class ChessServer final {
     #else
       ::grpc::Service::experimental().
     #endif
-        MarkMethodCallback(8,
+        MarkMethodCallback(9,
           new ::grpc_impl::internal::CallbackUnaryHandler< ::Proto::RoomWithIsKingHittable, ::Proto::Empty>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -1050,9 +1161,9 @@ class ChessServer final {
     void SetMessageAllocatorFor_SetKingHittable(
         ::grpc::experimental::MessageAllocator< ::Proto::RoomWithIsKingHittable, ::Proto::Empty>* allocator) {
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(8);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(9);
     #else
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(8);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(9);
     #endif
       static_cast<::grpc_impl::internal::CallbackUnaryHandler< ::Proto::RoomWithIsKingHittable, ::Proto::Empty>*>(handler)
               ->SetMessageAllocator(allocator);
@@ -1075,17 +1186,34 @@ class ChessServer final {
       { return nullptr; }
   };
   #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-  typedef ExperimentalWithCallbackMethod_IsRoomExists<ExperimentalWithCallbackMethod_CreateRoom<ExperimentalWithCallbackMethod_JoinRoom<ExperimentalWithCallbackMethod_GetUsername<ExperimentalWithCallbackMethod_WaitForReady<ExperimentalWithCallbackMethod_Ready<ExperimentalWithCallbackMethod_MovePiece<ExperimentalWithCallbackMethod_ReadPieceMove<ExperimentalWithCallbackMethod_SetKingHittable<Service > > > > > > > > > CallbackService;
+  typedef ExperimentalWithCallbackMethod_GetRooms<ExperimentalWithCallbackMethod_IsRoomExists<ExperimentalWithCallbackMethod_CreateRoom<ExperimentalWithCallbackMethod_JoinRoom<ExperimentalWithCallbackMethod_GetUsername<ExperimentalWithCallbackMethod_WaitForReady<ExperimentalWithCallbackMethod_Ready<ExperimentalWithCallbackMethod_MovePiece<ExperimentalWithCallbackMethod_ReadPieceMove<ExperimentalWithCallbackMethod_SetKingHittable<Service > > > > > > > > > > CallbackService;
   #endif
 
-  typedef ExperimentalWithCallbackMethod_IsRoomExists<ExperimentalWithCallbackMethod_CreateRoom<ExperimentalWithCallbackMethod_JoinRoom<ExperimentalWithCallbackMethod_GetUsername<ExperimentalWithCallbackMethod_WaitForReady<ExperimentalWithCallbackMethod_Ready<ExperimentalWithCallbackMethod_MovePiece<ExperimentalWithCallbackMethod_ReadPieceMove<ExperimentalWithCallbackMethod_SetKingHittable<Service > > > > > > > > > ExperimentalCallbackService;
+  typedef ExperimentalWithCallbackMethod_GetRooms<ExperimentalWithCallbackMethod_IsRoomExists<ExperimentalWithCallbackMethod_CreateRoom<ExperimentalWithCallbackMethod_JoinRoom<ExperimentalWithCallbackMethod_GetUsername<ExperimentalWithCallbackMethod_WaitForReady<ExperimentalWithCallbackMethod_Ready<ExperimentalWithCallbackMethod_MovePiece<ExperimentalWithCallbackMethod_ReadPieceMove<ExperimentalWithCallbackMethod_SetKingHittable<Service > > > > > > > > > > ExperimentalCallbackService;
+  template <class BaseClass>
+  class WithGenericMethod_GetRooms : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_GetRooms() {
+      ::grpc::Service::MarkMethodGeneric(0);
+    }
+    ~WithGenericMethod_GetRooms() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetRooms(::grpc::ServerContext* /*context*/, const ::Proto::Empty* /*request*/, ::Proto::RoomsInfo* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
   template <class BaseClass>
   class WithGenericMethod_IsRoomExists : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_IsRoomExists() {
-      ::grpc::Service::MarkMethodGeneric(0);
+      ::grpc::Service::MarkMethodGeneric(1);
     }
     ~WithGenericMethod_IsRoomExists() override {
       BaseClassMustBeDerivedFromService(this);
@@ -1102,7 +1230,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_CreateRoom() {
-      ::grpc::Service::MarkMethodGeneric(1);
+      ::grpc::Service::MarkMethodGeneric(2);
     }
     ~WithGenericMethod_CreateRoom() override {
       BaseClassMustBeDerivedFromService(this);
@@ -1119,7 +1247,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_JoinRoom() {
-      ::grpc::Service::MarkMethodGeneric(2);
+      ::grpc::Service::MarkMethodGeneric(3);
     }
     ~WithGenericMethod_JoinRoom() override {
       BaseClassMustBeDerivedFromService(this);
@@ -1136,7 +1264,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_GetUsername() {
-      ::grpc::Service::MarkMethodGeneric(3);
+      ::grpc::Service::MarkMethodGeneric(4);
     }
     ~WithGenericMethod_GetUsername() override {
       BaseClassMustBeDerivedFromService(this);
@@ -1153,7 +1281,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_WaitForReady() {
-      ::grpc::Service::MarkMethodGeneric(4);
+      ::grpc::Service::MarkMethodGeneric(5);
     }
     ~WithGenericMethod_WaitForReady() override {
       BaseClassMustBeDerivedFromService(this);
@@ -1170,7 +1298,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_Ready() {
-      ::grpc::Service::MarkMethodGeneric(5);
+      ::grpc::Service::MarkMethodGeneric(6);
     }
     ~WithGenericMethod_Ready() override {
       BaseClassMustBeDerivedFromService(this);
@@ -1187,7 +1315,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_MovePiece() {
-      ::grpc::Service::MarkMethodGeneric(6);
+      ::grpc::Service::MarkMethodGeneric(7);
     }
     ~WithGenericMethod_MovePiece() override {
       BaseClassMustBeDerivedFromService(this);
@@ -1204,7 +1332,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_ReadPieceMove() {
-      ::grpc::Service::MarkMethodGeneric(7);
+      ::grpc::Service::MarkMethodGeneric(8);
     }
     ~WithGenericMethod_ReadPieceMove() override {
       BaseClassMustBeDerivedFromService(this);
@@ -1221,7 +1349,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_SetKingHittable() {
-      ::grpc::Service::MarkMethodGeneric(8);
+      ::grpc::Service::MarkMethodGeneric(9);
     }
     ~WithGenericMethod_SetKingHittable() override {
       BaseClassMustBeDerivedFromService(this);
@@ -1233,12 +1361,32 @@ class ChessServer final {
     }
   };
   template <class BaseClass>
+  class WithRawMethod_GetRooms : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_GetRooms() {
+      ::grpc::Service::MarkMethodRaw(0);
+    }
+    ~WithRawMethod_GetRooms() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetRooms(::grpc::ServerContext* /*context*/, const ::Proto::Empty* /*request*/, ::Proto::RoomsInfo* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestGetRooms(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
   class WithRawMethod_IsRoomExists : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_IsRoomExists() {
-      ::grpc::Service::MarkMethodRaw(0);
+      ::grpc::Service::MarkMethodRaw(1);
     }
     ~WithRawMethod_IsRoomExists() override {
       BaseClassMustBeDerivedFromService(this);
@@ -1249,7 +1397,7 @@ class ChessServer final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestIsRoomExists(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -1258,7 +1406,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_CreateRoom() {
-      ::grpc::Service::MarkMethodRaw(1);
+      ::grpc::Service::MarkMethodRaw(2);
     }
     ~WithRawMethod_CreateRoom() override {
       BaseClassMustBeDerivedFromService(this);
@@ -1269,7 +1417,7 @@ class ChessServer final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestCreateRoom(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -1278,7 +1426,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_JoinRoom() {
-      ::grpc::Service::MarkMethodRaw(2);
+      ::grpc::Service::MarkMethodRaw(3);
     }
     ~WithRawMethod_JoinRoom() override {
       BaseClassMustBeDerivedFromService(this);
@@ -1289,7 +1437,7 @@ class ChessServer final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestJoinRoom(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -1298,7 +1446,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_GetUsername() {
-      ::grpc::Service::MarkMethodRaw(3);
+      ::grpc::Service::MarkMethodRaw(4);
     }
     ~WithRawMethod_GetUsername() override {
       BaseClassMustBeDerivedFromService(this);
@@ -1309,7 +1457,7 @@ class ChessServer final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestGetUsername(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(4, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -1318,7 +1466,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_WaitForReady() {
-      ::grpc::Service::MarkMethodRaw(4);
+      ::grpc::Service::MarkMethodRaw(5);
     }
     ~WithRawMethod_WaitForReady() override {
       BaseClassMustBeDerivedFromService(this);
@@ -1329,7 +1477,7 @@ class ChessServer final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestWaitForReady(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(4, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(5, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -1338,7 +1486,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_Ready() {
-      ::grpc::Service::MarkMethodRaw(5);
+      ::grpc::Service::MarkMethodRaw(6);
     }
     ~WithRawMethod_Ready() override {
       BaseClassMustBeDerivedFromService(this);
@@ -1349,7 +1497,7 @@ class ChessServer final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestReady(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(5, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(6, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -1358,7 +1506,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_MovePiece() {
-      ::grpc::Service::MarkMethodRaw(6);
+      ::grpc::Service::MarkMethodRaw(7);
     }
     ~WithRawMethod_MovePiece() override {
       BaseClassMustBeDerivedFromService(this);
@@ -1369,7 +1517,7 @@ class ChessServer final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestMovePiece(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(6, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(7, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -1378,7 +1526,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_ReadPieceMove() {
-      ::grpc::Service::MarkMethodRaw(7);
+      ::grpc::Service::MarkMethodRaw(8);
     }
     ~WithRawMethod_ReadPieceMove() override {
       BaseClassMustBeDerivedFromService(this);
@@ -1389,7 +1537,7 @@ class ChessServer final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestReadPieceMove(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(7, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(8, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -1398,7 +1546,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_SetKingHittable() {
-      ::grpc::Service::MarkMethodRaw(8);
+      ::grpc::Service::MarkMethodRaw(9);
     }
     ~WithRawMethod_SetKingHittable() override {
       BaseClassMustBeDerivedFromService(this);
@@ -1409,8 +1557,46 @@ class ChessServer final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestSetKingHittable(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(8, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(9, context, request, response, new_call_cq, notification_cq, tag);
     }
+  };
+  template <class BaseClass>
+  class ExperimentalWithRawCallbackMethod_GetRooms : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    ExperimentalWithRawCallbackMethod_GetRooms() {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::Service::
+    #else
+      ::grpc::Service::experimental().
+    #endif
+        MarkMethodRawCallback(0,
+          new ::grpc_impl::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+                   ::grpc::CallbackServerContext*
+    #else
+                   ::grpc::experimental::CallbackServerContext*
+    #endif
+                     context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->GetRooms(context, request, response); }));
+    }
+    ~ExperimentalWithRawCallbackMethod_GetRooms() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetRooms(::grpc::ServerContext* /*context*/, const ::Proto::Empty* /*request*/, ::Proto::RoomsInfo* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+    virtual ::grpc::ServerUnaryReactor* GetRooms(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
+    #else
+    virtual ::grpc::experimental::ServerUnaryReactor* GetRooms(
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
+    #endif
+      { return nullptr; }
   };
   template <class BaseClass>
   class ExperimentalWithRawCallbackMethod_IsRoomExists : public BaseClass {
@@ -1423,7 +1609,7 @@ class ChessServer final {
     #else
       ::grpc::Service::experimental().
     #endif
-        MarkMethodRawCallback(0,
+        MarkMethodRawCallback(1,
           new ::grpc_impl::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -1461,7 +1647,7 @@ class ChessServer final {
     #else
       ::grpc::Service::experimental().
     #endif
-        MarkMethodRawCallback(1,
+        MarkMethodRawCallback(2,
           new ::grpc_impl::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -1499,7 +1685,7 @@ class ChessServer final {
     #else
       ::grpc::Service::experimental().
     #endif
-        MarkMethodRawCallback(2,
+        MarkMethodRawCallback(3,
           new ::grpc_impl::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -1537,7 +1723,7 @@ class ChessServer final {
     #else
       ::grpc::Service::experimental().
     #endif
-        MarkMethodRawCallback(3,
+        MarkMethodRawCallback(4,
           new ::grpc_impl::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -1575,7 +1761,7 @@ class ChessServer final {
     #else
       ::grpc::Service::experimental().
     #endif
-        MarkMethodRawCallback(4,
+        MarkMethodRawCallback(5,
           new ::grpc_impl::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -1613,7 +1799,7 @@ class ChessServer final {
     #else
       ::grpc::Service::experimental().
     #endif
-        MarkMethodRawCallback(5,
+        MarkMethodRawCallback(6,
           new ::grpc_impl::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -1651,7 +1837,7 @@ class ChessServer final {
     #else
       ::grpc::Service::experimental().
     #endif
-        MarkMethodRawCallback(6,
+        MarkMethodRawCallback(7,
           new ::grpc_impl::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -1689,7 +1875,7 @@ class ChessServer final {
     #else
       ::grpc::Service::experimental().
     #endif
-        MarkMethodRawCallback(7,
+        MarkMethodRawCallback(8,
           new ::grpc_impl::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -1727,7 +1913,7 @@ class ChessServer final {
     #else
       ::grpc::Service::experimental().
     #endif
-        MarkMethodRawCallback(8,
+        MarkMethodRawCallback(9,
           new ::grpc_impl::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -1755,12 +1941,39 @@ class ChessServer final {
       { return nullptr; }
   };
   template <class BaseClass>
+  class WithStreamedUnaryMethod_GetRooms : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_GetRooms() {
+      ::grpc::Service::MarkMethodStreamed(0,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::Proto::Empty, ::Proto::RoomsInfo>(
+            [this](::grpc_impl::ServerContext* context,
+                   ::grpc_impl::ServerUnaryStreamer<
+                     ::Proto::Empty, ::Proto::RoomsInfo>* streamer) {
+                       return this->StreamedGetRooms(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_GetRooms() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status GetRooms(::grpc::ServerContext* /*context*/, const ::Proto::Empty* /*request*/, ::Proto::RoomsInfo* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedGetRooms(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::Proto::Empty,::Proto::RoomsInfo>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
   class WithStreamedUnaryMethod_IsRoomExists : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_IsRoomExists() {
-      ::grpc::Service::MarkMethodStreamed(0,
+      ::grpc::Service::MarkMethodStreamed(1,
         new ::grpc::internal::StreamedUnaryHandler<
           ::Proto::String, ::Proto::Bool>(
             [this](::grpc_impl::ServerContext* context,
@@ -1787,7 +2000,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_CreateRoom() {
-      ::grpc::Service::MarkMethodStreamed(1,
+      ::grpc::Service::MarkMethodStreamed(2,
         new ::grpc::internal::StreamedUnaryHandler<
           ::Proto::RoomWithUsername, ::Proto::Empty>(
             [this](::grpc_impl::ServerContext* context,
@@ -1814,7 +2027,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_JoinRoom() {
-      ::grpc::Service::MarkMethodStreamed(2,
+      ::grpc::Service::MarkMethodStreamed(3,
         new ::grpc::internal::StreamedUnaryHandler<
           ::Proto::RoomWithUsername, ::Proto::Empty>(
             [this](::grpc_impl::ServerContext* context,
@@ -1841,7 +2054,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_GetUsername() {
-      ::grpc::Service::MarkMethodStreamed(3,
+      ::grpc::Service::MarkMethodStreamed(4,
         new ::grpc::internal::StreamedUnaryHandler<
           ::Proto::RoomWithUsername, ::Proto::String>(
             [this](::grpc_impl::ServerContext* context,
@@ -1868,7 +2081,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_WaitForReady() {
-      ::grpc::Service::MarkMethodStreamed(4,
+      ::grpc::Service::MarkMethodStreamed(5,
         new ::grpc::internal::StreamedUnaryHandler<
           ::Proto::RoomSettings, ::Proto::Empty>(
             [this](::grpc_impl::ServerContext* context,
@@ -1895,7 +2108,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_Ready() {
-      ::grpc::Service::MarkMethodStreamed(5,
+      ::grpc::Service::MarkMethodStreamed(6,
         new ::grpc::internal::StreamedUnaryHandler<
           ::Proto::ReadyRequest, ::Proto::Empty>(
             [this](::grpc_impl::ServerContext* context,
@@ -1922,7 +2135,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_MovePiece() {
-      ::grpc::Service::MarkMethodStreamed(6,
+      ::grpc::Service::MarkMethodStreamed(7,
         new ::grpc::internal::StreamedUnaryHandler<
           ::Proto::MoveRequest, ::Proto::Empty>(
             [this](::grpc_impl::ServerContext* context,
@@ -1949,7 +2162,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_ReadPieceMove() {
-      ::grpc::Service::MarkMethodStreamed(7,
+      ::grpc::Service::MarkMethodStreamed(8,
         new ::grpc::internal::StreamedUnaryHandler<
           ::Proto::RoomSettings, ::Proto::LastMoveInfo>(
             [this](::grpc_impl::ServerContext* context,
@@ -1976,7 +2189,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_SetKingHittable() {
-      ::grpc::Service::MarkMethodStreamed(8,
+      ::grpc::Service::MarkMethodStreamed(9,
         new ::grpc::internal::StreamedUnaryHandler<
           ::Proto::RoomWithIsKingHittable, ::Proto::Empty>(
             [this](::grpc_impl::ServerContext* context,
@@ -1997,9 +2210,9 @@ class ChessServer final {
     // replace default version of method with streamed unary
     virtual ::grpc::Status StreamedSetKingHittable(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::Proto::RoomWithIsKingHittable,::Proto::Empty>* server_unary_streamer) = 0;
   };
-  typedef WithStreamedUnaryMethod_IsRoomExists<WithStreamedUnaryMethod_CreateRoom<WithStreamedUnaryMethod_JoinRoom<WithStreamedUnaryMethod_GetUsername<WithStreamedUnaryMethod_WaitForReady<WithStreamedUnaryMethod_Ready<WithStreamedUnaryMethod_MovePiece<WithStreamedUnaryMethod_ReadPieceMove<WithStreamedUnaryMethod_SetKingHittable<Service > > > > > > > > > StreamedUnaryService;
+  typedef WithStreamedUnaryMethod_GetRooms<WithStreamedUnaryMethod_IsRoomExists<WithStreamedUnaryMethod_CreateRoom<WithStreamedUnaryMethod_JoinRoom<WithStreamedUnaryMethod_GetUsername<WithStreamedUnaryMethod_WaitForReady<WithStreamedUnaryMethod_Ready<WithStreamedUnaryMethod_MovePiece<WithStreamedUnaryMethod_ReadPieceMove<WithStreamedUnaryMethod_SetKingHittable<Service > > > > > > > > > > StreamedUnaryService;
   typedef Service SplitStreamedService;
-  typedef WithStreamedUnaryMethod_IsRoomExists<WithStreamedUnaryMethod_CreateRoom<WithStreamedUnaryMethod_JoinRoom<WithStreamedUnaryMethod_GetUsername<WithStreamedUnaryMethod_WaitForReady<WithStreamedUnaryMethod_Ready<WithStreamedUnaryMethod_MovePiece<WithStreamedUnaryMethod_ReadPieceMove<WithStreamedUnaryMethod_SetKingHittable<Service > > > > > > > > > StreamedService;
+  typedef WithStreamedUnaryMethod_GetRooms<WithStreamedUnaryMethod_IsRoomExists<WithStreamedUnaryMethod_CreateRoom<WithStreamedUnaryMethod_JoinRoom<WithStreamedUnaryMethod_GetUsername<WithStreamedUnaryMethod_WaitForReady<WithStreamedUnaryMethod_Ready<WithStreamedUnaryMethod_MovePiece<WithStreamedUnaryMethod_ReadPieceMove<WithStreamedUnaryMethod_SetKingHittable<Service > > > > > > > > > > StreamedService;
 };
 
 }  // namespace Proto

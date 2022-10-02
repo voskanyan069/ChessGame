@@ -28,6 +28,10 @@ message Position {
     int32 y = 2;
 };
 
+message RoomsInfo {
+    repeated string names = 1;
+}
+
 message RoomSettings {
     string name = 1;
     string password = 2;

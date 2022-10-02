@@ -48,7 +48,7 @@ struct TableStruct_ChessServerTypes_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[11]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[12]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -86,6 +86,9 @@ extern RoomWithIsKingHittableDefaultTypeInternal _RoomWithIsKingHittable_default
 class RoomWithUsername;
 class RoomWithUsernameDefaultTypeInternal;
 extern RoomWithUsernameDefaultTypeInternal _RoomWithUsername_default_instance_;
+class RoomsInfo;
+class RoomsInfoDefaultTypeInternal;
+extern RoomsInfoDefaultTypeInternal _RoomsInfo_default_instance_;
 class String;
 class StringDefaultTypeInternal;
 extern StringDefaultTypeInternal _String_default_instance_;
@@ -101,6 +104,7 @@ template<> ::Proto::ReadyRequest* Arena::CreateMaybeMessage<::Proto::ReadyReques
 template<> ::Proto::RoomSettings* Arena::CreateMaybeMessage<::Proto::RoomSettings>(Arena*);
 template<> ::Proto::RoomWithIsKingHittable* Arena::CreateMaybeMessage<::Proto::RoomWithIsKingHittable>(Arena*);
 template<> ::Proto::RoomWithUsername* Arena::CreateMaybeMessage<::Proto::RoomWithUsername>(Arena*);
+template<> ::Proto::RoomsInfo* Arena::CreateMaybeMessage<::Proto::RoomsInfo>(Arena*);
 template<> ::Proto::String* Arena::CreateMaybeMessage<::Proto::String>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace Proto {
@@ -719,6 +723,158 @@ class Position PROTOBUF_FINAL :
 };
 // -------------------------------------------------------------------
 
+class RoomsInfo PROTOBUF_FINAL :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Proto.RoomsInfo) */ {
+ public:
+  inline RoomsInfo() : RoomsInfo(nullptr) {};
+  virtual ~RoomsInfo();
+
+  RoomsInfo(const RoomsInfo& from);
+  RoomsInfo(RoomsInfo&& from) noexcept
+    : RoomsInfo() {
+    *this = ::std::move(from);
+  }
+
+  inline RoomsInfo& operator=(const RoomsInfo& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline RoomsInfo& operator=(RoomsInfo&& from) noexcept {
+    if (GetArena() == from.GetArena()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const RoomsInfo& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const RoomsInfo* internal_default_instance() {
+    return reinterpret_cast<const RoomsInfo*>(
+               &_RoomsInfo_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    4;
+
+  friend void swap(RoomsInfo& a, RoomsInfo& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(RoomsInfo* other) {
+    if (other == this) return;
+    if (GetArena() == other->GetArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(RoomsInfo* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline RoomsInfo* New() const final {
+    return CreateMaybeMessage<RoomsInfo>(nullptr);
+  }
+
+  RoomsInfo* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<RoomsInfo>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const RoomsInfo& from);
+  void MergeFrom(const RoomsInfo& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(RoomsInfo* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Proto.RoomsInfo";
+  }
+  protected:
+  explicit RoomsInfo(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_ChessServerTypes_2eproto);
+    return ::descriptor_table_ChessServerTypes_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kNamesFieldNumber = 1,
+  };
+  // repeated string names = 1;
+  int names_size() const;
+  private:
+  int _internal_names_size() const;
+  public:
+  void clear_names();
+  const std::string& names(int index) const;
+  std::string* mutable_names(int index);
+  void set_names(int index, const std::string& value);
+  void set_names(int index, std::string&& value);
+  void set_names(int index, const char* value);
+  void set_names(int index, const char* value, size_t size);
+  std::string* add_names();
+  void add_names(const std::string& value);
+  void add_names(std::string&& value);
+  void add_names(const char* value);
+  void add_names(const char* value, size_t size);
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>& names() const;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* mutable_names();
+  private:
+  const std::string& _internal_names(int index) const;
+  std::string* _internal_add_names();
+  public:
+
+  // @@protoc_insertion_point(class_scope:Proto.RoomsInfo)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> names_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_ChessServerTypes_2eproto;
+};
+// -------------------------------------------------------------------
+
 class RoomSettings PROTOBUF_FINAL :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Proto.RoomSettings) */ {
  public:
@@ -761,7 +917,7 @@ class RoomSettings PROTOBUF_FINAL :
                &_RoomSettings_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    4;
+    5;
 
   friend void swap(RoomSettings& a, RoomSettings& b) {
     a.Swap(&b);
@@ -941,7 +1097,7 @@ class RoomWithUsername PROTOBUF_FINAL :
                &_RoomWithUsername_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    5;
+    6;
 
   friend void swap(RoomWithUsername& a, RoomWithUsername& b) {
     a.Swap(&b);
@@ -1114,7 +1270,7 @@ class ReadyRequest PROTOBUF_FINAL :
                &_ReadyRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    6;
+    7;
 
   friend void swap(ReadyRequest& a, ReadyRequest& b) {
     a.Swap(&b);
@@ -1282,7 +1438,7 @@ class MoveRequest PROTOBUF_FINAL :
                &_MoveRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    7;
+    8;
 
   friend void swap(MoveRequest& a, MoveRequest& b) {
     a.Swap(&b);
@@ -1468,7 +1624,7 @@ class IsKingHittable PROTOBUF_FINAL :
                &_IsKingHittable_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    8;
+    9;
 
   friend void swap(IsKingHittable& a, IsKingHittable& b) {
     a.Swap(&b);
@@ -1616,7 +1772,7 @@ class LastMoveInfo PROTOBUF_FINAL :
                &_LastMoveInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    9;
+    10;
 
   friend void swap(LastMoveInfo& a, LastMoveInfo& b) {
     a.Swap(&b);
@@ -1802,7 +1958,7 @@ class RoomWithIsKingHittable PROTOBUF_FINAL :
                &_RoomWithIsKingHittable_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    10;
+    11;
 
   friend void swap(RoomWithIsKingHittable& a, RoomWithIsKingHittable& b) {
     a.Swap(&b);
@@ -2086,6 +2242,84 @@ inline void Position::_internal_set_y(::PROTOBUF_NAMESPACE_ID::int32 value) {
 inline void Position::set_y(::PROTOBUF_NAMESPACE_ID::int32 value) {
   _internal_set_y(value);
   // @@protoc_insertion_point(field_set:Proto.Position.y)
+}
+
+// -------------------------------------------------------------------
+
+// RoomsInfo
+
+// repeated string names = 1;
+inline int RoomsInfo::_internal_names_size() const {
+  return names_.size();
+}
+inline int RoomsInfo::names_size() const {
+  return _internal_names_size();
+}
+inline void RoomsInfo::clear_names() {
+  names_.Clear();
+}
+inline std::string* RoomsInfo::add_names() {
+  // @@protoc_insertion_point(field_add_mutable:Proto.RoomsInfo.names)
+  return _internal_add_names();
+}
+inline const std::string& RoomsInfo::_internal_names(int index) const {
+  return names_.Get(index);
+}
+inline const std::string& RoomsInfo::names(int index) const {
+  // @@protoc_insertion_point(field_get:Proto.RoomsInfo.names)
+  return _internal_names(index);
+}
+inline std::string* RoomsInfo::mutable_names(int index) {
+  // @@protoc_insertion_point(field_mutable:Proto.RoomsInfo.names)
+  return names_.Mutable(index);
+}
+inline void RoomsInfo::set_names(int index, const std::string& value) {
+  // @@protoc_insertion_point(field_set:Proto.RoomsInfo.names)
+  names_.Mutable(index)->assign(value);
+}
+inline void RoomsInfo::set_names(int index, std::string&& value) {
+  // @@protoc_insertion_point(field_set:Proto.RoomsInfo.names)
+  names_.Mutable(index)->assign(std::move(value));
+}
+inline void RoomsInfo::set_names(int index, const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  names_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set_char:Proto.RoomsInfo.names)
+}
+inline void RoomsInfo::set_names(int index, const char* value, size_t size) {
+  names_.Mutable(index)->assign(
+    reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:Proto.RoomsInfo.names)
+}
+inline std::string* RoomsInfo::_internal_add_names() {
+  return names_.Add();
+}
+inline void RoomsInfo::add_names(const std::string& value) {
+  names_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add:Proto.RoomsInfo.names)
+}
+inline void RoomsInfo::add_names(std::string&& value) {
+  names_.Add(std::move(value));
+  // @@protoc_insertion_point(field_add:Proto.RoomsInfo.names)
+}
+inline void RoomsInfo::add_names(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  names_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add_char:Proto.RoomsInfo.names)
+}
+inline void RoomsInfo::add_names(const char* value, size_t size) {
+  names_.Add()->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_add_pointer:Proto.RoomsInfo.names)
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>&
+RoomsInfo::names() const {
+  // @@protoc_insertion_point(field_list:Proto.RoomsInfo.names)
+  return names_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>*
+RoomsInfo::mutable_names() {
+  // @@protoc_insertion_point(field_mutable_list:Proto.RoomsInfo.names)
+  return &names_;
 }
 
 // -------------------------------------------------------------------
@@ -3252,6 +3486,8 @@ inline void RoomWithIsKingHittable::set_allocated_iskinghittable(::Proto::IsKing
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

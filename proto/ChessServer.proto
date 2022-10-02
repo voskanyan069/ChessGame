@@ -5,6 +5,7 @@ import 'ChessServerTypes.proto';
 package Proto;
 
 service ChessServer {
+    rpc GetRooms (Empty) returns (RoomsInfo) {};
     rpc IsRoomExists (String) returns (Bool) {};
     rpc CreateRoom (RoomWithUsername) returns (Empty) {};
     rpc JoinRoom (RoomWithUsername) returns (Empty) {};
