@@ -5,12 +5,6 @@
 std::timed_mutex Sys::SignalHandler::m_signalsMutex;
 std::map<int, std::function<void(int)> > Sys::SignalHandler::m_signalHandlers;
 
-void Sys::SignalHandler::registerHandler(int signal,
-        const HandlerFunc& callback)
-{
-    m_signalHandlers.emplace(signal, callback);
-}
-
 void Sys::SignalHandler::invokeCallback(int signal)
 {
     std::unique_lock<std::timed_mutex> lock(m_signalsMutex, std::defer_lock);
@@ -25,17 +19,22 @@ void Sys::SignalHandler::invokeCallback(int signal)
     }
 }
 
+void Sys::SignalHandler::registerHandler(int signal,
+        const HandlerFunc& callback)
+{
+    m_signalHandlers.emplace(signal, callback);
+}
+
 void Sys::SignalHandler::AddSignalHandler(int signal,
         const HandlerFunc& callback)
 {
-    struct sigaction action;
-    if (-1 == sigfillset(&action.sa_mask))
-    {
-        throw Utils::Exception("Failed to add handler");
-    }
-    action.sa_flags = 0;
-    action.sa_handler = Sys::SignalHandler::invokeCallback;
-    if (-1 == sigaction(signal, &action, nullptr) && signal < __SIGRTMIN)
+    struct sigaction sa;
+    sigemptyset(&sa.sa_mask);
+    sigaddset(&sa.sa_mask, signal);
+    sa.sa_flags = 0;
+    sa.sa_handler = Sys::SignalHandler::invokeCallback;
+    sigaction(signal, &sa, 0);
+    if (-1 == sigaction(signal, &sa, nullptr) && signal < __SIGRTMIN)
     {
         throw Utils::Exception("Failed to configure handler for signal: " +
                 signal);

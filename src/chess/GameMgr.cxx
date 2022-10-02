@@ -109,30 +109,6 @@ bool Chess::GameMgr::checkPiece(Pieces::BasePiece* piece) const
     return true;
 }
 
-void Chess::GameMgr::setSignalHandler(Pieces::BasePiece*& piece,
-        Pieces::Positions& positions)
-{
-    resetSignalHandler();
-    std::function<void(int)> handler = [&] (int signal) {
-        m_isSkipWait = true;
-        Logger::GetInstance()->PrintEndl();
-        if (m_turn == m_thisPlayer->color)
-        {
-            StartGame();
-        }
-        else
-        {
-            CloseEngine();
-        }
-    };
-    Sys::SignalHandler::SetCtrlCHandler(handler);
-}
-
-void Chess::GameMgr::resetSignalHandler()
-{
-    Sys::SignalHandler::DeleteSignalHandler(SIGINT);
-}
-
 void Chess::GameMgr::refreshBoard(Pieces::BasePiece* piece,
         Pieces::Positions& positions)
 {
@@ -217,26 +193,42 @@ bool Chess::GameMgr::movePiece(Pieces::BasePiece* piece,
     }
 }
 
-void Chess::GameMgr::askCurrentPosition(Pieces::BasePiece*& piece,
-        Pieces::Positions& positions)
+void Chess::GameMgr::askCurrentPosition(Pieces::BasePiece*& piece)
 {
     Pieces::Position pos;
+    Pieces::Positions positions;
     try
     {
         Query::GetInstance()->AskPosition("Current position", pos);
     }
     catch (const Utils::Exception& e)
     {
-        Logger::GetInstance()->PrintEndl();
-        Logger::GetInstance()->Print(e);
-        Logger::GetInstance()->PrintEndl();
-        askCurrentPosition(piece, positions);
+        switch (e.GetErrorCode())
+        {
+        case 3:
+            {
+                Logger::GetInstance()->PrintBoard();
+                break;
+            }
+        case 4:
+            {
+                CloseEngine();
+                break;
+            }
+        default:
+            {
+                Logger::GetInstance()->PrintEndl();
+                Logger::GetInstance()->Print(e);
+                Logger::GetInstance()->PrintEndl();
+            }
+        }
+        askCurrentPosition(piece);
         return;
     }
     piece = m_board->GetPiece(pos);
     if (!checkPiece(piece))
     {
-        askCurrentPosition(piece, positions);
+        askCurrentPosition(piece);
         return;
     }
     piece->GetAvailableMoves(positions);
@@ -244,7 +236,7 @@ void Chess::GameMgr::askCurrentPosition(Pieces::BasePiece*& piece,
     Logger::GetInstance()->PrintBoard();
 }
 
-void Chess::GameMgr::askNewPosition(Pieces::BasePiece* piece)
+void Chess::GameMgr::askNewPosition(Pieces::BasePiece*& piece)
 {
     Pieces::Position newPos;
     try
@@ -253,15 +245,41 @@ void Chess::GameMgr::askNewPosition(Pieces::BasePiece* piece)
     }
     catch (const Utils::Exception& e)
     {
-        Logger::GetInstance()->PrintEndl();
-        Logger::GetInstance()->Print(e);
-        Logger::GetInstance()->PrintEndl();
+        switch (e.GetErrorCode())
+        {
+        case 2:
+            {
+                Logger::GetInstance()->PrintBoard();
+                askCurrentPosition(piece);
+                break;
+            }
+        case 3:
+            {
+                Pieces::Positions positions;
+                piece->GetAvailableMoves(positions);
+                m_board->SetAvailableMoves(positions);
+                Logger::GetInstance()->PrintBoard();
+                break;
+            }
+        case 4:
+            {
+                CloseEngine();
+                break;
+            }
+        default:
+            {
+                Logger::GetInstance()->PrintEndl();
+                Logger::GetInstance()->Print(e);
+                Logger::GetInstance()->PrintEndl();
+            }
+        }
         askNewPosition(piece);
         return;
     }
     if (!movePiece(piece, newPos))
     {
         askNewPosition(piece);
+        return;
     }
     switchPlayerOrder();
 }
@@ -280,10 +298,8 @@ void Chess::GameMgr::updateFrame()
         switchPlayerOrder();
     }
     Logger::GetInstance()->PrintBoard();
-    askCurrentPosition(piece, positions);
-    setSignalHandler(piece, positions);
+    askCurrentPosition(piece);
     askNewPosition(piece);
-    resetSignalHandler();
     m_isSkipWait = false;
     Logger::GetInstance()->PrintBoard();
 }
@@ -300,8 +316,11 @@ void Chess::GameMgr::StartGame()
 void Chess::GameMgr::CloseEngine()
 {
     m_isGameOnline = false;
-    Logger::GetInstance()->Print(WARN, "Closing game...");
-    std::exit(-1);
+    Logger::GetInstance()->PrintEndl();
+    Logger::GetInstance()->Print(INFO, "Closing game...");
+    Logger::GetInstance()->PrintEndl();
+    DisconnectFromServer();
+    std::exit(1);
 }
 
 Pieces::PieceColor Chess::GameMgr::GetTurn() const
@@ -320,6 +339,10 @@ void Chess::GameMgr::InitModel()
     initClient();
     initRoom();
     initPlayers();
+    std::function<void(int)> fHandler = [this] (int signal) {
+        CloseEngine();
+    };
+    Sys::SignalHandler::SetCtrlCHandler(fHandler);
 }
 
 void Chess::GameMgr::SetKingHittable(const Pieces::PieceColor& color,
@@ -358,4 +381,18 @@ void Chess::GameMgr::ConnectToServer()
     }
     setPlayersUsername();
     m_thisPlayer = m_playerMgr->Get(m_myUsername);
+}
+
+void Chess::GameMgr::DisconnectFromServer()
+{
+}
+
+std::string Chess::GameMgr::GetCommandsHelp()
+{
+    static std::string msg = "Commands list (Should be written in position "
+                             "input)\nref/refresh:\t\tPrints current state of "
+                             "the board\nESC:\t\t\tReturns from new position "
+                             "to the current position input\nclose/quit/exit:"
+                             "\tClose game\n";
+    return msg;
 }

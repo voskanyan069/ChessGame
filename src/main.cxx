@@ -25,6 +25,7 @@ void initArgsParser(ArgsParser& parser)
     {
         std::string helpMsg;
         parser.GetHelpMessage(helpMsg);
+        helpMsg += "\n" + Chess::GameMgr::GetCommandsHelp();
         Logger::GetInstance()->PrintHelp(helpMsg);
         std::exit(1);
     }

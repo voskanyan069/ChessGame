@@ -38,13 +38,13 @@ std::string Query::createMsgBool(const std::string& msg, bool defaultVal) const
 bool Query::processMsgBool(const std::string& input, bool& value) const
 {
     std::string resInput = input;
-    boost::to_upper(resInput);
-    if (resInput == "Y" || resInput == "YES")
+    boost::to_lower(resInput);
+    if (resInput == "y" || resInput == "yes")
     {
         value = true;
         return true;
     }
-    else if (resInput == "N" || resInput == "NO")
+    else if (resInput == "n" || resInput == "no")
     {
         value = false;
         return true;
@@ -63,6 +63,22 @@ void Query::AskPosition(const std::string& msg, Pieces::Position& pos) const
     }
     std::cout << " [" << player->name << "] " << msg << ": ";
     std::getline(std::cin, input);
+    boost::to_lower(input);
+    if ("refresh" == input || "ref" == input)
+    {
+        throw Utils::Exception("Refresh board", "Signal", 3);
+    }
+    if ("close" == input || "quit" == input || "exit" == input)
+    {
+        throw Utils::Exception("Close game", "Signal", 4);
+    }
+    for (const auto& c : input)
+    {
+        if (27 == c)
+        {
+            throw Utils::Exception("Select new piece to move", "Error", 2);
+        }
+    }
     Pieces::ConvertPosition(input, pos);
 }
 

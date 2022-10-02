@@ -42,8 +42,10 @@ public:
     void SetRoom(const Remote::Room& room);
     void SetKingHittable(const Pieces::PieceColor& color, bool status) const;
     void ConnectToServer();
+    void DisconnectFromServer();
     void StartGame();
     void CloseEngine();
+    static std::string GetCommandsHelp();
 
 private:
     void initPlayers();
@@ -57,16 +59,13 @@ private:
     bool askForReady() const;
     void readyAndWait(const Remote::Player& player) const;
     bool checkPiece(Pieces::BasePiece* piece) const;
-    void setSignalHandler(Pieces::BasePiece*& piece,
-            Pieces::Positions& positions);
-    void resetSignalHandler();
     void refreshBoard(Pieces::BasePiece* piece, Pieces::Positions& positions);
     void waitForUpdates(Pieces::Positions& positions) const;
     bool movePiece(Pieces::BasePiece* piece, const Pieces::Position& newPos);
-    void askCurrentPosition(Pieces::BasePiece*& piece,
-            Pieces::Positions& positions);
-    void askNewPosition(Pieces::BasePiece* piece);
+    void askCurrentPosition(Pieces::BasePiece*& piece);
+    void askNewPosition(Pieces::BasePiece*& piece);
     void updateFrame();
+    void closeHandler(int signal);
 
 private:
     bool m_isGameOnline;
