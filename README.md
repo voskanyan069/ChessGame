@@ -16,4 +16,5 @@
 - ~~Add GetRooms() rpc~~
 - ~~Close session when signal received (ctrl-c, termination)~~
 - ~~Error when in room already 2 players~~
-- Add spectator mode
+- ~~Add spectator mode~~
+- Add some widgets to printed board (last moves, destroyed pieces, viewers count)
