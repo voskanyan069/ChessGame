@@ -18,3 +18,4 @@
 - ~~Error when in room already 2 players~~
 - ~~Add spectator mode~~
 - Add some widgets to printed board (last moves, destroyed pieces, viewers count)
+- Test and fix game with multiple players and spectators
