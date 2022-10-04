@@ -2,13 +2,9 @@
 #include "chess/Board.hxx"
 #include "pieces/BasePiece.hxx"
 #include "pieces/Pawn.hxx"
+#include "utils/Defines.hxx"
 
 #include <iostream>
-
-#define INFO_CONSOLE    "\033[32m"
-#define WARN_CONSOLE    "\033[33m"
-#define ERROR_CONSOLE   "\033[31m"
-#define RESET_CONSOLE   "\033[0m"
 
 Logger* Logger::GetInstance()
 {
@@ -17,7 +13,8 @@ Logger* Logger::GetInstance()
 }
 
 Logger::Logger()
-    : m_os(&std::cout)
+    : m_bWhiteTop(false)
+    , m_os(&std::cout)
     , m_board(Chess::Board::GetInstance())
 {
 }
@@ -82,15 +79,50 @@ void Logger::printPieces(int lineIdx) const
     }
 }
 
-void Logger::printLines() const
+void Logger::printLine(int lineIdx) const
+{
+    *m_os << "  " << lineIdx << " ⎪";
+    printPieces(lineIdx - 1);
+    *m_os << " " << lineIdx;
+    *m_os << "\n ———————————————————————————————————————" << std::endl;
+}
+
+void Logger::printLinesWT() const
+{
+    for (int i = 1; i < 9; ++i)
+    {
+        printLine(i);
+    }
+}
+
+void Logger::printLinesBT() const
 {
     for (int i = 8; i > 0; --i)
     {
-        *m_os << "  " << i << " ⎪";
-        printPieces(i - 1);
-        *m_os << " " << i;
-        *m_os << "\n ———————————————————————————————————————" << std::endl;
+        printLine(i);
     }
+}
+
+void Logger::printLines() const
+{
+    if (m_bWhiteTop)
+    {
+        printLinesWT();
+    }
+    else
+    {
+        printLinesBT();
+    }
+}
+
+bool Logger::IsWhiteTop() const
+{
+    return m_bWhiteTop;
+}
+
+void Logger::ReverseBoard()
+{
+    m_bWhiteTop = !m_bWhiteTop;
 }
 
 void Logger::Print(const Utils::Exception& error) const

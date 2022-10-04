@@ -215,6 +215,12 @@ void Chess::GameMgr::askCurrentPosition(Pieces::BasePiece*& piece)
                 CloseEngine();
                 break;
             }
+        case 5:
+            {
+                Logger::GetInstance()->ReverseBoard();
+                Logger::GetInstance()->PrintBoard();
+                break;
+            }
         default:
             {
                 Logger::GetInstance()->PrintEndl();
@@ -264,6 +270,15 @@ void Chess::GameMgr::askNewPosition(Pieces::BasePiece*& piece)
         case 4:
             {
                 CloseEngine();
+                break;
+            }
+        case 5:
+            {
+                Logger::GetInstance()->ReverseBoard();
+                Pieces::Positions positions;
+                piece->GetAvailableMoves(positions);
+                m_board->SetAvailableMoves(positions);
+                Logger::GetInstance()->PrintBoard();
                 break;
             }
         default:
@@ -429,8 +444,9 @@ std::string Chess::GameMgr::GetCommandsHelp()
 {
     static std::string msg = "Commands list (Should be written in position "
                              "input)\nref/refresh:\t\tPrints current state of "
-                             "the board\nESC:\t\t\tReturns from new position "
-                             "to the current position input\nclose/quit/exit:"
+                             "the board\nrev/reverse:\t\tReverse the board\n"
+                             "ESC:\t\t\tReturns from new position to the "
+                             "current position input\nclose/quit/exit:"
                              "\tClose game\n";
     return msg;
 }

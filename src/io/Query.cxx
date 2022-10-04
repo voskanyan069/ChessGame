@@ -72,6 +72,10 @@ void Query::AskPosition(const std::string& msg, Pieces::Position& pos) const
     {
         throw Utils::Exception("Close game", "Signal", 4);
     }
+    if ("rev" == input || "reverse" == input)
+    {
+        throw Utils::Exception("Reverse board", "Signal", 5);
+    }
     for (const auto& c : input)
     {
         if (27 == c)

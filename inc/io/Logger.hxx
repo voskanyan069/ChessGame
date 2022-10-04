@@ -34,6 +34,8 @@ public:
     void SetStream(std::ostream* os);
 
 public:
+    bool IsWhiteTop() const;
+    void ReverseBoard();
     void Print(const Utils::Exception& error) const;
     void PrintEndl() const;
     void PrintHelp(const std::string& helpMsg) const;
@@ -53,9 +55,13 @@ private:
     void printLetters(bool line=true) const;
     void printPieceChar(const Pieces::BasePiece* piece) const;
     void printPieces(int lineIdx) const;
+    void printLine(int lineIdx) const;
+    void printLinesWT() const;
+    void printLinesBT() const;
     void printLines() const;
 
 private:
+    bool m_bWhiteTop;
     std::ostream* m_os;
     Chess::Board* m_board;
 };
