@@ -307,7 +307,7 @@ void Chess::GameMgr::updateFrame(const Remote::LastMove& lastMove)
     piece->GetAvailableMoves(positions);
     m_board->SetAvailableMoves(positions);
     piece->Move(lastMove.newPos);
-    positions.clear();
+    m_board->DestroyEmpties();
     Logger::GetInstance()->PrintBoard();
 }
 
