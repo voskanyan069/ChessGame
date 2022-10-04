@@ -19,3 +19,4 @@
 - ~~Add spectator mode~~
 - Add some widgets to printed board (last moves, destroyed pieces, viewers count)
 - Test and fix game with multiple players and spectators
+- Add board rotation feature
