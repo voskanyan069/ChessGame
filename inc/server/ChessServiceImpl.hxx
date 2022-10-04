@@ -40,6 +40,10 @@ public:
             grpc::ServerContext* context,
             const Proto::RoomWithUsername* request,
             Proto::Empty* response) override;
+    grpc::Status SpectateRoom(
+            grpc::ServerContext* context,
+            const Proto::String* request,
+            grpc::ServerWriter<Proto::LastMoveInfo>* writer) override;
     grpc::Status GetUsername(
             grpc::ServerContext* context,
             const Proto::RoomWithUsername* request,

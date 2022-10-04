@@ -14,11 +14,13 @@
 #include <unistd.h>
 
 bool bGetRooms = false;
+bool bSpectatorMode = false;
 
 void initArgsParser(ArgsParser& parser)
 {
     parser.AddSwitch("get-rooms,R", "get all exists rooms of the server",
             bGetRooms);
+    parser.AddSwitch("spectator-mode,S", "join as spectator", bSpectatorMode);
     parser.AddOption<std::string>("host,H", "host address of the server",
             "localhost");
     parser.AddOption<int>("port,P", "port of the server", 58001);
@@ -33,7 +35,6 @@ void initArgsParser(ArgsParser& parser)
         Logger::GetInstance()->PrintHelp(helpMsg);
         std::exit(1);
     }
-    Logger::GetInstance()->Print(INFO, "rooms : %b", bGetRooms);
 }
 
 void initGameMgrModel()
@@ -46,6 +47,10 @@ void startGame()
     if (bGetRooms)
     {
         Chess::GameMgr::GetInstance()->GetRooms();
+    }
+    else if (bSpectatorMode)
+    {
+        Chess::GameMgr::GetInstance()->SpectateGame();
     }
     else
     {

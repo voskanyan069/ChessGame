@@ -124,15 +124,20 @@ struct Remote::ServerPlayer
 
 struct Remote::ServerRoom
 {
+    bool exists = false;
     std::string password;
     Remote::ServerPlayer ownerPlayer;
     Remote::ServerPlayer guestPlayer;
     bool isLastMoveRead;
+    bool isSpectatorLastMoveRead;
     Remote::LastMove lastMove;
+    Remote::LastMove spectatorLastMove;
     BoostMutexUP waitMutex;
     BoostConditionVariableUP waitConditionVar;    
     BoostMutexUP moveMutex;
     BoostConditionVariableUP moveConditionVar;    
+    BoostMutexUP spectatorMutex;
+    BoostConditionVariableUP spectatorConditionVar;
 };
 
 #endif // __UTILS_TYPES_HXX__

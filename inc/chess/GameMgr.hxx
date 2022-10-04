@@ -45,6 +45,7 @@ public:
     void ConnectToServer();
     void DisconnectFromServer();
     void StartGame();
+    void SpectateGame();
     void CloseEngine();
     static std::string GetCommandsHelp();
 
@@ -66,6 +67,7 @@ private:
     void askCurrentPosition(Pieces::BasePiece*& piece);
     void askNewPosition(Pieces::BasePiece*& piece);
     void updateFrame();
+    void updateFrame(const Remote::LastMove& lastMove);
     void closeHandler(int signal);
 
 private:

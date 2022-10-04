@@ -15,6 +15,7 @@ namespace grpc
 namespace Remote
 {
     class ChessClient;
+    typedef std::function<void(const Remote::LastMove&)> MoveCallback;
 };
 
 class Remote::ChessClient
@@ -28,6 +29,8 @@ public:
     bool IsRoomExists(const std::string& name) const;
     void CreateRoom(const Remote::Room& room) const;
     void JoinRoom(const Remote::Room& room) const;
+    void SpectateRoom(const std::string& name,
+            const Remote::MoveCallback& fUpdCallback) const;
     void WaitForReady(const Remote::Room& room) const;
     void Ready(const Remote::Room& room, const Remote::Player& player) const;
     void MovePiece(const Remote::Room& room, const Pieces::Position& oldPos,

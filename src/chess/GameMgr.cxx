@@ -288,10 +288,6 @@ void Chess::GameMgr::updateFrame()
 {
     Pieces::Positions positions;
     Pieces::BasePiece* piece = nullptr;
-    Logger::GetInstance()->Print(INFO, "guestC: %d", m_guestPlayer->color);
-    Logger::GetInstance()->Print(INFO, "ownerC: %d", m_ownerPlayer->color);
-    Logger::GetInstance()->Print(INFO, "name  : %s", m_thisPlayer->name);
-    Logger::GetInstance()->Print(INFO, "color : %d", m_thisPlayer->color);
     if (!m_isSkipWait && m_turn != m_thisPlayer->color)
     {
         waitForUpdates(positions);
@@ -304,12 +300,40 @@ void Chess::GameMgr::updateFrame()
     Logger::GetInstance()->PrintBoard();
 }
 
+void Chess::GameMgr::updateFrame(const Remote::LastMove& lastMove)
+{
+    Pieces::Positions positions;
+    Pieces::BasePiece* piece = m_board->GetPiece(lastMove.oldPos);
+    piece->GetAvailableMoves(positions);
+    m_board->SetAvailableMoves(positions);
+    piece->Move(lastMove.newPos);
+    positions.clear();
+    Logger::GetInstance()->PrintBoard();
+}
+
 void Chess::GameMgr::StartGame()
 {
     m_isGameOnline = true;
     while (m_isGameOnline)
     {
         updateFrame();
+    }
+}
+
+void Chess::GameMgr::SpectateGame()
+{
+    Logger::GetInstance()->PrintBoard();
+    try
+    {
+        Remote::MoveCallback fCallback = [this] (const Remote::LastMove& lm) {
+            updateFrame(lm);
+        };
+        m_client->SpectateRoom(m_room.name, fCallback);
+    }
+    catch (const Utils::Exception& e)
+    {
+        Logger::GetInstance()->Print(e);
+        std::exit(1);
     }
 }
 

@@ -100,6 +100,25 @@ void Remote::ChessClient::JoinRoom(const Remote::Room& room) const
     checkRequestStatus(status);
 }
 
+void Remote::ChessClient::SpectateRoom(const std::string& name,
+        const Remote::MoveCallback& fUpdCallback) const
+{
+    grpc::ClientContext context;
+    Proto::String request;
+    Proto::LastMoveInfo response;
+    Remote::LastMove lastMove;
+    request.set_value(name);
+    std::unique_ptr<grpc::ClientReader<Proto::LastMoveInfo> > reader(
+        m_stub->SpectateRoom(&context, request));
+    while (reader->Read(&response))
+    {
+        P2C_Converter::ConvertLastMoveInfo(response, lastMove);
+        fUpdCallback(lastMove);
+    }
+    grpc::Status status = reader->Finish();
+    checkRequestStatus(status);
+}
+
 void Remote::ChessClient::WaitForReady(const Remote::Room& room) const
 {
     grpc::ClientContext context;
