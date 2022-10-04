@@ -19,6 +19,7 @@ namespace Remote
     struct ServerRoom;
     struct ServerPlayer;
     struct LastMove;
+    typedef std::vector<Remote::LastMove> LastMovesVec;
 }
 
 namespace Pieces
@@ -138,6 +139,7 @@ struct Remote::ServerRoom
     BoostConditionVariableUP moveConditionVar;    
     BoostMutexUP spectatorMutex;
     BoostConditionVariableUP spectatorConditionVar;
+    Remote::LastMovesVec vecMovesHistory;
 };
 
 #endif // __UTILS_TYPES_HXX__

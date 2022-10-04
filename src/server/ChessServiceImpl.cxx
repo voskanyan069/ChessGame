@@ -148,6 +148,11 @@ grpc::Status Remote::ChessServiceImpl::SpectateRoom(
         return grpc::Status(grpc::StatusCode::CANCELLED,
                 "The game is not started yet");
     }
+    for (const auto& move : room.vecMovesHistory)
+    {
+        C2P_Converter::ConvertLastMoveInfo(move, lastMove);
+        writer->Write(lastMove);
+    }
     while (room.exists)
     {
         room.isSpectatorLastMoveRead = false;
@@ -250,6 +255,7 @@ grpc::Status Remote::ChessServiceImpl::MovePiece(
     room.isSpectatorLastMoveRead = true;
     room.moveConditionVar->notify_one();
     room.spectatorConditionVar->notify_one();
+    room.vecMovesHistory.push_back(room.spectatorLastMove);
     return grpc::Status::OK;
 }
 
