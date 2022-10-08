@@ -39,7 +39,11 @@ private:
 public:
     void InitModel();
     Pieces::PieceColor GetTurn() const;
+    Player* GetThisPlayer() const;
     int GetViewersCount() const;
+    std::string GetDestroyedWhitePieces() const;
+    std::string GetDestroyedBlackPieces() const;
+    void AddDestroyedPiece(const Pieces::BasePiece* piece);
     void SetRoom(const Remote::Room& room);
     void SetKingHittable(const Pieces::PieceColor& color, bool status) const;
     void GetRooms();
@@ -62,6 +66,8 @@ private:
     bool askForReady() const;
     void waitOrLeaveRoom(const Remote::PlayerType& playerType) const;
     void readyAndWait(const Remote::Player& player) const;
+    void addDestroyedWhitePiece(const Pieces::BasePiece* piece);
+    void addDestroyedBlackPiece(const Pieces::BasePiece* piece);
     bool checkPiece(Pieces::BasePiece* piece) const;
     void refreshBoard(Pieces::BasePiece* piece, Pieces::Positions& positions);
     void waitForUpdates(Pieces::Positions& positions) const;
@@ -78,6 +84,8 @@ private:
     bool m_isUserGuest;
     bool m_isSignalRegistered;
     std::string m_myUsername;
+    std::string m_whiteDestroyed;
+    std::string m_blackDestroyed;
     Remote::Room m_room;
     Remote::ChessClient* m_client;
     Pieces::PieceColor m_turn;

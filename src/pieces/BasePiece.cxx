@@ -71,13 +71,16 @@ bool Pieces::BasePiece::isKingHittable() const
 bool Pieces::BasePiece::cleanPositionIfEnemy(const Pieces::Position& pos) const
 {
     Chess::Board* board = Chess::Board::GetInstance();
+    Chess::GameMgr* gameMgr = Chess::GameMgr::GetInstance();
     Pieces::BasePiece*** pieces = board->GetBoard();
+    Pieces::BasePiece* piece = board->GetPiece(pos);
     if (!board->IsFree(pos))
     {
         if (!board->IsEnemy(m_position, pos))
         {
             return false;
         }
+        gameMgr->AddDestroyedPiece(piece);
         delete pieces[pos.x][pos.y];
     }
     return true;

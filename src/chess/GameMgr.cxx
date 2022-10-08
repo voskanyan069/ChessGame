@@ -376,9 +376,46 @@ Pieces::PieceColor Chess::GameMgr::GetTurn() const
     return m_turn;
 }
 
+Player* Chess::GameMgr::GetThisPlayer() const
+{
+    return m_thisPlayer;
+}
+
 int Chess::GameMgr::GetViewersCount() const
 {
     return m_client->GetViewersCount(m_room.name);
+}
+
+std::string Chess::GameMgr::GetDestroyedWhitePieces() const
+{
+    return m_whiteDestroyed;
+}
+
+std::string Chess::GameMgr::GetDestroyedBlackPieces() const
+{
+    return m_blackDestroyed;
+}
+
+void Chess::GameMgr::AddDestroyedPiece(const Pieces::BasePiece* piece)
+{
+    if (0 == (int)piece->GetColor())
+    {
+        addDestroyedWhitePiece(piece);
+    }
+    else
+    {
+        addDestroyedBlackPiece(piece);
+    }
+}
+
+void Chess::GameMgr::addDestroyedWhitePiece(const Pieces::BasePiece* piece)
+{
+    m_whiteDestroyed += piece->GetPieceChar();
+}
+
+void Chess::GameMgr::addDestroyedBlackPiece(const Pieces::BasePiece* piece)
+{
+    m_blackDestroyed += piece->GetPieceChar();
 }
 
 void Chess::GameMgr::SetRoom(const Remote::Room& room)

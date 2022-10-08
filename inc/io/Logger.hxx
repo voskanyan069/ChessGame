@@ -11,6 +11,7 @@
 namespace Chess
 {
     class Board;
+    class GameMgr;
 }
 
 typedef enum
@@ -65,6 +66,7 @@ private:
     bool m_bWhiteTop;
     std::ostream* m_os;
     Chess::Board* m_board;
+    Chess::GameMgr* m_gameMgr;
 };
 
 #endif // __IO_LOGGER_HXX__

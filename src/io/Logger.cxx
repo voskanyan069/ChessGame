@@ -4,6 +4,7 @@
 #include "pieces/BasePiece.hxx"
 #include "pieces/Pawn.hxx"
 #include "utils/Defines.hxx"
+#include "utils/Types.hxx"
 
 #include <iostream>
 
@@ -17,6 +18,7 @@ Logger::Logger()
     : m_bWhiteTop(false)
     , m_os(&std::cout)
     , m_board(Chess::Board::GetInstance())
+    , m_gameMgr(Chess::GameMgr::GetInstance())
 {
 }
 
@@ -49,7 +51,7 @@ void Logger::resetConsole() const
 
 void Logger::printViewersCount() const
 {
-    int viewers = Chess::GameMgr::GetInstance()->GetViewersCount();
+    int viewers = m_gameMgr->GetViewersCount();
     *m_os << "\t\t\t\t👁 " << viewers << std::endl;
 }
 
@@ -57,13 +59,18 @@ void Logger::printLetters(bool line) const
 {
     if (line)
     {
-        *m_os << "\n    ⎪ A ⎪ B ⎪ C ⎪ D ⎪ E ⎪ F ⎪ G ⎪ H ⎪   " << std::endl;
-        *m_os << " ———————————————————————————————————————";
+        *m_os << "\n    ⎪ A ⎪ B ⎪ C ⎪ D ⎪ E ⎪ F ⎪ G ⎪ H ⎪   \t";
+        if (m_bWhiteTop) *m_os << m_gameMgr->GetDestroyedBlackPieces();
+        else *m_os << m_gameMgr->GetDestroyedWhitePieces();
+        *m_os << "\n ———————————————————————————————————————";
         printViewersCount();
     }
     else
     {
-        *m_os << "    ⎪ A ⎪ B ⎪ C ⎪ D ⎪ E ⎪ F ⎪ G ⎪ H ⎪   \n" << std::endl;
+        *m_os << "    ⎪ A ⎪ B ⎪ C ⎪ D ⎪ E ⎪ F ⎪ G ⎪ H ⎪   \t";
+        if (m_bWhiteTop) *m_os << m_gameMgr->GetDestroyedWhitePieces();
+        else *m_os << m_gameMgr->GetDestroyedBlackPieces();
+        *m_os << "\n" << std::endl;
     }
 }
 
