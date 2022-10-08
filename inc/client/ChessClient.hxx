@@ -29,6 +29,7 @@ public:
     bool IsRoomExists(const std::string& name) const;
     void CreateRoom(const Remote::Room& room) const;
     void JoinRoom(const Remote::Room& room) const;
+    void LeaveRoom(const Remote::Room& room) const;
     void SpectateRoom(const std::string& name,
             const Remote::MoveCallback& fUpdCallback) const;
     void WaitForReady(const Remote::Room& room) const;
@@ -37,9 +38,10 @@ public:
             const Pieces::Position& newPos) const;
     void ReadLastMove(const Remote::Room& room,
             Remote::LastMove& lastMove) const;
-    std::string GetOpponentUsername(const Remote::Room& room) const;
     void SetKingHittable(const Remote::Room& room,
             const Pieces::PieceColor& color, bool status) const;
+    int GetViewersCount(const std::string& room) const;
+    std::string GetOpponentUsername(const Remote::Room& room) const;
 
 private:
     void convertPieceColor(const Pieces::PieceColor& color,

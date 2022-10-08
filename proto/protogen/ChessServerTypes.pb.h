@@ -48,7 +48,7 @@ struct TableStruct_ChessServerTypes_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[12]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[13]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -62,6 +62,9 @@ extern BoolDefaultTypeInternal _Bool_default_instance_;
 class Empty;
 class EmptyDefaultTypeInternal;
 extern EmptyDefaultTypeInternal _Empty_default_instance_;
+class Integer;
+class IntegerDefaultTypeInternal;
+extern IntegerDefaultTypeInternal _Integer_default_instance_;
 class IsKingHittable;
 class IsKingHittableDefaultTypeInternal;
 extern IsKingHittableDefaultTypeInternal _IsKingHittable_default_instance_;
@@ -96,6 +99,7 @@ extern StringDefaultTypeInternal _String_default_instance_;
 PROTOBUF_NAMESPACE_OPEN
 template<> ::Proto::Bool* Arena::CreateMaybeMessage<::Proto::Bool>(Arena*);
 template<> ::Proto::Empty* Arena::CreateMaybeMessage<::Proto::Empty>(Arena*);
+template<> ::Proto::Integer* Arena::CreateMaybeMessage<::Proto::Integer>(Arena*);
 template<> ::Proto::IsKingHittable* Arena::CreateMaybeMessage<::Proto::IsKingHittable>(Arena*);
 template<> ::Proto::LastMoveInfo* Arena::CreateMaybeMessage<::Proto::LastMoveInfo>(Arena*);
 template<> ::Proto::MoveRequest* Arena::CreateMaybeMessage<::Proto::MoveRequest>(Arena*);
@@ -422,6 +426,143 @@ class Bool PROTOBUF_FINAL :
 };
 // -------------------------------------------------------------------
 
+class Integer PROTOBUF_FINAL :
+    public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Proto.Integer) */ {
+ public:
+  inline Integer() : Integer(nullptr) {};
+  virtual ~Integer();
+
+  Integer(const Integer& from);
+  Integer(Integer&& from) noexcept
+    : Integer() {
+    *this = ::std::move(from);
+  }
+
+  inline Integer& operator=(const Integer& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline Integer& operator=(Integer&& from) noexcept {
+    if (GetArena() == from.GetArena()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* descriptor() {
+    return GetDescriptor();
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Descriptor* GetDescriptor() {
+    return GetMetadataStatic().descriptor;
+  }
+  static const ::PROTOBUF_NAMESPACE_ID::Reflection* GetReflection() {
+    return GetMetadataStatic().reflection;
+  }
+  static const Integer& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const Integer* internal_default_instance() {
+    return reinterpret_cast<const Integer*>(
+               &_Integer_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    2;
+
+  friend void swap(Integer& a, Integer& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(Integer* other) {
+    if (other == this) return;
+    if (GetArena() == other->GetArena()) {
+      InternalSwap(other);
+    } else {
+      ::PROTOBUF_NAMESPACE_ID::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(Integer* other) {
+    if (other == this) return;
+    GOOGLE_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline Integer* New() const final {
+    return CreateMaybeMessage<Integer>(nullptr);
+  }
+
+  Integer* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<Integer>(arena);
+  }
+  void CopyFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void MergeFrom(const ::PROTOBUF_NAMESPACE_ID::Message& from) final;
+  void CopyFrom(const Integer& from);
+  void MergeFrom(const Integer& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  ::PROTOBUF_NAMESPACE_ID::uint8* _InternalSerialize(
+      ::PROTOBUF_NAMESPACE_ID::uint8* target, ::PROTOBUF_NAMESPACE_ID::io::EpsCopyOutputStream* stream) const final;
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const final;
+  void InternalSwap(Integer* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "Proto.Integer";
+  }
+  protected:
+  explicit Integer(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  private:
+  static void ArenaDtor(void* object);
+  inline void RegisterArenaDtor(::PROTOBUF_NAMESPACE_ID::Arena* arena);
+  public:
+
+  ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadata() const final;
+  private:
+  static ::PROTOBUF_NAMESPACE_ID::Metadata GetMetadataStatic() {
+    ::PROTOBUF_NAMESPACE_ID::internal::AssignDescriptors(&::descriptor_table_ChessServerTypes_2eproto);
+    return ::descriptor_table_ChessServerTypes_2eproto.file_level_metadata[kIndexInFileMessages];
+  }
+
+  public:
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kValueFieldNumber = 1,
+  };
+  // bool value = 1;
+  void clear_value();
+  bool value() const;
+  void set_value(bool value);
+  private:
+  bool _internal_value() const;
+  void _internal_set_value(bool value);
+  public:
+
+  // @@protoc_insertion_point(class_scope:Proto.Integer)
+ private:
+  class _Internal;
+
+  template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
+  typedef void InternalArenaConstructable_;
+  typedef void DestructorSkippable_;
+  bool value_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  friend struct ::TableStruct_ChessServerTypes_2eproto;
+};
+// -------------------------------------------------------------------
+
 class String PROTOBUF_FINAL :
     public ::PROTOBUF_NAMESPACE_ID::Message /* @@protoc_insertion_point(class_definition:Proto.String) */ {
  public:
@@ -464,7 +605,7 @@ class String PROTOBUF_FINAL :
                &_String_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    2;
+    3;
 
   friend void swap(String& a, String& b) {
     a.Swap(&b);
@@ -617,7 +758,7 @@ class Position PROTOBUF_FINAL :
                &_Position_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    3;
+    4;
 
   friend void swap(Position& a, Position& b) {
     a.Swap(&b);
@@ -765,7 +906,7 @@ class RoomsInfo PROTOBUF_FINAL :
                &_RoomsInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    4;
+    5;
 
   friend void swap(RoomsInfo& a, RoomsInfo& b) {
     a.Swap(&b);
@@ -917,7 +1058,7 @@ class RoomSettings PROTOBUF_FINAL :
                &_RoomSettings_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    5;
+    6;
 
   friend void swap(RoomSettings& a, RoomSettings& b) {
     a.Swap(&b);
@@ -1097,7 +1238,7 @@ class RoomWithUsername PROTOBUF_FINAL :
                &_RoomWithUsername_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    6;
+    7;
 
   friend void swap(RoomWithUsername& a, RoomWithUsername& b) {
     a.Swap(&b);
@@ -1270,7 +1411,7 @@ class ReadyRequest PROTOBUF_FINAL :
                &_ReadyRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    7;
+    8;
 
   friend void swap(ReadyRequest& a, ReadyRequest& b) {
     a.Swap(&b);
@@ -1438,7 +1579,7 @@ class MoveRequest PROTOBUF_FINAL :
                &_MoveRequest_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    8;
+    9;
 
   friend void swap(MoveRequest& a, MoveRequest& b) {
     a.Swap(&b);
@@ -1624,7 +1765,7 @@ class IsKingHittable PROTOBUF_FINAL :
                &_IsKingHittable_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    9;
+    10;
 
   friend void swap(IsKingHittable& a, IsKingHittable& b) {
     a.Swap(&b);
@@ -1772,7 +1913,7 @@ class LastMoveInfo PROTOBUF_FINAL :
                &_LastMoveInfo_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    10;
+    11;
 
   friend void swap(LastMoveInfo& a, LastMoveInfo& b) {
     a.Swap(&b);
@@ -1958,7 +2099,7 @@ class RoomWithIsKingHittable PROTOBUF_FINAL :
                &_RoomWithIsKingHittable_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    11;
+    12;
 
   friend void swap(RoomWithIsKingHittable& a, RoomWithIsKingHittable& b) {
     a.Swap(&b);
@@ -2113,6 +2254,30 @@ inline void Bool::_internal_set_value(bool value) {
 inline void Bool::set_value(bool value) {
   _internal_set_value(value);
   // @@protoc_insertion_point(field_set:Proto.Bool.value)
+}
+
+// -------------------------------------------------------------------
+
+// Integer
+
+// bool value = 1;
+inline void Integer::clear_value() {
+  value_ = false;
+}
+inline bool Integer::_internal_value() const {
+  return value_;
+}
+inline bool Integer::value() const {
+  // @@protoc_insertion_point(field_get:Proto.Integer.value)
+  return _internal_value();
+}
+inline void Integer::_internal_set_value(bool value) {
+  
+  value_ = value;
+}
+inline void Integer::set_value(bool value) {
+  _internal_set_value(value);
+  // @@protoc_insertion_point(field_set:Proto.Integer.value)
 }
 
 // -------------------------------------------------------------------
@@ -3486,6 +3651,8 @@ inline void RoomWithIsKingHittable::set_allocated_iskinghittable(::Proto::IsKing
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

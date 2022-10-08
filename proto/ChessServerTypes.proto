@@ -19,6 +19,10 @@ message Bool {
     bool value = 1;
 };
 
+message Integer {
+    bool value = 1;
+};
+
 message String {
     string value = 1;
 };

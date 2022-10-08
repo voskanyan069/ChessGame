@@ -39,6 +39,7 @@ private:
 public:
     void InitModel();
     Pieces::PieceColor GetTurn() const;
+    int GetViewersCount() const;
     void SetRoom(const Remote::Room& room);
     void SetKingHittable(const Pieces::PieceColor& color, bool status) const;
     void GetRooms();
@@ -59,6 +60,7 @@ private:
     void joinRoom() const;
     void createRoom() const;
     bool askForReady() const;
+    void waitOrLeaveRoom(const Remote::PlayerType& playerType) const;
     void readyAndWait(const Remote::Player& player) const;
     bool checkPiece(Pieces::BasePiece* piece) const;
     void refreshBoard(Pieces::BasePiece* piece, Pieces::Positions& positions);

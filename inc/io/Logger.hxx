@@ -52,6 +52,7 @@ public:
 private:
     void setConsoleColor(const MessageType& type) const;
     void resetConsole() const;
+    void printViewersCount() const;
     void printLetters(bool line=true) const;
     void printPieceChar(const Pieces::BasePiece* piece) const;
     void printPieces(int lineIdx) const;

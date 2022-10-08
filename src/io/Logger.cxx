@@ -1,5 +1,6 @@
 #include "io/Logger.hxx"
 #include "chess/Board.hxx"
+#include "chess/GameMgr.hxx"
 #include "pieces/BasePiece.hxx"
 #include "pieces/Pawn.hxx"
 #include "utils/Defines.hxx"
@@ -46,12 +47,19 @@ void Logger::resetConsole() const
     *m_os << RESET_CONSOLE << std::endl;
 }
 
+void Logger::printViewersCount() const
+{
+    int viewers = Chess::GameMgr::GetInstance()->GetViewersCount();
+    *m_os << "\t\t\t\t👁 " << viewers << std::endl;
+}
+
 void Logger::printLetters(bool line) const
 {
     if (line)
     {
         *m_os << "\n    ⎪ A ⎪ B ⎪ C ⎪ D ⎪ E ⎪ F ⎪ G ⎪ H ⎪   " << std::endl;
-        *m_os << " ———————————————————————————————————————" << std::endl;
+        *m_os << " ———————————————————————————————————————";
+        printViewersCount();
     }
     else
     {

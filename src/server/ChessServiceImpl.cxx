@@ -90,6 +90,7 @@ grpc::Status Remote::ChessServiceImpl::CreateRoom(
     }
     Remote::ServerRoom& room = m_mapRooms[name];
     room.exists = true;
+    room.spectatorsCount = 0;
     room.ownerPlayer.username = request->username();
     room.password = request->room().password();
     room.ownerPlayer.isReady = false;
@@ -131,6 +132,34 @@ grpc::Status Remote::ChessServiceImpl::JoinRoom(
     return grpc::Status::OK;
 }
 
+grpc::Status Remote::ChessServiceImpl::LeaveRoom(
+        grpc::ServerContext* context,
+        const Proto::RoomWithUsername* request,
+        Proto::Empty* response)
+{
+    std::string errMsg = "";
+    if (!doCheckRoomSettings(request->room(), errMsg))
+    {
+        return grpc::Status(grpc::StatusCode::CANCELLED, errMsg);
+    }
+    Remote::ServerRoom& room = m_mapRooms[request->room().name()];
+    if (request->username() == room.ownerPlayer.username)
+    {
+        m_mapRooms.erase(request->room().name());
+    }
+    else if (request->username() == room.guestPlayer.username)
+    {
+        room.guestPlayer.username = "";
+    }
+    else
+    {
+        return grpc::Status(grpc::StatusCode::CANCELLED, "Incorrect username");
+    }
+    std::cout << context->peer() << " has leaved " << request->room().name()
+        << " room" << std::endl;
+    return grpc::Status::OK;
+}
+
 grpc::Status Remote::ChessServiceImpl::SpectateRoom(
         grpc::ServerContext* context,
         const Proto::String* request,
@@ -148,6 +177,9 @@ grpc::Status Remote::ChessServiceImpl::SpectateRoom(
         return grpc::Status(grpc::StatusCode::CANCELLED,
                 "The game is not started yet");
     }
+    std::cout << context->peer() << " has joined as spectator to "
+        << name << " room" << std::endl;
+    room.spectatorsCount += 1;
     for (const auto& move : room.vecMovesHistory)
     {
         C2P_Converter::ConvertLastMoveInfo(move, lastMove);
@@ -165,6 +197,23 @@ grpc::Status Remote::ChessServiceImpl::SpectateRoom(
         room.spectatorLastMove.Clean();
         writer->Write(lastMove);
     }
+    return grpc::Status::OK;
+}
+
+grpc::Status Remote::ChessServiceImpl::GetViewersCount(
+        grpc::ServerContext* context,
+        const Proto::String* request,
+        Proto::Integer* response)
+{
+    response->set_value(0);
+    std::string name = request->value();
+    if (m_mapRooms.end() == m_mapRooms.find(name))
+    {
+        return grpc::Status(grpc::StatusCode::CANCELLED, "Room doesn't exists");
+    }
+    Remote::ServerRoom& room = m_mapRooms[name];
+    int viewers = room.spectatorsCount;
+    response->set_value(viewers);
     return grpc::Status::OK;
 }
 
@@ -229,7 +278,7 @@ grpc::Status Remote::ChessServiceImpl::Ready(
     {
         room.guestPlayer.isReady = request->isready();
     }
-    room.waitConditionVar->notify_one();
+    room.waitConditionVar->notify_all();
     return grpc::Status::OK;
 }
 

@@ -12,12 +12,15 @@
 - Implement hittable King (In progress)
 - Implement checkmate
 - Close session when one of players leave room
-- Allow to join other players when someone press not ready
+- ~~Allow to join other players when someone press not ready~~
 - ~~Add GetRooms() rpc~~
 - ~~Close session when signal received (ctrl-c, termination)~~
 - ~~Error when in room already 2 players~~
 - ~~Add spectator mode~~
-- Add some widgets to printed board (last moves, destroyed pieces, viewers count)
+- Add some widgets to printed board
+  - Last moves info
+  - Show destroyed pieces
+  - ~~Viewers count~~
 - Test and fix game with multiple players and spectators
 - ~~Add board rotation feature~~
 - Add commands for spectator mode

@@ -47,10 +47,6 @@ bool Chess::GameMgr::askForReady() const
 {
     Logger::GetInstance()->PrintEndl();
     bool isReady = Query::GetInstance()->AskForReady();
-    if (!isReady)
-    {
-        std::exit(1);
-    }
     Logger::GetInstance()->PrintEndl();
     return isReady;
 }
@@ -69,13 +65,27 @@ void Chess::GameMgr::readyAndWait(const Remote::Player& player) const
     }
 }
 
+void Chess::GameMgr::waitOrLeaveRoom(const Remote::PlayerType& playerType) const
+{
+    bool isReady = askForReady();
+    if (isReady)
+    {
+        readyAndWait({playerType, isReady});
+    }
+    else
+    {
+        m_client->LeaveRoom(m_room);
+        Logger::GetInstance()->Print(INFO, "Room has been left, Bye...");
+        std::exit(-1);
+    }
+}
+
 void Chess::GameMgr::joinRoom() const
 {
     Logger::GetInstance()->Print(INFO, "Trying to join %s...", m_room.name);
     m_client->JoinRoom(m_room);
     Logger::GetInstance()->Print(INFO, "Joined to %s", m_room.name);
-    bool isReady = askForReady();
-    readyAndWait({Remote::PlayerType::GUEST, isReady});
+    waitOrLeaveRoom(Remote::PlayerType::GUEST);
 }
 
 void Chess::GameMgr::createRoom() const
@@ -84,8 +94,7 @@ void Chess::GameMgr::createRoom() const
             m_room.name);
     m_client->CreateRoom(m_room);
     Logger::GetInstance()->Print(INFO, "Created and joined to %s", m_room.name);
-    bool isReady = askForReady();
-    readyAndWait({Remote::PlayerType::OWNER, isReady});
+    waitOrLeaveRoom(Remote::PlayerType::OWNER);
 }
 
 bool Chess::GameMgr::checkPiece(Pieces::BasePiece* piece) const
@@ -365,6 +374,11 @@ void Chess::GameMgr::CloseEngine()
 Pieces::PieceColor Chess::GameMgr::GetTurn() const
 {
     return m_turn;
+}
+
+int Chess::GameMgr::GetViewersCount() const
+{
+    return m_client->GetViewersCount(m_room.name);
 }
 
 void Chess::GameMgr::SetRoom(const Remote::Room& room)

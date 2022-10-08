@@ -100,6 +100,18 @@ void Remote::ChessClient::JoinRoom(const Remote::Room& room) const
     checkRequestStatus(status);
 }
 
+void Remote::ChessClient::LeaveRoom(const Remote::Room& room) const
+{
+    grpc::ClientContext context;
+    Proto::RoomWithUsername request;
+    Proto::Empty response;
+    request.set_username(m_username);
+    request.mutable_room()->set_name(room.name);
+    request.mutable_room()->set_password(room.password);
+    grpc::Status status = m_stub->LeaveRoom(&context, request, &response);
+    checkRequestStatus(status);
+}
+
 void Remote::ChessClient::SpectateRoom(const std::string& name,
         const Remote::MoveCallback& fUpdCallback) const
 {
@@ -173,20 +185,6 @@ void Remote::ChessClient::ReadLastMove(const Remote::Room& room,
     P2C_Converter::ConvertLastMoveInfo(response, lastMove);
 }
 
-std::string Remote::ChessClient::GetOpponentUsername(
-        const Remote::Room& room) const
-{
-    grpc::ClientContext context;
-    Proto::RoomWithUsername request;
-    Proto::String response;
-    request.set_username(m_username);
-    request.mutable_room()->set_name(room.name);
-    request.mutable_room()->set_password(room.password);
-    grpc::Status status = m_stub->GetUsername(&context, request, &response);
-    checkRequestStatus(status);
-    return response.value();
-}
-
 void Remote::ChessClient::SetKingHittable(const Remote::Room& room,
         const Pieces::PieceColor& color, bool newStatus) const
 {
@@ -201,4 +199,29 @@ void Remote::ChessClient::SetKingHittable(const Remote::Room& room,
     request.mutable_room()->set_password(room.password);
     grpc::Status status = m_stub->SetKingHittable(&context, request, &response);
     checkRequestStatus(status);
+}
+
+std::string Remote::ChessClient::GetOpponentUsername(
+        const Remote::Room& room) const
+{
+    grpc::ClientContext context;
+    Proto::RoomWithUsername request;
+    Proto::String response;
+    request.set_username(m_username);
+    request.mutable_room()->set_name(room.name);
+    request.mutable_room()->set_password(room.password);
+    grpc::Status status = m_stub->GetUsername(&context, request, &response);
+    checkRequestStatus(status);
+    return response.value();
+}
+
+int Remote::ChessClient::GetViewersCount(const std::string& room) const
+{
+    grpc::ClientContext context;
+    Proto::String request;
+    Proto::Integer response;
+    request.set_value(room);
+    grpc::Status status = m_stub->GetViewersCount(&context, request, &response);
+    checkRequestStatus(status);
+    return response.value();
 }
