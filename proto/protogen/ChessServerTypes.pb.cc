@@ -390,7 +390,7 @@ static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] =
 const char descriptor_table_protodef_ChessServerTypes_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n\026ChessServerTypes.proto\022\005Proto\"\007\n\005Empty"
   "\"\025\n\004Bool\022\r\n\005value\030\001 \001(\010\"\030\n\007Integer\022\r\n\005va"
-  "lue\030\001 \001(\010\"\027\n\006String\022\r\n\005value\030\001 \001(\t\" \n\010Po"
+  "lue\030\001 \001(\005\"\027\n\006String\022\r\n\005value\030\001 \001(\t\" \n\010Po"
   "sition\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030\002 \001(\005\"\032\n\tRoomsInf"
   "o\022\r\n\005names\030\001 \003(\t\".\n\014RoomSettings\022\014\n\004name"
   "\030\001 \001(\t\022\020\n\010password\030\002 \001(\t\"G\n\020RoomWithUser"
@@ -852,7 +852,7 @@ Integer::Integer(const Integer& from)
 }
 
 void Integer::SharedCtor() {
-  value_ = false;
+  value_ = 0;
 }
 
 Integer::~Integer() {
@@ -886,7 +886,7 @@ void Integer::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  value_ = false;
+  value_ = 0;
   _internal_metadata_.Clear<::PROTOBUF_NAMESPACE_ID::UnknownFieldSet>();
 }
 
@@ -898,7 +898,7 @@ const char* Integer::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::in
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
-      // bool value = 1;
+      // int32 value = 1;
       case 1:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
           value_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint64(&ptr);
@@ -933,10 +933,10 @@ failure:
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  // bool value = 1;
+  // int32 value = 1;
   if (this->value() != 0) {
     target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteBoolToArray(1, this->_internal_value(), target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_value(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -955,9 +955,11 @@ size_t Integer::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  // bool value = 1;
+  // int32 value = 1;
   if (this->value() != 0) {
-    total_size += 1 + 1;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_value());
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {

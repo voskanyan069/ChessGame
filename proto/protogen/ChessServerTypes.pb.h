@@ -541,13 +541,13 @@ class Integer PROTOBUF_FINAL :
   enum : int {
     kValueFieldNumber = 1,
   };
-  // bool value = 1;
+  // int32 value = 1;
   void clear_value();
-  bool value() const;
-  void set_value(bool value);
+  ::PROTOBUF_NAMESPACE_ID::int32 value() const;
+  void set_value(::PROTOBUF_NAMESPACE_ID::int32 value);
   private:
-  bool _internal_value() const;
-  void _internal_set_value(bool value);
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_value() const;
+  void _internal_set_value(::PROTOBUF_NAMESPACE_ID::int32 value);
   public:
 
   // @@protoc_insertion_point(class_scope:Proto.Integer)
@@ -557,7 +557,7 @@ class Integer PROTOBUF_FINAL :
   template <typename T> friend class ::PROTOBUF_NAMESPACE_ID::Arena::InternalHelper;
   typedef void InternalArenaConstructable_;
   typedef void DestructorSkippable_;
-  bool value_;
+  ::PROTOBUF_NAMESPACE_ID::int32 value_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_ChessServerTypes_2eproto;
 };
@@ -2260,22 +2260,22 @@ inline void Bool::set_value(bool value) {
 
 // Integer
 
-// bool value = 1;
+// int32 value = 1;
 inline void Integer::clear_value() {
-  value_ = false;
+  value_ = 0;
 }
-inline bool Integer::_internal_value() const {
+inline ::PROTOBUF_NAMESPACE_ID::int32 Integer::_internal_value() const {
   return value_;
 }
-inline bool Integer::value() const {
+inline ::PROTOBUF_NAMESPACE_ID::int32 Integer::value() const {
   // @@protoc_insertion_point(field_get:Proto.Integer.value)
   return _internal_value();
 }
-inline void Integer::_internal_set_value(bool value) {
+inline void Integer::_internal_set_value(::PROTOBUF_NAMESPACE_ID::int32 value) {
   
   value_ = value;
 }
-inline void Integer::set_value(bool value) {
+inline void Integer::set_value(::PROTOBUF_NAMESPACE_ID::int32 value) {
   _internal_set_value(value);
   // @@protoc_insertion_point(field_set:Proto.Integer.value)
 }

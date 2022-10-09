@@ -321,7 +321,6 @@ void Chess::GameMgr::updateFrame()
     askCurrentPosition(piece);
     askNewPosition(piece);
     m_isSkipWait = false;
-    Logger::GetInstance()->PrintBoard();
 }
 
 void Chess::GameMgr::updateFrame(const Remote::LastMove& lastMove)

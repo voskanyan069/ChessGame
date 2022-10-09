@@ -222,6 +222,9 @@ int Remote::ChessClient::GetViewersCount(const std::string& room) const
     Proto::Integer response;
     request.set_value(room);
     grpc::Status status = m_stub->GetViewersCount(&context, request, &response);
-    checkRequestStatus(status);
+    if (!status.ok())
+    {
+        return 0;
+    }
     return response.value();
 }

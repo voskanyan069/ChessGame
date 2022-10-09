@@ -212,8 +212,7 @@ grpc::Status Remote::ChessServiceImpl::GetViewersCount(
         return grpc::Status(grpc::StatusCode::CANCELLED, "Room doesn't exists");
     }
     Remote::ServerRoom& room = m_mapRooms[name];
-    int viewers = room.spectatorsCount;
-    response->set_value(viewers);
+    response->set_value(room.spectatorsCount);
     return grpc::Status::OK;
 }
 
@@ -303,7 +302,7 @@ grpc::Status Remote::ChessServiceImpl::MovePiece(
     room.isLastMoveRead = true;
     room.isSpectatorLastMoveRead = true;
     room.moveConditionVar->notify_one();
-    room.spectatorConditionVar->notify_one();
+    room.spectatorConditionVar->notify_all();
     room.vecMovesHistory.push_back(room.spectatorLastMove);
     return grpc::Status::OK;
 }
