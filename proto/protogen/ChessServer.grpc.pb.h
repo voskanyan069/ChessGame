@@ -80,6 +80,13 @@ class ChessServer final {
     std::unique_ptr< ::grpc::ClientAsyncReaderInterface< ::Proto::LastMoveInfo>> PrepareAsyncSpectateRoom(::grpc::ClientContext* context, const ::Proto::String& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncReaderInterface< ::Proto::LastMoveInfo>>(PrepareAsyncSpectateRoomRaw(context, request, cq));
     }
+    virtual ::grpc::Status LeaveSpectatorRoom(::grpc::ClientContext* context, const ::Proto::String& request, ::Proto::Empty* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Proto::Empty>> AsyncLeaveSpectatorRoom(::grpc::ClientContext* context, const ::Proto::String& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Proto::Empty>>(AsyncLeaveSpectatorRoomRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Proto::Empty>> PrepareAsyncLeaveSpectatorRoom(::grpc::ClientContext* context, const ::Proto::String& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Proto::Empty>>(PrepareAsyncLeaveSpectatorRoomRaw(context, request, cq));
+    }
     virtual ::grpc::Status GetViewersCount(::grpc::ClientContext* context, const ::Proto::String& request, ::Proto::Integer* response) = 0;
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Proto::Integer>> AsyncGetViewersCount(::grpc::ClientContext* context, const ::Proto::String& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Proto::Integer>>(AsyncGetViewersCountRaw(context, request, cq));
@@ -197,6 +204,18 @@ class ChessServer final {
       #else
       virtual void SpectateRoom(::grpc::ClientContext* context, ::Proto::String* request, ::grpc::experimental::ClientReadReactor< ::Proto::LastMoveInfo>* reactor) = 0;
       #endif
+      virtual void LeaveSpectatorRoom(::grpc::ClientContext* context, const ::Proto::String* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void LeaveSpectatorRoom(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) = 0;
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      virtual void LeaveSpectatorRoom(::grpc::ClientContext* context, const ::Proto::String* request, ::Proto::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      #else
+      virtual void LeaveSpectatorRoom(::grpc::ClientContext* context, const ::Proto::String* request, ::Proto::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
+      #endif
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      virtual void LeaveSpectatorRoom(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      #else
+      virtual void LeaveSpectatorRoom(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
+      #endif
       virtual void GetViewersCount(::grpc::ClientContext* context, const ::Proto::String* request, ::Proto::Integer* response, std::function<void(::grpc::Status)>) = 0;
       virtual void GetViewersCount(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Integer* response, std::function<void(::grpc::Status)>) = 0;
       #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -303,6 +322,8 @@ class ChessServer final {
     virtual ::grpc::ClientReaderInterface< ::Proto::LastMoveInfo>* SpectateRoomRaw(::grpc::ClientContext* context, const ::Proto::String& request) = 0;
     virtual ::grpc::ClientAsyncReaderInterface< ::Proto::LastMoveInfo>* AsyncSpectateRoomRaw(::grpc::ClientContext* context, const ::Proto::String& request, ::grpc::CompletionQueue* cq, void* tag) = 0;
     virtual ::grpc::ClientAsyncReaderInterface< ::Proto::LastMoveInfo>* PrepareAsyncSpectateRoomRaw(::grpc::ClientContext* context, const ::Proto::String& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::Proto::Empty>* AsyncLeaveSpectatorRoomRaw(::grpc::ClientContext* context, const ::Proto::String& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::Proto::Empty>* PrepareAsyncLeaveSpectatorRoomRaw(::grpc::ClientContext* context, const ::Proto::String& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::Proto::Integer>* AsyncGetViewersCountRaw(::grpc::ClientContext* context, const ::Proto::String& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::Proto::Integer>* PrepareAsyncGetViewersCountRaw(::grpc::ClientContext* context, const ::Proto::String& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::Proto::String>* AsyncGetUsernameRaw(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) = 0;
@@ -364,6 +385,13 @@ class ChessServer final {
     }
     std::unique_ptr< ::grpc::ClientAsyncReader< ::Proto::LastMoveInfo>> PrepareAsyncSpectateRoom(::grpc::ClientContext* context, const ::Proto::String& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncReader< ::Proto::LastMoveInfo>>(PrepareAsyncSpectateRoomRaw(context, request, cq));
+    }
+    ::grpc::Status LeaveSpectatorRoom(::grpc::ClientContext* context, const ::Proto::String& request, ::Proto::Empty* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Proto::Empty>> AsyncLeaveSpectatorRoom(::grpc::ClientContext* context, const ::Proto::String& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Proto::Empty>>(AsyncLeaveSpectatorRoomRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Proto::Empty>> PrepareAsyncLeaveSpectatorRoom(::grpc::ClientContext* context, const ::Proto::String& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Proto::Empty>>(PrepareAsyncLeaveSpectatorRoomRaw(context, request, cq));
     }
     ::grpc::Status GetViewersCount(::grpc::ClientContext* context, const ::Proto::String& request, ::Proto::Integer* response) override;
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Proto::Integer>> AsyncGetViewersCount(::grpc::ClientContext* context, const ::Proto::String& request, ::grpc::CompletionQueue* cq) {
@@ -482,6 +510,18 @@ class ChessServer final {
       #else
       void SpectateRoom(::grpc::ClientContext* context, ::Proto::String* request, ::grpc::experimental::ClientReadReactor< ::Proto::LastMoveInfo>* reactor) override;
       #endif
+      void LeaveSpectatorRoom(::grpc::ClientContext* context, const ::Proto::String* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) override;
+      void LeaveSpectatorRoom(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) override;
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      void LeaveSpectatorRoom(::grpc::ClientContext* context, const ::Proto::String* request, ::Proto::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
+      #else
+      void LeaveSpectatorRoom(::grpc::ClientContext* context, const ::Proto::String* request, ::Proto::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
+      #endif
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      void LeaveSpectatorRoom(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
+      #else
+      void LeaveSpectatorRoom(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
+      #endif
       void GetViewersCount(::grpc::ClientContext* context, const ::Proto::String* request, ::Proto::Integer* response, std::function<void(::grpc::Status)>) override;
       void GetViewersCount(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Integer* response, std::function<void(::grpc::Status)>) override;
       #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -590,6 +630,8 @@ class ChessServer final {
     ::grpc::ClientReader< ::Proto::LastMoveInfo>* SpectateRoomRaw(::grpc::ClientContext* context, const ::Proto::String& request) override;
     ::grpc::ClientAsyncReader< ::Proto::LastMoveInfo>* AsyncSpectateRoomRaw(::grpc::ClientContext* context, const ::Proto::String& request, ::grpc::CompletionQueue* cq, void* tag) override;
     ::grpc::ClientAsyncReader< ::Proto::LastMoveInfo>* PrepareAsyncSpectateRoomRaw(::grpc::ClientContext* context, const ::Proto::String& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::Proto::Empty>* AsyncLeaveSpectatorRoomRaw(::grpc::ClientContext* context, const ::Proto::String& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::Proto::Empty>* PrepareAsyncLeaveSpectatorRoomRaw(::grpc::ClientContext* context, const ::Proto::String& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::Proto::Integer>* AsyncGetViewersCountRaw(::grpc::ClientContext* context, const ::Proto::String& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::Proto::Integer>* PrepareAsyncGetViewersCountRaw(::grpc::ClientContext* context, const ::Proto::String& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::Proto::String>* AsyncGetUsernameRaw(::grpc::ClientContext* context, const ::Proto::RoomWithUsername& request, ::grpc::CompletionQueue* cq) override;
@@ -610,6 +652,7 @@ class ChessServer final {
     const ::grpc::internal::RpcMethod rpcmethod_JoinRoom_;
     const ::grpc::internal::RpcMethod rpcmethod_LeaveRoom_;
     const ::grpc::internal::RpcMethod rpcmethod_SpectateRoom_;
+    const ::grpc::internal::RpcMethod rpcmethod_LeaveSpectatorRoom_;
     const ::grpc::internal::RpcMethod rpcmethod_GetViewersCount_;
     const ::grpc::internal::RpcMethod rpcmethod_GetUsername_;
     const ::grpc::internal::RpcMethod rpcmethod_WaitForReady_;
@@ -630,6 +673,7 @@ class ChessServer final {
     virtual ::grpc::Status JoinRoom(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response);
     virtual ::grpc::Status LeaveRoom(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response);
     virtual ::grpc::Status SpectateRoom(::grpc::ServerContext* context, const ::Proto::String* request, ::grpc::ServerWriter< ::Proto::LastMoveInfo>* writer);
+    virtual ::grpc::Status LeaveSpectatorRoom(::grpc::ServerContext* context, const ::Proto::String* request, ::Proto::Empty* response);
     virtual ::grpc::Status GetViewersCount(::grpc::ServerContext* context, const ::Proto::String* request, ::Proto::Integer* response);
     virtual ::grpc::Status GetUsername(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::String* response);
     virtual ::grpc::Status WaitForReady(::grpc::ServerContext* context, const ::Proto::RoomSettings* request, ::Proto::Empty* response);
@@ -759,12 +803,32 @@ class ChessServer final {
     }
   };
   template <class BaseClass>
+  class WithAsyncMethod_LeaveSpectatorRoom : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_LeaveSpectatorRoom() {
+      ::grpc::Service::MarkMethodAsync(6);
+    }
+    ~WithAsyncMethod_LeaveSpectatorRoom() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status LeaveSpectatorRoom(::grpc::ServerContext* /*context*/, const ::Proto::String* /*request*/, ::Proto::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestLeaveSpectatorRoom(::grpc::ServerContext* context, ::Proto::String* request, ::grpc::ServerAsyncResponseWriter< ::Proto::Empty>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(6, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
   class WithAsyncMethod_GetViewersCount : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_GetViewersCount() {
-      ::grpc::Service::MarkMethodAsync(6);
+      ::grpc::Service::MarkMethodAsync(7);
     }
     ~WithAsyncMethod_GetViewersCount() override {
       BaseClassMustBeDerivedFromService(this);
@@ -775,7 +839,7 @@ class ChessServer final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestGetViewersCount(::grpc::ServerContext* context, ::Proto::String* request, ::grpc::ServerAsyncResponseWriter< ::Proto::Integer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(6, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(7, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -784,7 +848,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_GetUsername() {
-      ::grpc::Service::MarkMethodAsync(7);
+      ::grpc::Service::MarkMethodAsync(8);
     }
     ~WithAsyncMethod_GetUsername() override {
       BaseClassMustBeDerivedFromService(this);
@@ -795,7 +859,7 @@ class ChessServer final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestGetUsername(::grpc::ServerContext* context, ::Proto::RoomWithUsername* request, ::grpc::ServerAsyncResponseWriter< ::Proto::String>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(7, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(8, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -804,7 +868,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_WaitForReady() {
-      ::grpc::Service::MarkMethodAsync(8);
+      ::grpc::Service::MarkMethodAsync(9);
     }
     ~WithAsyncMethod_WaitForReady() override {
       BaseClassMustBeDerivedFromService(this);
@@ -815,7 +879,7 @@ class ChessServer final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestWaitForReady(::grpc::ServerContext* context, ::Proto::RoomSettings* request, ::grpc::ServerAsyncResponseWriter< ::Proto::Empty>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(8, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(9, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -824,7 +888,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_Ready() {
-      ::grpc::Service::MarkMethodAsync(9);
+      ::grpc::Service::MarkMethodAsync(10);
     }
     ~WithAsyncMethod_Ready() override {
       BaseClassMustBeDerivedFromService(this);
@@ -835,7 +899,7 @@ class ChessServer final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestReady(::grpc::ServerContext* context, ::Proto::ReadyRequest* request, ::grpc::ServerAsyncResponseWriter< ::Proto::Empty>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(9, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(10, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -844,7 +908,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_MovePiece() {
-      ::grpc::Service::MarkMethodAsync(10);
+      ::grpc::Service::MarkMethodAsync(11);
     }
     ~WithAsyncMethod_MovePiece() override {
       BaseClassMustBeDerivedFromService(this);
@@ -855,7 +919,7 @@ class ChessServer final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestMovePiece(::grpc::ServerContext* context, ::Proto::MoveRequest* request, ::grpc::ServerAsyncResponseWriter< ::Proto::Empty>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(10, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(11, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -864,7 +928,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_ReadPieceMove() {
-      ::grpc::Service::MarkMethodAsync(11);
+      ::grpc::Service::MarkMethodAsync(12);
     }
     ~WithAsyncMethod_ReadPieceMove() override {
       BaseClassMustBeDerivedFromService(this);
@@ -875,7 +939,7 @@ class ChessServer final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestReadPieceMove(::grpc::ServerContext* context, ::Proto::RoomSettings* request, ::grpc::ServerAsyncResponseWriter< ::Proto::LastMoveInfo>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(11, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(12, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -884,7 +948,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_SetKingHittable() {
-      ::grpc::Service::MarkMethodAsync(12);
+      ::grpc::Service::MarkMethodAsync(13);
     }
     ~WithAsyncMethod_SetKingHittable() override {
       BaseClassMustBeDerivedFromService(this);
@@ -895,10 +959,10 @@ class ChessServer final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestSetKingHittable(::grpc::ServerContext* context, ::Proto::RoomWithIsKingHittable* request, ::grpc::ServerAsyncResponseWriter< ::Proto::Empty>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(12, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(13, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
-  typedef WithAsyncMethod_GetRooms<WithAsyncMethod_IsRoomExists<WithAsyncMethod_CreateRoom<WithAsyncMethod_JoinRoom<WithAsyncMethod_LeaveRoom<WithAsyncMethod_SpectateRoom<WithAsyncMethod_GetViewersCount<WithAsyncMethod_GetUsername<WithAsyncMethod_WaitForReady<WithAsyncMethod_Ready<WithAsyncMethod_MovePiece<WithAsyncMethod_ReadPieceMove<WithAsyncMethod_SetKingHittable<Service > > > > > > > > > > > > > AsyncService;
+  typedef WithAsyncMethod_GetRooms<WithAsyncMethod_IsRoomExists<WithAsyncMethod_CreateRoom<WithAsyncMethod_JoinRoom<WithAsyncMethod_LeaveRoom<WithAsyncMethod_SpectateRoom<WithAsyncMethod_LeaveSpectatorRoom<WithAsyncMethod_GetViewersCount<WithAsyncMethod_GetUsername<WithAsyncMethod_WaitForReady<WithAsyncMethod_Ready<WithAsyncMethod_MovePiece<WithAsyncMethod_ReadPieceMove<WithAsyncMethod_SetKingHittable<Service > > > > > > > > > > > > > > AsyncService;
   template <class BaseClass>
   class ExperimentalWithCallbackMethod_GetRooms : public BaseClass {
    private:
@@ -1173,6 +1237,53 @@ class ChessServer final {
       { return nullptr; }
   };
   template <class BaseClass>
+  class ExperimentalWithCallbackMethod_LeaveSpectatorRoom : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    ExperimentalWithCallbackMethod_LeaveSpectatorRoom() {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::Service::
+    #else
+      ::grpc::Service::experimental().
+    #endif
+        MarkMethodCallback(6,
+          new ::grpc_impl::internal::CallbackUnaryHandler< ::Proto::String, ::Proto::Empty>(
+            [this](
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+                   ::grpc::CallbackServerContext*
+    #else
+                   ::grpc::experimental::CallbackServerContext*
+    #endif
+                     context, const ::Proto::String* request, ::Proto::Empty* response) { return this->LeaveSpectatorRoom(context, request, response); }));}
+    void SetMessageAllocatorFor_LeaveSpectatorRoom(
+        ::grpc::experimental::MessageAllocator< ::Proto::String, ::Proto::Empty>* allocator) {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(6);
+    #else
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(6);
+    #endif
+      static_cast<::grpc_impl::internal::CallbackUnaryHandler< ::Proto::String, ::Proto::Empty>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~ExperimentalWithCallbackMethod_LeaveSpectatorRoom() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status LeaveSpectatorRoom(::grpc::ServerContext* /*context*/, const ::Proto::String* /*request*/, ::Proto::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+    virtual ::grpc::ServerUnaryReactor* LeaveSpectatorRoom(
+      ::grpc::CallbackServerContext* /*context*/, const ::Proto::String* /*request*/, ::Proto::Empty* /*response*/)
+    #else
+    virtual ::grpc::experimental::ServerUnaryReactor* LeaveSpectatorRoom(
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::Proto::String* /*request*/, ::Proto::Empty* /*response*/)
+    #endif
+      { return nullptr; }
+  };
+  template <class BaseClass>
   class ExperimentalWithCallbackMethod_GetViewersCount : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
@@ -1183,7 +1294,7 @@ class ChessServer final {
     #else
       ::grpc::Service::experimental().
     #endif
-        MarkMethodCallback(6,
+        MarkMethodCallback(7,
           new ::grpc_impl::internal::CallbackUnaryHandler< ::Proto::String, ::Proto::Integer>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -1195,9 +1306,9 @@ class ChessServer final {
     void SetMessageAllocatorFor_GetViewersCount(
         ::grpc::experimental::MessageAllocator< ::Proto::String, ::Proto::Integer>* allocator) {
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(6);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(7);
     #else
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(6);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(7);
     #endif
       static_cast<::grpc_impl::internal::CallbackUnaryHandler< ::Proto::String, ::Proto::Integer>*>(handler)
               ->SetMessageAllocator(allocator);
@@ -1230,7 +1341,7 @@ class ChessServer final {
     #else
       ::grpc::Service::experimental().
     #endif
-        MarkMethodCallback(7,
+        MarkMethodCallback(8,
           new ::grpc_impl::internal::CallbackUnaryHandler< ::Proto::RoomWithUsername, ::Proto::String>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -1242,9 +1353,9 @@ class ChessServer final {
     void SetMessageAllocatorFor_GetUsername(
         ::grpc::experimental::MessageAllocator< ::Proto::RoomWithUsername, ::Proto::String>* allocator) {
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(7);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(8);
     #else
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(7);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(8);
     #endif
       static_cast<::grpc_impl::internal::CallbackUnaryHandler< ::Proto::RoomWithUsername, ::Proto::String>*>(handler)
               ->SetMessageAllocator(allocator);
@@ -1277,7 +1388,7 @@ class ChessServer final {
     #else
       ::grpc::Service::experimental().
     #endif
-        MarkMethodCallback(8,
+        MarkMethodCallback(9,
           new ::grpc_impl::internal::CallbackUnaryHandler< ::Proto::RoomSettings, ::Proto::Empty>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -1289,9 +1400,9 @@ class ChessServer final {
     void SetMessageAllocatorFor_WaitForReady(
         ::grpc::experimental::MessageAllocator< ::Proto::RoomSettings, ::Proto::Empty>* allocator) {
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(8);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(9);
     #else
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(8);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(9);
     #endif
       static_cast<::grpc_impl::internal::CallbackUnaryHandler< ::Proto::RoomSettings, ::Proto::Empty>*>(handler)
               ->SetMessageAllocator(allocator);
@@ -1324,7 +1435,7 @@ class ChessServer final {
     #else
       ::grpc::Service::experimental().
     #endif
-        MarkMethodCallback(9,
+        MarkMethodCallback(10,
           new ::grpc_impl::internal::CallbackUnaryHandler< ::Proto::ReadyRequest, ::Proto::Empty>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -1336,9 +1447,9 @@ class ChessServer final {
     void SetMessageAllocatorFor_Ready(
         ::grpc::experimental::MessageAllocator< ::Proto::ReadyRequest, ::Proto::Empty>* allocator) {
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(9);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(10);
     #else
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(9);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(10);
     #endif
       static_cast<::grpc_impl::internal::CallbackUnaryHandler< ::Proto::ReadyRequest, ::Proto::Empty>*>(handler)
               ->SetMessageAllocator(allocator);
@@ -1371,7 +1482,7 @@ class ChessServer final {
     #else
       ::grpc::Service::experimental().
     #endif
-        MarkMethodCallback(10,
+        MarkMethodCallback(11,
           new ::grpc_impl::internal::CallbackUnaryHandler< ::Proto::MoveRequest, ::Proto::Empty>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -1383,9 +1494,9 @@ class ChessServer final {
     void SetMessageAllocatorFor_MovePiece(
         ::grpc::experimental::MessageAllocator< ::Proto::MoveRequest, ::Proto::Empty>* allocator) {
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(10);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(11);
     #else
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(10);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(11);
     #endif
       static_cast<::grpc_impl::internal::CallbackUnaryHandler< ::Proto::MoveRequest, ::Proto::Empty>*>(handler)
               ->SetMessageAllocator(allocator);
@@ -1418,7 +1529,7 @@ class ChessServer final {
     #else
       ::grpc::Service::experimental().
     #endif
-        MarkMethodCallback(11,
+        MarkMethodCallback(12,
           new ::grpc_impl::internal::CallbackUnaryHandler< ::Proto::RoomSettings, ::Proto::LastMoveInfo>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -1430,9 +1541,9 @@ class ChessServer final {
     void SetMessageAllocatorFor_ReadPieceMove(
         ::grpc::experimental::MessageAllocator< ::Proto::RoomSettings, ::Proto::LastMoveInfo>* allocator) {
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(11);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(12);
     #else
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(11);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(12);
     #endif
       static_cast<::grpc_impl::internal::CallbackUnaryHandler< ::Proto::RoomSettings, ::Proto::LastMoveInfo>*>(handler)
               ->SetMessageAllocator(allocator);
@@ -1465,7 +1576,7 @@ class ChessServer final {
     #else
       ::grpc::Service::experimental().
     #endif
-        MarkMethodCallback(12,
+        MarkMethodCallback(13,
           new ::grpc_impl::internal::CallbackUnaryHandler< ::Proto::RoomWithIsKingHittable, ::Proto::Empty>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -1477,9 +1588,9 @@ class ChessServer final {
     void SetMessageAllocatorFor_SetKingHittable(
         ::grpc::experimental::MessageAllocator< ::Proto::RoomWithIsKingHittable, ::Proto::Empty>* allocator) {
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(12);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(13);
     #else
-      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(12);
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(13);
     #endif
       static_cast<::grpc_impl::internal::CallbackUnaryHandler< ::Proto::RoomWithIsKingHittable, ::Proto::Empty>*>(handler)
               ->SetMessageAllocator(allocator);
@@ -1502,10 +1613,10 @@ class ChessServer final {
       { return nullptr; }
   };
   #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
-  typedef ExperimentalWithCallbackMethod_GetRooms<ExperimentalWithCallbackMethod_IsRoomExists<ExperimentalWithCallbackMethod_CreateRoom<ExperimentalWithCallbackMethod_JoinRoom<ExperimentalWithCallbackMethod_LeaveRoom<ExperimentalWithCallbackMethod_SpectateRoom<ExperimentalWithCallbackMethod_GetViewersCount<ExperimentalWithCallbackMethod_GetUsername<ExperimentalWithCallbackMethod_WaitForReady<ExperimentalWithCallbackMethod_Ready<ExperimentalWithCallbackMethod_MovePiece<ExperimentalWithCallbackMethod_ReadPieceMove<ExperimentalWithCallbackMethod_SetKingHittable<Service > > > > > > > > > > > > > CallbackService;
+  typedef ExperimentalWithCallbackMethod_GetRooms<ExperimentalWithCallbackMethod_IsRoomExists<ExperimentalWithCallbackMethod_CreateRoom<ExperimentalWithCallbackMethod_JoinRoom<ExperimentalWithCallbackMethod_LeaveRoom<ExperimentalWithCallbackMethod_SpectateRoom<ExperimentalWithCallbackMethod_LeaveSpectatorRoom<ExperimentalWithCallbackMethod_GetViewersCount<ExperimentalWithCallbackMethod_GetUsername<ExperimentalWithCallbackMethod_WaitForReady<ExperimentalWithCallbackMethod_Ready<ExperimentalWithCallbackMethod_MovePiece<ExperimentalWithCallbackMethod_ReadPieceMove<ExperimentalWithCallbackMethod_SetKingHittable<Service > > > > > > > > > > > > > > CallbackService;
   #endif
 
-  typedef ExperimentalWithCallbackMethod_GetRooms<ExperimentalWithCallbackMethod_IsRoomExists<ExperimentalWithCallbackMethod_CreateRoom<ExperimentalWithCallbackMethod_JoinRoom<ExperimentalWithCallbackMethod_LeaveRoom<ExperimentalWithCallbackMethod_SpectateRoom<ExperimentalWithCallbackMethod_GetViewersCount<ExperimentalWithCallbackMethod_GetUsername<ExperimentalWithCallbackMethod_WaitForReady<ExperimentalWithCallbackMethod_Ready<ExperimentalWithCallbackMethod_MovePiece<ExperimentalWithCallbackMethod_ReadPieceMove<ExperimentalWithCallbackMethod_SetKingHittable<Service > > > > > > > > > > > > > ExperimentalCallbackService;
+  typedef ExperimentalWithCallbackMethod_GetRooms<ExperimentalWithCallbackMethod_IsRoomExists<ExperimentalWithCallbackMethod_CreateRoom<ExperimentalWithCallbackMethod_JoinRoom<ExperimentalWithCallbackMethod_LeaveRoom<ExperimentalWithCallbackMethod_SpectateRoom<ExperimentalWithCallbackMethod_LeaveSpectatorRoom<ExperimentalWithCallbackMethod_GetViewersCount<ExperimentalWithCallbackMethod_GetUsername<ExperimentalWithCallbackMethod_WaitForReady<ExperimentalWithCallbackMethod_Ready<ExperimentalWithCallbackMethod_MovePiece<ExperimentalWithCallbackMethod_ReadPieceMove<ExperimentalWithCallbackMethod_SetKingHittable<Service > > > > > > > > > > > > > > ExperimentalCallbackService;
   template <class BaseClass>
   class WithGenericMethod_GetRooms : public BaseClass {
    private:
@@ -1609,12 +1720,29 @@ class ChessServer final {
     }
   };
   template <class BaseClass>
+  class WithGenericMethod_LeaveSpectatorRoom : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_LeaveSpectatorRoom() {
+      ::grpc::Service::MarkMethodGeneric(6);
+    }
+    ~WithGenericMethod_LeaveSpectatorRoom() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status LeaveSpectatorRoom(::grpc::ServerContext* /*context*/, const ::Proto::String* /*request*/, ::Proto::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
   class WithGenericMethod_GetViewersCount : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_GetViewersCount() {
-      ::grpc::Service::MarkMethodGeneric(6);
+      ::grpc::Service::MarkMethodGeneric(7);
     }
     ~WithGenericMethod_GetViewersCount() override {
       BaseClassMustBeDerivedFromService(this);
@@ -1631,7 +1759,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_GetUsername() {
-      ::grpc::Service::MarkMethodGeneric(7);
+      ::grpc::Service::MarkMethodGeneric(8);
     }
     ~WithGenericMethod_GetUsername() override {
       BaseClassMustBeDerivedFromService(this);
@@ -1648,7 +1776,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_WaitForReady() {
-      ::grpc::Service::MarkMethodGeneric(8);
+      ::grpc::Service::MarkMethodGeneric(9);
     }
     ~WithGenericMethod_WaitForReady() override {
       BaseClassMustBeDerivedFromService(this);
@@ -1665,7 +1793,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_Ready() {
-      ::grpc::Service::MarkMethodGeneric(9);
+      ::grpc::Service::MarkMethodGeneric(10);
     }
     ~WithGenericMethod_Ready() override {
       BaseClassMustBeDerivedFromService(this);
@@ -1682,7 +1810,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_MovePiece() {
-      ::grpc::Service::MarkMethodGeneric(10);
+      ::grpc::Service::MarkMethodGeneric(11);
     }
     ~WithGenericMethod_MovePiece() override {
       BaseClassMustBeDerivedFromService(this);
@@ -1699,7 +1827,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_ReadPieceMove() {
-      ::grpc::Service::MarkMethodGeneric(11);
+      ::grpc::Service::MarkMethodGeneric(12);
     }
     ~WithGenericMethod_ReadPieceMove() override {
       BaseClassMustBeDerivedFromService(this);
@@ -1716,7 +1844,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_SetKingHittable() {
-      ::grpc::Service::MarkMethodGeneric(12);
+      ::grpc::Service::MarkMethodGeneric(13);
     }
     ~WithGenericMethod_SetKingHittable() override {
       BaseClassMustBeDerivedFromService(this);
@@ -1848,12 +1976,32 @@ class ChessServer final {
     }
   };
   template <class BaseClass>
+  class WithRawMethod_LeaveSpectatorRoom : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_LeaveSpectatorRoom() {
+      ::grpc::Service::MarkMethodRaw(6);
+    }
+    ~WithRawMethod_LeaveSpectatorRoom() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status LeaveSpectatorRoom(::grpc::ServerContext* /*context*/, const ::Proto::String* /*request*/, ::Proto::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestLeaveSpectatorRoom(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(6, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
   class WithRawMethod_GetViewersCount : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_GetViewersCount() {
-      ::grpc::Service::MarkMethodRaw(6);
+      ::grpc::Service::MarkMethodRaw(7);
     }
     ~WithRawMethod_GetViewersCount() override {
       BaseClassMustBeDerivedFromService(this);
@@ -1864,7 +2012,7 @@ class ChessServer final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestGetViewersCount(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(6, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(7, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -1873,7 +2021,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_GetUsername() {
-      ::grpc::Service::MarkMethodRaw(7);
+      ::grpc::Service::MarkMethodRaw(8);
     }
     ~WithRawMethod_GetUsername() override {
       BaseClassMustBeDerivedFromService(this);
@@ -1884,7 +2032,7 @@ class ChessServer final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestGetUsername(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(7, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(8, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -1893,7 +2041,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_WaitForReady() {
-      ::grpc::Service::MarkMethodRaw(8);
+      ::grpc::Service::MarkMethodRaw(9);
     }
     ~WithRawMethod_WaitForReady() override {
       BaseClassMustBeDerivedFromService(this);
@@ -1904,7 +2052,7 @@ class ChessServer final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestWaitForReady(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(8, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(9, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -1913,7 +2061,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_Ready() {
-      ::grpc::Service::MarkMethodRaw(9);
+      ::grpc::Service::MarkMethodRaw(10);
     }
     ~WithRawMethod_Ready() override {
       BaseClassMustBeDerivedFromService(this);
@@ -1924,7 +2072,7 @@ class ChessServer final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestReady(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(9, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(10, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -1933,7 +2081,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_MovePiece() {
-      ::grpc::Service::MarkMethodRaw(10);
+      ::grpc::Service::MarkMethodRaw(11);
     }
     ~WithRawMethod_MovePiece() override {
       BaseClassMustBeDerivedFromService(this);
@@ -1944,7 +2092,7 @@ class ChessServer final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestMovePiece(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(10, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(11, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -1953,7 +2101,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_ReadPieceMove() {
-      ::grpc::Service::MarkMethodRaw(11);
+      ::grpc::Service::MarkMethodRaw(12);
     }
     ~WithRawMethod_ReadPieceMove() override {
       BaseClassMustBeDerivedFromService(this);
@@ -1964,7 +2112,7 @@ class ChessServer final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestReadPieceMove(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(11, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(12, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -1973,7 +2121,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_SetKingHittable() {
-      ::grpc::Service::MarkMethodRaw(12);
+      ::grpc::Service::MarkMethodRaw(13);
     }
     ~WithRawMethod_SetKingHittable() override {
       BaseClassMustBeDerivedFromService(this);
@@ -1984,7 +2132,7 @@ class ChessServer final {
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     void RequestSetKingHittable(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(12, context, request, response, new_call_cq, notification_cq, tag);
+      ::grpc::Service::RequestAsyncUnary(13, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
   template <class BaseClass>
@@ -2216,6 +2364,44 @@ class ChessServer final {
       { return nullptr; }
   };
   template <class BaseClass>
+  class ExperimentalWithRawCallbackMethod_LeaveSpectatorRoom : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    ExperimentalWithRawCallbackMethod_LeaveSpectatorRoom() {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::Service::
+    #else
+      ::grpc::Service::experimental().
+    #endif
+        MarkMethodRawCallback(6,
+          new ::grpc_impl::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+                   ::grpc::CallbackServerContext*
+    #else
+                   ::grpc::experimental::CallbackServerContext*
+    #endif
+                     context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->LeaveSpectatorRoom(context, request, response); }));
+    }
+    ~ExperimentalWithRawCallbackMethod_LeaveSpectatorRoom() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status LeaveSpectatorRoom(::grpc::ServerContext* /*context*/, const ::Proto::String* /*request*/, ::Proto::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+    virtual ::grpc::ServerUnaryReactor* LeaveSpectatorRoom(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
+    #else
+    virtual ::grpc::experimental::ServerUnaryReactor* LeaveSpectatorRoom(
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
+    #endif
+      { return nullptr; }
+  };
+  template <class BaseClass>
   class ExperimentalWithRawCallbackMethod_GetViewersCount : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
@@ -2226,7 +2412,7 @@ class ChessServer final {
     #else
       ::grpc::Service::experimental().
     #endif
-        MarkMethodRawCallback(6,
+        MarkMethodRawCallback(7,
           new ::grpc_impl::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -2264,7 +2450,7 @@ class ChessServer final {
     #else
       ::grpc::Service::experimental().
     #endif
-        MarkMethodRawCallback(7,
+        MarkMethodRawCallback(8,
           new ::grpc_impl::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -2302,7 +2488,7 @@ class ChessServer final {
     #else
       ::grpc::Service::experimental().
     #endif
-        MarkMethodRawCallback(8,
+        MarkMethodRawCallback(9,
           new ::grpc_impl::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -2340,7 +2526,7 @@ class ChessServer final {
     #else
       ::grpc::Service::experimental().
     #endif
-        MarkMethodRawCallback(9,
+        MarkMethodRawCallback(10,
           new ::grpc_impl::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -2378,7 +2564,7 @@ class ChessServer final {
     #else
       ::grpc::Service::experimental().
     #endif
-        MarkMethodRawCallback(10,
+        MarkMethodRawCallback(11,
           new ::grpc_impl::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -2416,7 +2602,7 @@ class ChessServer final {
     #else
       ::grpc::Service::experimental().
     #endif
-        MarkMethodRawCallback(11,
+        MarkMethodRawCallback(12,
           new ::grpc_impl::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -2454,7 +2640,7 @@ class ChessServer final {
     #else
       ::grpc::Service::experimental().
     #endif
-        MarkMethodRawCallback(12,
+        MarkMethodRawCallback(13,
           new ::grpc_impl::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
             [this](
     #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
@@ -2617,12 +2803,39 @@ class ChessServer final {
     virtual ::grpc::Status StreamedLeaveRoom(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::Proto::RoomWithUsername,::Proto::Empty>* server_unary_streamer) = 0;
   };
   template <class BaseClass>
+  class WithStreamedUnaryMethod_LeaveSpectatorRoom : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_LeaveSpectatorRoom() {
+      ::grpc::Service::MarkMethodStreamed(6,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::Proto::String, ::Proto::Empty>(
+            [this](::grpc_impl::ServerContext* context,
+                   ::grpc_impl::ServerUnaryStreamer<
+                     ::Proto::String, ::Proto::Empty>* streamer) {
+                       return this->StreamedLeaveSpectatorRoom(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_LeaveSpectatorRoom() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status LeaveSpectatorRoom(::grpc::ServerContext* /*context*/, const ::Proto::String* /*request*/, ::Proto::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedLeaveSpectatorRoom(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::Proto::String,::Proto::Empty>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
   class WithStreamedUnaryMethod_GetViewersCount : public BaseClass {
    private:
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_GetViewersCount() {
-      ::grpc::Service::MarkMethodStreamed(6,
+      ::grpc::Service::MarkMethodStreamed(7,
         new ::grpc::internal::StreamedUnaryHandler<
           ::Proto::String, ::Proto::Integer>(
             [this](::grpc_impl::ServerContext* context,
@@ -2649,7 +2862,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_GetUsername() {
-      ::grpc::Service::MarkMethodStreamed(7,
+      ::grpc::Service::MarkMethodStreamed(8,
         new ::grpc::internal::StreamedUnaryHandler<
           ::Proto::RoomWithUsername, ::Proto::String>(
             [this](::grpc_impl::ServerContext* context,
@@ -2676,7 +2889,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_WaitForReady() {
-      ::grpc::Service::MarkMethodStreamed(8,
+      ::grpc::Service::MarkMethodStreamed(9,
         new ::grpc::internal::StreamedUnaryHandler<
           ::Proto::RoomSettings, ::Proto::Empty>(
             [this](::grpc_impl::ServerContext* context,
@@ -2703,7 +2916,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_Ready() {
-      ::grpc::Service::MarkMethodStreamed(9,
+      ::grpc::Service::MarkMethodStreamed(10,
         new ::grpc::internal::StreamedUnaryHandler<
           ::Proto::ReadyRequest, ::Proto::Empty>(
             [this](::grpc_impl::ServerContext* context,
@@ -2730,7 +2943,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_MovePiece() {
-      ::grpc::Service::MarkMethodStreamed(10,
+      ::grpc::Service::MarkMethodStreamed(11,
         new ::grpc::internal::StreamedUnaryHandler<
           ::Proto::MoveRequest, ::Proto::Empty>(
             [this](::grpc_impl::ServerContext* context,
@@ -2757,7 +2970,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_ReadPieceMove() {
-      ::grpc::Service::MarkMethodStreamed(11,
+      ::grpc::Service::MarkMethodStreamed(12,
         new ::grpc::internal::StreamedUnaryHandler<
           ::Proto::RoomSettings, ::Proto::LastMoveInfo>(
             [this](::grpc_impl::ServerContext* context,
@@ -2784,7 +2997,7 @@ class ChessServer final {
     void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_SetKingHittable() {
-      ::grpc::Service::MarkMethodStreamed(12,
+      ::grpc::Service::MarkMethodStreamed(13,
         new ::grpc::internal::StreamedUnaryHandler<
           ::Proto::RoomWithIsKingHittable, ::Proto::Empty>(
             [this](::grpc_impl::ServerContext* context,
@@ -2805,7 +3018,7 @@ class ChessServer final {
     // replace default version of method with streamed unary
     virtual ::grpc::Status StreamedSetKingHittable(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::Proto::RoomWithIsKingHittable,::Proto::Empty>* server_unary_streamer) = 0;
   };
-  typedef WithStreamedUnaryMethod_GetRooms<WithStreamedUnaryMethod_IsRoomExists<WithStreamedUnaryMethod_CreateRoom<WithStreamedUnaryMethod_JoinRoom<WithStreamedUnaryMethod_LeaveRoom<WithStreamedUnaryMethod_GetViewersCount<WithStreamedUnaryMethod_GetUsername<WithStreamedUnaryMethod_WaitForReady<WithStreamedUnaryMethod_Ready<WithStreamedUnaryMethod_MovePiece<WithStreamedUnaryMethod_ReadPieceMove<WithStreamedUnaryMethod_SetKingHittable<Service > > > > > > > > > > > > StreamedUnaryService;
+  typedef WithStreamedUnaryMethod_GetRooms<WithStreamedUnaryMethod_IsRoomExists<WithStreamedUnaryMethod_CreateRoom<WithStreamedUnaryMethod_JoinRoom<WithStreamedUnaryMethod_LeaveRoom<WithStreamedUnaryMethod_LeaveSpectatorRoom<WithStreamedUnaryMethod_GetViewersCount<WithStreamedUnaryMethod_GetUsername<WithStreamedUnaryMethod_WaitForReady<WithStreamedUnaryMethod_Ready<WithStreamedUnaryMethod_MovePiece<WithStreamedUnaryMethod_ReadPieceMove<WithStreamedUnaryMethod_SetKingHittable<Service > > > > > > > > > > > > > StreamedUnaryService;
   template <class BaseClass>
   class WithSplitStreamingMethod_SpectateRoom : public BaseClass {
    private:
@@ -2834,7 +3047,7 @@ class ChessServer final {
     virtual ::grpc::Status StreamedSpectateRoom(::grpc::ServerContext* context, ::grpc::ServerSplitStreamer< ::Proto::String,::Proto::LastMoveInfo>* server_split_streamer) = 0;
   };
   typedef WithSplitStreamingMethod_SpectateRoom<Service > SplitStreamedService;
-  typedef WithStreamedUnaryMethod_GetRooms<WithStreamedUnaryMethod_IsRoomExists<WithStreamedUnaryMethod_CreateRoom<WithStreamedUnaryMethod_JoinRoom<WithStreamedUnaryMethod_LeaveRoom<WithSplitStreamingMethod_SpectateRoom<WithStreamedUnaryMethod_GetViewersCount<WithStreamedUnaryMethod_GetUsername<WithStreamedUnaryMethod_WaitForReady<WithStreamedUnaryMethod_Ready<WithStreamedUnaryMethod_MovePiece<WithStreamedUnaryMethod_ReadPieceMove<WithStreamedUnaryMethod_SetKingHittable<Service > > > > > > > > > > > > > StreamedService;
+  typedef WithStreamedUnaryMethod_GetRooms<WithStreamedUnaryMethod_IsRoomExists<WithStreamedUnaryMethod_CreateRoom<WithStreamedUnaryMethod_JoinRoom<WithStreamedUnaryMethod_LeaveRoom<WithSplitStreamingMethod_SpectateRoom<WithStreamedUnaryMethod_LeaveSpectatorRoom<WithStreamedUnaryMethod_GetViewersCount<WithStreamedUnaryMethod_GetUsername<WithStreamedUnaryMethod_WaitForReady<WithStreamedUnaryMethod_Ready<WithStreamedUnaryMethod_MovePiece<WithStreamedUnaryMethod_ReadPieceMove<WithStreamedUnaryMethod_SetKingHittable<Service > > > > > > > > > > > > > > StreamedService;
 };
 
 }  // namespace Proto

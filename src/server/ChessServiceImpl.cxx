@@ -90,16 +90,13 @@ grpc::Status Remote::ChessServiceImpl::CreateRoom(
     }
     Remote::ServerRoom& room = m_mapRooms[name];
     room.exists = true;
-    room.spectatorsCount = 0;
     room.ownerPlayer.username = request->username();
     room.password = request->room().password();
     room.ownerPlayer.isReady = false;
     room.guestPlayer.isReady = false;
     room.isLastMoveRead = false;
-    room.isSpectatorLastMoveRead = false;
     initMutexAndConditionVar(room.waitMutex, room.waitConditionVar);
     initMutexAndConditionVar(room.moveMutex, room.moveConditionVar);
-    initMutexAndConditionVar(room.spectatorMutex, room.spectatorConditionVar);
     std::cout << context->peer() << " has created " << name
         << " room" << std::endl;
     return grpc::Status::OK;
@@ -179,7 +176,12 @@ grpc::Status Remote::ChessServiceImpl::SpectateRoom(
     }
     std::cout << context->peer() << " has joined as spectator to "
         << name << " room" << std::endl;
-    room.spectatorsCount += 1;
+    Remote::Spectator spectator;
+    spectator.isOnline = true;
+    spectator.isLastMoveRead = false;
+    spectator.uid = context->peer();
+    initMutexAndConditionVar(spectator.mutex, spectator.conditionVar);
+    room.vecSpectators.push_back(&spectator);
     for (const auto& move : room.vecMovesHistory)
     {
         C2P_Converter::ConvertLastMoveInfo(move, lastMove);
@@ -187,15 +189,44 @@ grpc::Status Remote::ChessServiceImpl::SpectateRoom(
     }
     while (room.exists)
     {
-        room.isSpectatorLastMoveRead = false;
-        boost::mutex::scoped_lock lock(*(room.spectatorMutex));
-        while (!room.isSpectatorLastMoveRead)
+        spectator.isLastMoveRead = false;
+        boost::mutex::scoped_lock lock(*(spectator.mutex));
+        while (!spectator.isLastMoveRead)
         {
-            room.spectatorConditionVar->wait(lock);
+            spectator.conditionVar->wait(lock);
+        }
+        if (!spectator.isOnline)
+        {
+            break;
         }
         C2P_Converter::ConvertLastMoveInfo(room.spectatorLastMove, lastMove);
-        room.spectatorLastMove.Clean();
         writer->Write(lastMove);
+    }
+    return grpc::Status::OK;
+}
+
+grpc::Status Remote::ChessServiceImpl::LeaveSpectatorRoom(
+        grpc::ServerContext* context,
+        const Proto::String* request,
+        Proto::Empty* response)
+{
+    std::string name = request->value();
+    if (m_mapRooms.end() == m_mapRooms.find(name))
+    {
+        return grpc::Status(grpc::StatusCode::CANCELLED, "Room doesn't exists");
+    }
+    Remote::ServerRoom& room = m_mapRooms[name];
+    Remote::Spectator* spectator = nullptr;
+    for (int i = 0; i < room.vecSpectators.size(); ++i)
+    {
+        spectator = room.vecSpectators.at(i);
+        if (context->peer() == spectator->uid)
+        {
+            spectator->isOnline = false;
+            spectator->conditionVar->notify_all();
+            room.vecSpectators.erase(room.vecSpectators.begin() + i);
+            break;
+        }
     }
     return grpc::Status::OK;
 }
@@ -212,7 +243,7 @@ grpc::Status Remote::ChessServiceImpl::GetViewersCount(
         return grpc::Status(grpc::StatusCode::CANCELLED, "Room doesn't exists");
     }
     Remote::ServerRoom& room = m_mapRooms[name];
-    response->set_value(room.spectatorsCount);
+    response->set_value(room.vecSpectators.size());
     return grpc::Status::OK;
 }
 
@@ -300,9 +331,12 @@ grpc::Status Remote::ChessServiceImpl::MovePiece(
     room.spectatorLastMove = Remote::LastMove(oldPos, newPos);
     room.lastMove.isKingHittable = false;
     room.isLastMoveRead = true;
-    room.isSpectatorLastMoveRead = true;
     room.moveConditionVar->notify_one();
-    room.spectatorConditionVar->notify_all();
+    for (auto& spectator : room.vecSpectators)
+    {
+        spectator->isLastMoveRead = true;
+        spectator->conditionVar->notify_all();
+    }
     room.vecMovesHistory.push_back(room.spectatorLastMove);
     return grpc::Status::OK;
 }

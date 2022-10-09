@@ -48,6 +48,10 @@ public:
             grpc::ServerContext* context,
             const Proto::String* request,
             grpc::ServerWriter<Proto::LastMoveInfo>* writer) override;
+    grpc::Status LeaveSpectatorRoom(
+            grpc::ServerContext* context,
+            const Proto::String* request,
+            Proto::Empty* response) override;
     grpc::Status GetViewersCount(
             grpc::ServerContext* context,
             const Proto::String* request,

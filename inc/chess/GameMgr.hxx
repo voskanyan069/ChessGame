@@ -51,6 +51,7 @@ public:
     void DisconnectFromServer();
     void StartGame();
     void SpectateGame();
+    void LeaveSpectatorRoom();
     void CloseEngine();
     static std::string GetCommandsHelp();
 

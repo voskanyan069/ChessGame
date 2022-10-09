@@ -19,7 +19,9 @@ namespace Remote
     struct ServerRoom;
     struct ServerPlayer;
     struct LastMove;
+    struct Spectator;
     typedef std::vector<Remote::LastMove> LastMovesVec;
+    typedef std::vector<Remote::Spectator*> SpectatorVec;
 }
 
 namespace Pieces
@@ -123,24 +125,30 @@ struct Remote::ServerPlayer
     }
 };
 
+struct Remote::Spectator
+{
+    bool isOnline;
+    bool isLastMoveRead;
+    std::string uid;
+    BoostMutexUP mutex;
+    BoostConditionVariableUP conditionVar;
+};
+
 struct Remote::ServerRoom
 {
     bool exists;
     bool isLastMoveRead;
-    bool isSpectatorLastMoveRead;
-    int spectatorsCount;
     std::string password;
     Remote::ServerPlayer ownerPlayer;
     Remote::ServerPlayer guestPlayer;
     Remote::LastMove lastMove;
     Remote::LastMove spectatorLastMove;
     Remote::LastMovesVec vecMovesHistory;
+    Remote::SpectatorVec vecSpectators;
     BoostMutexUP waitMutex;
     BoostConditionVariableUP waitConditionVar;    
     BoostMutexUP moveMutex;
     BoostConditionVariableUP moveConditionVar;    
-    BoostMutexUP spectatorMutex;
-    BoostConditionVariableUP spectatorConditionVar;
 };
 
 #endif // __UTILS_TYPES_HXX__

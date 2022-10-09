@@ -345,6 +345,10 @@ void Chess::GameMgr::StartGame()
 
 void Chess::GameMgr::SpectateGame()
 {
+    std::function<void(int)> fHandler = [this] (int signal) {
+        LeaveSpectatorRoom();
+    };
+    Sys::SignalHandler::SetCtrlCHandler(fHandler);
     Logger::GetInstance()->PrintBoard();
     try
     {
@@ -358,6 +362,15 @@ void Chess::GameMgr::SpectateGame()
         Logger::GetInstance()->Print(e);
         std::exit(1);
     }
+}
+
+void Chess::GameMgr::LeaveSpectatorRoom()
+{
+    Logger::GetInstance()->PrintEndl();
+    Logger::GetInstance()->Print(INFO, "Leaving spectator room...");
+    Logger::GetInstance()->PrintEndl();
+    m_client->LeaveSpectatorRoom(m_room.name);
+    std::exit(1);
 }
 
 void Chess::GameMgr::CloseEngine()
@@ -428,10 +441,6 @@ void Chess::GameMgr::InitModel()
     initClient();
     initRoom();
     initPlayers();
-    std::function<void(int)> fHandler = [this] (int signal) {
-        CloseEngine();
-    };
-    Sys::SignalHandler::SetCtrlCHandler(fHandler);
 }
 
 void Chess::GameMgr::SetKingHittable(const Pieces::PieceColor& color,
@@ -464,6 +473,10 @@ void Chess::GameMgr::GetRooms()
 
 void Chess::GameMgr::ConnectToServer()
 {
+    std::function<void(int)> fHandler = [this] (int signal) {
+        CloseEngine();
+    };
+    Sys::SignalHandler::SetCtrlCHandler(fHandler);
     try
     {
         if (m_client->IsRoomExists(m_room.name))

@@ -131,6 +131,16 @@ void Remote::ChessClient::SpectateRoom(const std::string& name,
     checkRequestStatus(status);
 }
 
+void Remote::ChessClient::LeaveSpectatorRoom(const std::string& name) const
+{
+    grpc::ClientContext context;
+    Proto::String request;
+    Proto::Empty response;
+    request.set_value(name);
+    grpc::Status status=m_stub->LeaveSpectatorRoom(&context,request,&response);
+    checkRequestStatus(status);
+}
+
 void Remote::ChessClient::WaitForReady(const Remote::Room& room) const
 {
     grpc::ClientContext context;

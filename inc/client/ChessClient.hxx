@@ -32,6 +32,7 @@ public:
     void LeaveRoom(const Remote::Room& room) const;
     void SpectateRoom(const std::string& name,
             const Remote::MoveCallback& fUpdCallback) const;
+    void LeaveSpectatorRoom(const std::string& name) const;
     void WaitForReady(const Remote::Room& room) const;
     void Ready(const Remote::Room& room, const Remote::Player& player) const;
     void MovePiece(const Remote::Room& room, const Pieces::Position& oldPos,
