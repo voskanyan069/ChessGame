@@ -126,8 +126,8 @@ void Chess::GameMgr::refreshBoard(Pieces::BasePiece* piece,
 void Chess::GameMgr::setPlayersUsername()
 {
     std::string owName, guName;
-    owName = m_isUserGuest ? m_client->GetOpponentUsername(m_room):m_myUsername;
-    guName = m_isUserGuest ? m_myUsername:m_client->GetOpponentUsername(m_room);
+    guName = m_isUserGuest ? m_client->GetOpponentUsername(m_room):m_myUsername;
+    owName = m_isUserGuest ? m_myUsername:m_client->GetOpponentUsername(m_room);
     m_ownerPlayer->name = owName;
     m_guestPlayer->name = guName;
     m_ownerPlayer->color = Pieces::PieceColor::WHITE;

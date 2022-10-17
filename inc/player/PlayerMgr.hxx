@@ -3,7 +3,7 @@
 
 #include <string>
 
-class Player;
+struct Player;
 
 class PlayerMgr
 {

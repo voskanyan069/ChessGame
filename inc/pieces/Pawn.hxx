@@ -20,6 +20,9 @@ protected:
 private:
     void getAvailableMovesWhite(Pieces::Positions& positions) const;
     void getAvailableMovesBlack(Pieces::Positions& positions) const;
+    void checkForNextMoves(Pieces::Positions& positions) const;
+    void setHittableEnemies(Pieces::Positions& positions,
+            Pieces::Position& rightPos, Pieces::Position& leftPos) const;
 };
 
 #endif // __PIECES_PAWN_HXX__

@@ -2,54 +2,63 @@
 #include "pieces/BasePiece.hxx"
 #include "pieces/Pawn.hxx"
 #include "chess/Board.hxx"
+#include "io/Query.hxx"
 
 #include <algorithm>
 
 Pieces::Pawn::Pawn(const Pieces::PieceColor& color,
         const Pieces::Position& position)
     : Pieces::BasePiece("Pawn", color, position)
+    , m_startLine((color == Pieces::PieceColor::WHITE) ? 1 : 6)
+    , m_endLine((color == Pieces::PieceColor::WHITE) ? 7 : 0)
 {
     setPieceChar(color, "♙", "♟");
 }
 
-void Pieces::Pawn::getAvailableMovesWhite(Pieces::Positions& positions) const
+void Pieces::Pawn::checkForNextMoves(Pieces::Positions& positions) const
 {
-    if (m_position.x == 1)
+    int module = (m_color == Pieces::PieceColor::WHITE) ? 1 : -1;
+    Pieces::Position nextPos(m_position.x + (1 * module), m_position.y);
+    Pieces::Position next2Pos(m_position.x + (2 * module), m_position.y);
+    Chess::Board* board = Chess::Board::GetInstance();
+    Query* query = Query::GetInstance();
+    if (board->IsFree(nextPos))
     {
-        for (int i = 1; i < 3; ++i)
+        positions.push_back(nextPos);
+        if (m_startLine == m_position.x && board->IsFree(next2Pos))
         {
-            positions.emplace_back(m_position.x + i, m_position.y);
+            positions.push_back(next2Pos);
         }
     }
-    else if (m_position.x < 8)
+    else if (m_endLine == m_position.x)
     {
-        positions.emplace_back(m_position.x + 1, m_position.y);
+       query->AskPawnReplacement();
     }
 }
 
-void Pieces::Pawn::getAvailableMovesBlack(Pieces::Positions& positions) const
+void Pieces::Pawn::setHittableEnemies(Pieces::Positions& positions,
+        Pieces::Position& rightPos, Pieces::Position& leftPos) const
 {
-    if (m_position.x == 6)
+    Chess::Board* board = Chess::Board::GetInstance();
+    Pieces::BasePiece* rightPiece = board->GetPiece(rightPos);
+    Pieces::BasePiece* leftPiece = board->GetPiece(leftPos);
+    if (rightPiece != nullptr && board->IsEnemy(m_position, rightPos))
     {
-        for (int i = 1; i < 3; ++i)
-        {
-            positions.emplace_back(m_position.x - i, m_position.y);
-        }
+        positions.push_back(rightPos);
+        rightPiece->SetHittable(true);
     }
-    else if (m_position.x > 0)
+    if (leftPiece != nullptr && board->IsEnemy(m_position, leftPos))
     {
-        positions.emplace_back(m_position.x - 1, m_position.y);
+        positions.push_back(leftPos);
+        leftPiece->SetHittable(true);
     }
 }
 
 void Pieces::Pawn::getAvailableMoves(Pieces::Positions& positions) const
 {
-    if (m_color == Pieces::PieceColor::WHITE)
-    {
-        getAvailableMovesWhite(positions);
-    }
-    else
-    {
-        getAvailableMovesBlack(positions);
-    }
+    int module = (m_color == Pieces::PieceColor::WHITE) ? 1 : -1;
+    Pieces::Position nextRightPos(m_position.x + (1 * module), m_position.y + 1);
+    Pieces::Position nextLeftPos(m_position.x + (1 * module), m_position.y - 1);
+    checkForNextMoves(positions);
+    setHittableEnemies(positions, nextRightPos, nextLeftPos);
 }

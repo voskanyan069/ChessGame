@@ -193,6 +193,15 @@ void Chess::Board::SetKingHittable(const Pieces::PieceColor& color,
 
 Pieces::BasePiece* Chess::Board::GetPiece(const Pieces::Position& pos) const
 {
+    if (8 < pos.x || 0 > pos.x ||
+            8 < pos.y || 0 > pos.y)
+    {
+        return nullptr;
+    }
+    if (nullptr == m_board[pos.x][pos.y])
+    {
+        return nullptr;
+    }
     return m_board[pos.x][pos.y];
 }
 
