@@ -23,6 +23,8 @@ private:
     void checkForNextMoves(Pieces::Positions& positions) const;
     void setHittableEnemies(Pieces::Positions& positions,
             Pieces::Position& rightPos, Pieces::Position& leftPos) const;
+    int m_startLine;
+    int m_endLine;
 };
 
 #endif // __PIECES_PAWN_HXX__

@@ -29,6 +29,7 @@ namespace Pieces
     struct Position;
     typedef std::vector<Position> Positions;
     typedef enum { WHITE, BLACK, UNDEF } PieceColor;
+    typedef enum { QUEEN, ROOK, BISHOP, KNIGHT } PawnReplacements;
 }
 
 struct Player
