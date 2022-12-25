@@ -96,25 +96,45 @@ void Logger::printPieces(int lineIdx) const
 
 void Logger::printLine(int lineIdx) const
 {
-    *m_os << "  " << lineIdx << " ⎪";
-    printPieces(lineIdx - 1);
-    *m_os << " " << lineIdx;
-    *m_os << "\n ———————————————————————————————————————" << std::endl;
+    *m_os << "  " << lineIdx + 1 << " ⎪";
+    printPieces(lineIdx);
+    *m_os << " " << lineIdx + 1;
+    *m_os << "\n ———————————————————————————————————————";
+}
+
+void Logger::printLastMove(int lineIdx) const
+{
+    Pieces::PrintableLastMove* pMove = m_gameMgr->GetLastMove(lineIdx);
+    if ( nullptr == pMove )
+    {
+        return;
+    }
+    int oldX = pMove->oldPos.x + 1;
+    char oldY = pMove->oldPos.y + 65;
+    int newX = pMove->newPos.x + 1;
+    char newY = pMove->newPos.y + 65;
+    *m_os << "\t";
+    *m_os << pMove->piece << " from " << oldY << oldX << " to " << newY << newX;
+    *m_os << " | " << pMove->time;
 }
 
 void Logger::printLinesWT() const
 {
-    for (int i = 1; i < 9; ++i)
+    for (int i = 0; i < 8; ++i)
     {
         printLine(i);
+        printLastMove(i);
+        std::cout << std::endl;
     }
 }
 
 void Logger::printLinesBT() const
 {
-    for (int i = 8; i > 0; --i)
+    for (int i = 7, j = 0; i >= 0; --i, ++j)
     {
         printLine(i);
+        printLastMove(j);
+        std::cout << std::endl;
     }
 }
 

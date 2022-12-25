@@ -57,6 +57,7 @@ private:
     void printLetters(bool line=true) const;
     void printPieceChar(const Pieces::BasePiece* piece) const;
     void printPieces(int lineIdx) const;
+    void printLastMove(int lineIdx) const;
     void printLine(int lineIdx) const;
     void printLinesWT() const;
     void printLinesBT() const;

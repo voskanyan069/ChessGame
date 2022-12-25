@@ -27,6 +27,7 @@ namespace Remote
 namespace Pieces
 {
     struct Position;
+    struct PrintableLastMove;
     typedef std::vector<Position> Positions;
     typedef enum { WHITE, BLACK, UNDEF } PieceColor;
 }
@@ -56,6 +57,23 @@ struct Pieces::Position
     inline bool operator!=(const Position& other)
     {
         return !(*this == other);
+    }
+};
+
+struct Pieces::PrintableLastMove
+{
+    std::string piece;
+    std::string time;
+    Pieces::Position oldPos;
+    Pieces::Position newPos;
+
+    PrintableLastMove(const std::string& p, const std::string& t,
+            const Pieces::Position& o, const Pieces::Position& n)
+        : piece(p)
+        , time(t)
+        , oldPos(o)
+        , newPos(n)
+    {
     }
 };
 

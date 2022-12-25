@@ -10,6 +10,8 @@
 #include "player/PlayerMgr.hxx"
 
 #include <iostream>
+#include <sstream>
+#include <iomanip>
 
 Chess::GameMgr* Chess::GameMgr::GetInstance()
 {
@@ -165,6 +167,15 @@ void Chess::GameMgr::initPlayers()
     m_guestPlayer = new Player();
     m_playerMgr->InitPlayer(Pieces::PieceColor::WHITE, m_ownerPlayer);
     m_playerMgr->InitPlayer(Pieces::PieceColor::BLACK, m_guestPlayer);
+}
+
+std::string Chess::GameMgr::currentTime()
+{
+    auto now = std::chrono::system_clock::now();
+    time_t time_now = std::chrono::system_clock::to_time_t(now);
+    std::stringstream ss;
+    ss << std::put_time(localtime(&time_now), "%T");
+    return ss.str();
 }
 
 void Chess::GameMgr::waitForUpdates(Pieces::Positions& positions) const
@@ -406,6 +417,26 @@ std::string Chess::GameMgr::GetDestroyedWhitePieces() const
 std::string Chess::GameMgr::GetDestroyedBlackPieces() const
 {
     return m_blackDestroyed;
+}
+
+void Chess::GameMgr::AddNewLastMove(const std::string& pieceChar,
+        const Pieces::Position& oldPos, const Pieces::Position& newPos)
+{
+    if ( m_lastMoves.size() > 7 )
+    {
+        m_lastMoves.pop_front();
+    }
+    std::string time = currentTime();
+    m_lastMoves.emplace_back(pieceChar, time, oldPos, newPos);
+}
+
+Pieces::PrintableLastMove* Chess::GameMgr::GetLastMove(int idx) const
+{
+    if (idx >= m_lastMoves.size())
+    {
+        return nullptr;
+    }
+    return const_cast<Pieces::PrintableLastMove*>(&m_lastMoves[idx]);
 }
 
 void Chess::GameMgr::AddDestroyedPiece(const Pieces::BasePiece* piece)

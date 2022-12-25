@@ -3,6 +3,8 @@
 
 #include "pieces/BasePiece.hxx"
 
+#include <deque>
+
 struct Player;
 class PlayerMgr;
 class CMDArguments;
@@ -17,6 +19,7 @@ namespace Remote
 namespace Pieces
 {
     class BasePiece;
+    struct PrintableLastMove;
 };
 
 namespace Chess
@@ -43,6 +46,9 @@ public:
     int GetViewersCount() const;
     std::string GetDestroyedWhitePieces() const;
     std::string GetDestroyedBlackPieces() const;
+    void AddNewLastMove(const std::string& pieceChar,
+            const Pieces::Position& oldPos, const Pieces::Position& newPos);
+    Pieces::PrintableLastMove* GetLastMove(int idx) const;
     void AddDestroyedPiece(const Pieces::BasePiece* piece);
     void SetRoom(const Remote::Room& room);
     void SetKingHittable(const Pieces::PieceColor& color, bool status) const;
@@ -60,6 +66,7 @@ private:
     void initClient();
     void initRoom();
     void initMyUsername();
+    std::string currentTime();
     void setPlayersUsername();
     void switchPlayerOrder();
     void joinRoom() const;
@@ -94,6 +101,7 @@ private:
     Player* m_thisPlayer;
     Player* m_ownerPlayer;
     Player* m_guestPlayer;
+    std::deque<Pieces::PrintableLastMove> m_lastMoves;
     PlayerMgr* m_playerMgr;
     CMDArguments* m_args;
 };

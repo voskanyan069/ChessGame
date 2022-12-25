@@ -89,7 +89,10 @@ bool Pieces::BasePiece::cleanPositionIfEnemy(const Pieces::Position& pos) const
 void Pieces::BasePiece::movePiece(const Pieces::Position& pos)
 {
     Chess::Board* board = Chess::Board::GetInstance();
+    Chess::GameMgr* gameMgr = Chess::GameMgr::GetInstance();
     Pieces::BasePiece*** pieces = board->GetBoard();
+    gameMgr->AddNewLastMove(pieces[m_position.x][m_position.y]->GetPieceChar(),
+            m_position, pos);
     pieces[pos.x][pos.y] = std::move(
             pieces[m_position.x][m_position.y]);
     pieces[m_position.x][m_position.y] = nullptr;
