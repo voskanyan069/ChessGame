@@ -52,6 +52,48 @@ bool Query::processMsgBool(const std::string& input, bool& value) const
     return false;
 }
 
+bool Query::processPawnReplacement(const std::string& input, int& value) const
+{
+    if (input.empty())
+    {
+        return false;
+    }
+    try
+    {
+        std::stringstream ss(input);
+        if ((ss >> value).fail() || !(ss >> std::ws).eof())
+        {
+            throw std::bad_cast();
+        }
+        return true;
+    }
+    catch (...)
+    {
+        return false;
+    }
+}
+
+void Query::printUsername() const
+{
+    Pieces::PieceColor turn = Chess::GameMgr::GetInstance()->GetTurn();
+    Player* player = PlayerMgr::GetInstance()->Get(turn);
+    if (nullptr == player)
+    {
+        throw Utils::Exception("Not initialized player");
+    }
+    std::cout << " [" << player->name << "] ";
+}
+
+void Query::AskPosition(const std::string& msg, Pieces::Position& pos) const
+{
+    std::string input;
+    printUsername();
+    std::cout << msg << ": ";
+    std::getline(std::cin, input);
+    Pieces::ConvertPosition(input, pos);
+}
+
+/*
 void Query::AskPosition(const std::string& msg, Pieces::Position& pos) const
 {
     std::string input;
@@ -85,7 +127,7 @@ void Query::AskPosition(const std::string& msg, Pieces::Position& pos) const
     }
     Pieces::ConvertPosition(input, pos);
 }
-
+*/
 bool Query::AskForReady() const
 {
     bool value = false;
@@ -102,4 +144,19 @@ bool Query::AskForReady() const
         throw Utils::Exception("Incorrect answer");
     }
     return value;
+}
+
+Pieces::PawnReplacements Query::AskPawnReplacement() const
+{
+    int value = -1;
+    std::string input;
+    std::string msg = "Please select new piece (1:T, 2:N, 3:P, 4:DZ)";
+    printUsername();
+    std::cout << msg << ": ";
+    std::getline(std::cin, input);
+    if (!processPawnReplacement(input, value))
+    {
+        throw Utils::Exception("Incorrect answer");
+    }
+    return (Pieces::PawnReplacements)value;
 }
