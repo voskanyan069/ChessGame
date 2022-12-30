@@ -1,6 +1,8 @@
 # ChessGame
 ### TODO
 - Finalize available moves validation for Pawn and King
+  - ~~Pawn~~
+  - King
 - ~~Add players order mechanism~~
 - ~~Add gRPC for multiplayer~~
   - ~~Figure out connecting mechaism~~
@@ -9,7 +11,7 @@
   - ~~Add client module for communication with the server~~
   - ~~Move piece in both clients boards~~
   - ~~Add loop in game~~
-- Implement hittable King (In progress)
+- ~~Implement hittable King~~
 - Implement checkmate
 - Close session when one of players leave room
 - ~~Allow to join other players when someone press not ready~~
@@ -17,10 +19,10 @@
 - ~~Close session when signal received (ctrl-c, termination)~~
 - ~~Error when in room already 2 players~~
 - ~~Add spectator mode~~
-- Add some widgets to printed board
-  - Last moves info
+- ~~Add some widgets to printed board~~
+  - ~~Last moves info~~
   - ~~Show destroyed pieces~~
   - ~~Viewers count~~
-- Test and fix game with multiple players and spectators
+- ~~Test and fix game with multiple players and spectators~~
 - ~~Add board rotation feature~~
 - Add commands for spectator mode
