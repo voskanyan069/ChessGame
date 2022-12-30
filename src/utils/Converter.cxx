@@ -13,8 +13,6 @@ void P2C_Converter::ConvertLastMoveInfo(const Proto::LastMoveInfo& src,
 {
     P2C_Converter::ConvertPosition(src.oldposition(), dest.oldPos);
     P2C_Converter::ConvertPosition(src.newposition(), dest.newPos);
-    dest.isKingHittable = src.iskinghittable().status();
-    dest.hittableKingColor = (Pieces::PieceColor)src.iskinghittable().color();
 }
 
 void C2P_Converter::ConvertPosition(const Pieces::Position& src,
@@ -29,6 +27,4 @@ void C2P_Converter::ConvertLastMoveInfo(const Remote::LastMove& src,
 {
     C2P_Converter::ConvertPosition(src.oldPos, *(dest.mutable_oldposition()));
     C2P_Converter::ConvertPosition(src.newPos, *(dest.mutable_newposition()));
-    dest.mutable_iskinghittable()->set_status(src.isKingHittable);
-    dest.mutable_iskinghittable()->set_color((Proto::PieceColor)src.hittableKingColor);
 }

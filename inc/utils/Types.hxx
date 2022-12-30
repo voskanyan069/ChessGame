@@ -82,15 +82,11 @@ struct Remote::LastMove
 {
     Pieces::Position oldPos;
     Pieces::Position newPos;
-    bool isKingHittable;
-    Pieces::PieceColor hittableKingColor;
 
     LastMove(const Pieces::Position& oldPos=(-1, -1),
              const Pieces::Position& newPos=(-1, -1))
         : oldPos(oldPos)
         , newPos(newPos)
-        , isKingHittable(false)
-        , hittableKingColor(Pieces::PieceColor::UNDEF)
     {
     }
 
@@ -105,8 +101,6 @@ struct Remote::LastMove
         oldPos.y = -1;
         newPos.x = -1;
         newPos.y = -1;
-        isKingHittable = false;
-        hittableKingColor = Pieces::PieceColor::UNDEF;
     }
 };
 

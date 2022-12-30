@@ -58,18 +58,7 @@ message MoveRequest {
     Position newPosition = 3;
 };
 
-message IsKingHittable {
-    PieceColor color = 2;
-    bool status = 3;
-};
-
 message LastMoveInfo {
     Position oldPosition = 1;
     Position newPosition = 2;
-    IsKingHittable iskinghittable = 3;
-};
-
-message RoomWithIsKingHittable {
-    RoomSettings room = 1;
-    IsKingHittable iskinghittable = 2;
 };

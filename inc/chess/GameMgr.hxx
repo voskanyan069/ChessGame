@@ -31,6 +31,9 @@ namespace Chess
 class Chess::GameMgr
 {
 public:
+    typedef enum { Moved, Fail, KingHittable } MoveStatus;
+
+public:
     static GameMgr* GetInstance();
     GameMgr(GameMgr const&) = delete;
     void operator=(GameMgr const&) = delete;
@@ -51,7 +54,6 @@ public:
     Pieces::PrintableLastMove* GetLastMove(int idx) const;
     void AddDestroyedPiece(const Pieces::BasePiece* piece);
     void SetRoom(const Remote::Room& room);
-    void SetKingHittable(const Pieces::PieceColor& color, bool status) const;
     void GetRooms();
     void ConnectToServer();
     void DisconnectFromServer();
@@ -79,7 +81,7 @@ private:
     bool checkPiece(Pieces::BasePiece* piece) const;
     void refreshBoard(Pieces::BasePiece* piece, Pieces::Positions& positions);
     void waitForUpdates(Pieces::Positions& positions) const;
-    bool movePiece(Pieces::BasePiece* piece, const Pieces::Position& newPos);
+    MoveStatus movePiece(Pieces::BasePiece* piece, const Pieces::Position& pos);
     void askCurrentPosition(Pieces::BasePiece*& piece);
     void askNewPosition(Pieces::BasePiece*& piece);
     void updateFrame();

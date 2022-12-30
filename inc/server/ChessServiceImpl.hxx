@@ -76,10 +76,6 @@ public:
             grpc::ServerContext* context,
             const Proto::RoomSettings* request,
             Proto::LastMoveInfo* response) override;
-    grpc::Status SetKingHittable(
-            grpc::ServerContext* context,
-            const Proto::RoomWithIsKingHittable* request,
-            Proto::Empty* response) override;
 
 private:
     bool doCheckRoomSettings(const Proto::RoomSettings& settings,

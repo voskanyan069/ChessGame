@@ -38,11 +38,13 @@ private:
     void resetPieceHittableStatus(const Pieces::Position& pos) const;
     bool comparePositions(const Pieces::Position& pos,
             const Pieces::Position& newPos) const;
-    bool isKingHittable() const;
-    void changeEnemyKingHittableStatus();
     bool cleanPositionIfEnemy(const Pieces::Position& pos) const;
     void movePiece(const Pieces::Position& pos);
-    bool checkMoveResult(bool bResult, const std::string& sMsg) const;
+    bool findKingInPositions(const Pieces::Position& pKingPiece,
+            const Pieces::Positions& positions) const;
+    bool findKingInEnemyMoves(const Pieces::PieceColor& kingColor,
+            const Pieces::PieceColor& enemyColor) const;
+    bool isMyKingHittable(Pieces::BasePiece* pPiece) const;
 
 protected:
     bool m_isHittable;

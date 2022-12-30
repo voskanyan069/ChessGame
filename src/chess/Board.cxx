@@ -8,7 +8,6 @@
 #include "pieces/Bishop.hxx"
 #include "pieces/Queen.hxx"
 #include "pieces/King.hxx"
-#include <iostream>
 
 Chess::Board* Chess::Board::GetInstance()
 {
@@ -120,20 +119,6 @@ void Chess::Board::initBoard()
     }
     initEmptyFields();
     initPieces();
-//#warning (INIT BOARD COMMENT LINES)
-//    m_board[4][4] = Pieces::CreatePiece<
-//        Pieces::King>(Pieces::WHITE, Pieces::Position(4, 4));
-
-    //m_board[1][3] = Pieces::CreatePiece<
-    //    Pieces::King>(Pieces::BLACK, Pieces::Position(1, 3));
-    //m_board[5][5] = Pieces::CreatePiece<
-    //    Pieces::Bishop>(Pieces::BLACK, Pieces::Position(5, 5));
-    //m_board[5][3] = Pieces::CreatePiece<
-    //    Pieces::Rook>(Pieces::WHITE, Pieces::Position(5, 3));
-    //m_board[2][3] = Pieces::CreatePiece<
-    //    Pieces::Knight>(Pieces::BLACK, Pieces::Position(2, 3));
-    //m_board[3][7] = Pieces::CreatePiece<
-    //    Pieces::Bishop>(Pieces::BLACK, Pieces::Position(3, 7));
 }
 
 bool Chess::Board::IsFree(const Pieces::Position& pos) const
@@ -151,59 +136,27 @@ bool Chess::Board::IsEnemy(const Pieces::Position& piecePos,
     return GetPiece(piecePos)->GetColor() != GetPiece(newPos)->GetColor();
 }
 
-bool Chess::Board::IsKingHittable(const Pieces::PieceColor& color) const
-{
-    for (int i = 0; i < 8; ++i)
-    {
-        for (int j = 0; j < 8; ++j)
-        {
-            Pieces::Position pos(i, j);
-            if (IsFree(pos))
-            {
-                continue;
-            }
-            Pieces::BasePiece* pPiece = GetPiece(pos);
-            if ("King" == pPiece->GetPieceName() && color == pPiece->GetColor())
-            {
-                return pPiece->IsHittable();
-            }
-        }
-    }
-}
-
-void Chess::Board::SetKingHittable(const Pieces::PieceColor& color,
-        bool status)
-{
-    for (int i = 0; i < 8; ++i)
-    {
-        for (int j = 0; j < 8; ++j)
-        {
-            Pieces::Position pos(i, j);
-            if (IsFree(pos))
-            {
-                continue;
-            }
-            Pieces::BasePiece* pPiece = GetPiece(pos);
-            if ("King" == pPiece->GetPieceName() && color == pPiece->GetColor())
-            {
-                return pPiece->SetHittable(status);
-            }
-        }
-    }
-}
-
 Pieces::BasePiece* Chess::Board::GetPiece(const Pieces::Position& pos) const
 {
-    if (8 < pos.x || 0 > pos.x ||
-            8 < pos.y || 0 > pos.y)
-    {
-        return nullptr;
-    }
-    if (nullptr == m_board[pos.x][pos.y])
+    if ( pos.x > 7 || pos.x < 0 || pos.y > 7 || pos.y < 0 )
     {
         return nullptr;
     }
     return m_board[pos.x][pos.y];
+}
+
+Pieces::BasePiece* Chess::Board::GetKing(const Pieces::PieceColor& color) const
+{
+    std::vector<Pieces::BasePiece*> pieces;
+    GetPieces(color, pieces);
+    for ( Pieces::BasePiece* piece : pieces )
+    {
+        if ( "King" == piece->GetPieceName() )
+        {
+            return piece;
+        }
+    }
+    return nullptr;
 }
 
 void Chess::Board::SetAvailableMoves(const Pieces::Positions& positions) const
@@ -222,6 +175,25 @@ void Chess::Board::SetAvailableMoves(const Pieces::Positions& positions) const
 Pieces::BasePiece*** Chess::Board::GetBoard() const
 {
     return m_board;
+}
+
+void Chess::Board::GetPieces(const Pieces::PieceColor& color,
+        std::vector<Pieces::BasePiece*>& pieces) const
+{
+    for (int i = 0; i < 8; ++i)
+    {
+        for (int j = 0; j < 8; ++j)
+        {
+            if ( IsFree(Pieces::Position(i, j)) )
+            {
+                continue;
+            }
+            if ( color == m_board[i][j]->GetColor() )
+            {
+                pieces.push_back(m_board[i][j]);
+            }
+        }
+    }
 }
 
 void Chess::Board::DestroyEmpties()

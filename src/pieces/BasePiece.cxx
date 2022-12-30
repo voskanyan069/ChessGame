@@ -62,12 +62,6 @@ bool Pieces::BasePiece::comparePositions(const Pieces::Position& pos,
     return true;
 }
 
-bool Pieces::BasePiece::isKingHittable() const
-{
-    Chess::Board* board = Chess::Board::GetInstance();
-    return board->IsKingHittable(board->GetPiece(m_position)->GetColor());
-}
-
 bool Pieces::BasePiece::cleanPositionIfEnemy(const Pieces::Position& pos) const
 {
     Chess::Board* board = Chess::Board::GetInstance();
@@ -86,41 +80,77 @@ bool Pieces::BasePiece::cleanPositionIfEnemy(const Pieces::Position& pos) const
     return true;
 }
 
+bool Pieces::BasePiece::findKingInPositions(const Pieces::Position& kingPos,
+        const Pieces::Positions& positions) const
+{
+    bool ret = false;
+    for ( auto pos : positions )
+    {
+        if ( pos == kingPos )
+        {
+            ret = true;
+        }
+        resetPieceHittableStatus(pos);
+    }
+    return ret;
+}
+
+bool Pieces::BasePiece::findKingInEnemyMoves(
+        const Pieces::PieceColor& kingColor,
+        const Pieces::PieceColor& enemyColor) const
+{
+    bool ret = false;
+    std::vector<Pieces::BasePiece*> pieces;
+    Chess::Board* board = Chess::Board::GetInstance();
+    Pieces::BasePiece* king = board->GetKing(kingColor);
+    Pieces::Position kingPos = king->GetPosition();
+    board->GetPieces(enemyColor, pieces);
+    for ( Pieces::BasePiece* piece : pieces )
+    {
+        Pieces::Positions positions;
+        piece->getAvailableMoves(positions);
+        if ( findKingInPositions(kingPos, positions) )
+        {
+            ret = true;
+        }
+    }
+    return ret;
+}
+
+bool Pieces::BasePiece::isMyKingHittable(Pieces::BasePiece* pPiece) const
+{
+    if ( nullptr == pPiece )
+    {
+        throw Utils::Exception("Oops, something went wrong...");
+    }
+    Pieces::PieceColor color = pPiece->GetColor();
+    Pieces::PieceColor enemyColor = Pieces::PieceColor::BLACK;
+    if ( Pieces::PieceColor::BLACK == color )
+    {
+        enemyColor = Pieces::PieceColor::WHITE;
+    }
+    return findKingInEnemyMoves(color, enemyColor);
+}
+
 void Pieces::BasePiece::movePiece(const Pieces::Position& pos)
 {
     Chess::Board* board = Chess::Board::GetInstance();
     Chess::GameMgr* gameMgr = Chess::GameMgr::GetInstance();
     Pieces::BasePiece*** pieces = board->GetBoard();
-    gameMgr->AddNewLastMove(pieces[m_position.x][m_position.y]->GetPieceChar(),
-            m_position, pos);
-    pieces[pos.x][pos.y] = std::move(
-            pieces[m_position.x][m_position.y]);
+    Pieces::BasePiece* prevPiece = pieces[pos.x][pos.y];
+    pieces[pos.x][pos.y] = std::move(pieces[m_position.x][m_position.y]);
     pieces[m_position.x][m_position.y] = nullptr;
+    bool bIsKingHittable = isMyKingHittable(pieces[pos.x][pos.y]);
+    if ( bIsKingHittable )
+    {
+        pieces[m_position.x][m_position.y] = std::move(pieces[pos.x][pos.y]);
+        pieces[pos.x][pos.y] = prevPiece;
+        throw Utils::Exception("Your king is under the attack!", "Signal", 2);
+    }
     m_position.x = pos.x;
     m_position.y = pos.y;
-}
-
-void Pieces::BasePiece::changeEnemyKingHittableStatus()
-{
-    Chess::Board* board = Chess::Board::GetInstance();
-    Pieces::PieceColor color = Pieces::PieceColor::WHITE;
-    if (Pieces::PieceColor::WHITE == GetColor())
-    {
-        color = Pieces::PieceColor::BLACK;
-    }
-    //Pieces::Positions positions;
-    //GetAvailableMoves(positions);
-    bool isHittable = board->IsKingHittable(color);
-    //Chess::GameMgr::GetInstance()->SetKingHittable(color, isHittable);
-}
-
-bool Pieces::BasePiece::checkMoveResult(bool bResult,
-        const std::string& sMsg) const
-{
-    if (!bResult)
-    {
-        throw Utils::Exception(sMsg);
-    }
+    gameMgr->AddNewLastMove(pieces[m_position.x][m_position.y]->GetPieceChar(),
+            m_position, pos);
 }
 
 void Pieces::BasePiece::SetHittable(bool isHittable)
@@ -182,11 +212,12 @@ void Pieces::BasePiece::Move(const Pieces::Position& position)
     {
         resetPieceHittableStatus(pos);
         if (!comparePositions(pos, position)) continue;
-        if (isKingHittable()) checkMoveResult(false, "King is hittable");
         if (!cleanPositionIfEnemy(pos)) continue;
         movePiece(position);
-        changeEnemyKingHittableStatus();
         isMoved = true;
     }
-    checkMoveResult(isMoved, "Incorrect position");
+    if ( !isMoved )
+    {
+        throw Utils::Exception("Incorrect position");
+    }
 }

@@ -195,22 +195,6 @@ void Remote::ChessClient::ReadLastMove(const Remote::Room& room,
     P2C_Converter::ConvertLastMoveInfo(response, lastMove);
 }
 
-void Remote::ChessClient::SetKingHittable(const Remote::Room& room,
-        const Pieces::PieceColor& color, bool newStatus) const
-{
-    grpc::ClientContext context;
-    Proto::RoomWithIsKingHittable request;
-    Proto::Empty response;
-    Proto::PieceColor pieceColor;
-    convertPieceColor(color, pieceColor);
-    request.mutable_iskinghittable()->set_color(pieceColor);
-    request.mutable_iskinghittable()->set_status(newStatus);
-    request.mutable_room()->set_name(room.name);
-    request.mutable_room()->set_password(room.password);
-    grpc::Status status = m_stub->SetKingHittable(&context, request, &response);
-    checkRequestStatus(status);
-}
-
 std::string Remote::ChessClient::GetOpponentUsername(
         const Remote::Room& room) const
 {

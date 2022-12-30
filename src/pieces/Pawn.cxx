@@ -62,7 +62,7 @@ void Pieces::Pawn::getAvailableMoves(Pieces::Positions& positions) const
 #include "pieces/Pawn.hxx"
 #include "chess/Board.hxx"
 #include "io/Query.hxx"
-#include <iostream> // delete
+
 #include <algorithm>
 
 Pieces::Pawn::Pawn(const Pieces::PieceColor& color,
@@ -106,12 +106,6 @@ void Pieces::Pawn::setHittableEnemies(Pieces::Positions& positions,
         positions.push_back(rightPos);
         rightPiece->SetHittable(true);
     }
-    if (leftPiece != nullptr)
-    {
-        if (board->IsEnemy(m_position, leftPos))
-        {
-        }
-    }
     if (leftPiece != nullptr && board->IsEnemy(m_position, leftPos))
     {
         positions.push_back(leftPos);
@@ -122,8 +116,8 @@ void Pieces::Pawn::setHittableEnemies(Pieces::Positions& positions,
 void Pieces::Pawn::getAvailableMoves(Pieces::Positions& positions) const
 {
     int module = (m_color == Pieces::PieceColor::WHITE) ? 1 : -1;
-    Pieces::Position nextRightPos(m_position.x + (1 * module), m_position.y + 1);
-    Pieces::Position nextLeftPos(m_position.x + (1 * module), m_position.y - 1);
+    Pieces::Position nextRightPos(m_position.x + (1*module), m_position.y + 1);
+    Pieces::Position nextLeftPos(m_position.x + (1*module), m_position.y - 1);
     checkForNextMoves(positions);
     setHittableEnemies(positions, nextRightPos, nextLeftPos);
 }

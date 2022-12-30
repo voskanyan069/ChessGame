@@ -7,23 +7,24 @@
 #include "ChessServer.pb.h"
 
 #include <functional>
+#include <grpc/impl/codegen/port_platform.h>
 #include <grpcpp/impl/codegen/async_generic_service.h>
 #include <grpcpp/impl/codegen/async_stream.h>
 #include <grpcpp/impl/codegen/async_unary_call.h>
-#include <grpcpp/impl/codegen/method_handler_impl.h>
+#include <grpcpp/impl/codegen/client_callback.h>
+#include <grpcpp/impl/codegen/client_context.h>
+#include <grpcpp/impl/codegen/completion_queue.h>
+#include <grpcpp/impl/codegen/message_allocator.h>
+#include <grpcpp/impl/codegen/method_handler.h>
 #include <grpcpp/impl/codegen/proto_utils.h>
 #include <grpcpp/impl/codegen/rpc_method.h>
+#include <grpcpp/impl/codegen/server_callback.h>
+#include <grpcpp/impl/codegen/server_callback_handlers.h>
+#include <grpcpp/impl/codegen/server_context.h>
 #include <grpcpp/impl/codegen/service_type.h>
 #include <grpcpp/impl/codegen/status.h>
 #include <grpcpp/impl/codegen/stub_options.h>
 #include <grpcpp/impl/codegen/sync_stream.h>
-
-namespace grpc {
-class CompletionQueue;
-class Channel;
-class ServerCompletionQueue;
-class ServerContext;
-}  // namespace grpc
 
 namespace Proto {
 
@@ -128,30 +129,165 @@ class ChessServer final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Proto::LastMoveInfo>> PrepareAsyncReadPieceMove(::grpc::ClientContext* context, const ::Proto::RoomSettings& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Proto::LastMoveInfo>>(PrepareAsyncReadPieceMoveRaw(context, request, cq));
     }
-    virtual ::grpc::Status SetKingHittable(::grpc::ClientContext* context, const ::Proto::RoomWithIsKingHittable& request, ::Proto::Empty* response) = 0;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Proto::Empty>> AsyncSetKingHittable(::grpc::ClientContext* context, const ::Proto::RoomWithIsKingHittable& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Proto::Empty>>(AsyncSetKingHittableRaw(context, request, cq));
-    }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Proto::Empty>> PrepareAsyncSetKingHittable(::grpc::ClientContext* context, const ::Proto::RoomWithIsKingHittable& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::Proto::Empty>>(PrepareAsyncSetKingHittableRaw(context, request, cq));
-    }
     class experimental_async_interface {
      public:
       virtual ~experimental_async_interface() {}
       virtual void GetRooms(::grpc::ClientContext* context, const ::Proto::Empty* request, ::Proto::RoomsInfo* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void GetRooms(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::RoomsInfo* response, std::function<void(::grpc::Status)>) = 0;
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      virtual void GetRooms(::grpc::ClientContext* context, const ::Proto::Empty* request, ::Proto::RoomsInfo* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      #else
+      virtual void GetRooms(::grpc::ClientContext* context, const ::Proto::Empty* request, ::Proto::RoomsInfo* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
+      #endif
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      virtual void GetRooms(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::RoomsInfo* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      #else
+      virtual void GetRooms(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::RoomsInfo* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
+      #endif
       virtual void IsRoomExists(::grpc::ClientContext* context, const ::Proto::String* request, ::Proto::Bool* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void IsRoomExists(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Bool* response, std::function<void(::grpc::Status)>) = 0;
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      virtual void IsRoomExists(::grpc::ClientContext* context, const ::Proto::String* request, ::Proto::Bool* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      #else
+      virtual void IsRoomExists(::grpc::ClientContext* context, const ::Proto::String* request, ::Proto::Bool* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
+      #endif
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      virtual void IsRoomExists(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Bool* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      #else
+      virtual void IsRoomExists(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Bool* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
+      #endif
       virtual void CreateRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void CreateRoom(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) = 0;
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      virtual void CreateRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      #else
+      virtual void CreateRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
+      #endif
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      virtual void CreateRoom(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      #else
+      virtual void CreateRoom(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
+      #endif
       virtual void JoinRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void JoinRoom(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) = 0;
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      virtual void JoinRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      #else
+      virtual void JoinRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
+      #endif
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      virtual void JoinRoom(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      #else
+      virtual void JoinRoom(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
+      #endif
       virtual void LeaveRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void LeaveRoom(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) = 0;
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      virtual void LeaveRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      #else
+      virtual void LeaveRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
+      #endif
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      virtual void LeaveRoom(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      #else
+      virtual void LeaveRoom(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
+      #endif
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      virtual void SpectateRoom(::grpc::ClientContext* context, ::Proto::String* request, ::grpc::ClientReadReactor< ::Proto::LastMoveInfo>* reactor) = 0;
+      #else
+      virtual void SpectateRoom(::grpc::ClientContext* context, ::Proto::String* request, ::grpc::experimental::ClientReadReactor< ::Proto::LastMoveInfo>* reactor) = 0;
+      #endif
       virtual void LeaveSpectatorRoom(::grpc::ClientContext* context, const ::Proto::String* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void LeaveSpectatorRoom(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) = 0;
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      virtual void LeaveSpectatorRoom(::grpc::ClientContext* context, const ::Proto::String* request, ::Proto::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      #else
+      virtual void LeaveSpectatorRoom(::grpc::ClientContext* context, const ::Proto::String* request, ::Proto::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
+      #endif
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      virtual void LeaveSpectatorRoom(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      #else
+      virtual void LeaveSpectatorRoom(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
+      #endif
       virtual void GetViewersCount(::grpc::ClientContext* context, const ::Proto::String* request, ::Proto::Integer* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void GetViewersCount(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Integer* response, std::function<void(::grpc::Status)>) = 0;
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      virtual void GetViewersCount(::grpc::ClientContext* context, const ::Proto::String* request, ::Proto::Integer* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      #else
+      virtual void GetViewersCount(::grpc::ClientContext* context, const ::Proto::String* request, ::Proto::Integer* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
+      #endif
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      virtual void GetViewersCount(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Integer* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      #else
+      virtual void GetViewersCount(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Integer* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
+      #endif
       virtual void GetUsername(::grpc::ClientContext* context, const ::Proto::RoomWithUsername* request, ::Proto::String* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void GetUsername(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::String* response, std::function<void(::grpc::Status)>) = 0;
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      virtual void GetUsername(::grpc::ClientContext* context, const ::Proto::RoomWithUsername* request, ::Proto::String* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      #else
+      virtual void GetUsername(::grpc::ClientContext* context, const ::Proto::RoomWithUsername* request, ::Proto::String* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
+      #endif
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      virtual void GetUsername(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::String* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      #else
+      virtual void GetUsername(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::String* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
+      #endif
       virtual void WaitForReady(::grpc::ClientContext* context, const ::Proto::RoomSettings* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void WaitForReady(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) = 0;
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      virtual void WaitForReady(::grpc::ClientContext* context, const ::Proto::RoomSettings* request, ::Proto::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      #else
+      virtual void WaitForReady(::grpc::ClientContext* context, const ::Proto::RoomSettings* request, ::Proto::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
+      #endif
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      virtual void WaitForReady(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      #else
+      virtual void WaitForReady(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
+      #endif
       virtual void Ready(::grpc::ClientContext* context, const ::Proto::ReadyRequest* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void Ready(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) = 0;
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      virtual void Ready(::grpc::ClientContext* context, const ::Proto::ReadyRequest* request, ::Proto::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      #else
+      virtual void Ready(::grpc::ClientContext* context, const ::Proto::ReadyRequest* request, ::Proto::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
+      #endif
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      virtual void Ready(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      #else
+      virtual void Ready(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
+      #endif
       virtual void MovePiece(::grpc::ClientContext* context, const ::Proto::MoveRequest* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void MovePiece(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) = 0;
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      virtual void MovePiece(::grpc::ClientContext* context, const ::Proto::MoveRequest* request, ::Proto::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      #else
+      virtual void MovePiece(::grpc::ClientContext* context, const ::Proto::MoveRequest* request, ::Proto::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
+      #endif
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      virtual void MovePiece(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      #else
+      virtual void MovePiece(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
+      #endif
       virtual void ReadPieceMove(::grpc::ClientContext* context, const ::Proto::RoomSettings* request, ::Proto::LastMoveInfo* response, std::function<void(::grpc::Status)>) = 0;
-      virtual void SetKingHittable(::grpc::ClientContext* context, const ::Proto::RoomWithIsKingHittable* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void ReadPieceMove(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::LastMoveInfo* response, std::function<void(::grpc::Status)>) = 0;
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      virtual void ReadPieceMove(::grpc::ClientContext* context, const ::Proto::RoomSettings* request, ::Proto::LastMoveInfo* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      #else
+      virtual void ReadPieceMove(::grpc::ClientContext* context, const ::Proto::RoomSettings* request, ::Proto::LastMoveInfo* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
+      #endif
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      virtual void ReadPieceMove(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::LastMoveInfo* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      #else
+      virtual void ReadPieceMove(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::LastMoveInfo* response, ::grpc::experimental::ClientUnaryReactor* reactor) = 0;
+      #endif
     };
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+    typedef class experimental_async_interface async_interface;
+    #endif
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+    async_interface* async() { return experimental_async(); }
+    #endif
     virtual class experimental_async_interface* experimental_async() { return nullptr; }
   private:
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::Proto::RoomsInfo>* AsyncGetRoomsRaw(::grpc::ClientContext* context, const ::Proto::Empty& request, ::grpc::CompletionQueue* cq) = 0;
@@ -181,8 +317,6 @@ class ChessServer final {
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::Proto::Empty>* PrepareAsyncMovePieceRaw(::grpc::ClientContext* context, const ::Proto::MoveRequest& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::Proto::LastMoveInfo>* AsyncReadPieceMoveRaw(::grpc::ClientContext* context, const ::Proto::RoomSettings& request, ::grpc::CompletionQueue* cq) = 0;
     virtual ::grpc::ClientAsyncResponseReaderInterface< ::Proto::LastMoveInfo>* PrepareAsyncReadPieceMoveRaw(::grpc::ClientContext* context, const ::Proto::RoomSettings& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::Proto::Empty>* AsyncSetKingHittableRaw(::grpc::ClientContext* context, const ::Proto::RoomWithIsKingHittable& request, ::grpc::CompletionQueue* cq) = 0;
-    virtual ::grpc::ClientAsyncResponseReaderInterface< ::Proto::Empty>* PrepareAsyncSetKingHittableRaw(::grpc::ClientContext* context, const ::Proto::RoomWithIsKingHittable& request, ::grpc::CompletionQueue* cq) = 0;
   };
   class Stub final : public StubInterface {
    public:
@@ -280,29 +414,158 @@ class ChessServer final {
     std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Proto::LastMoveInfo>> PrepareAsyncReadPieceMove(::grpc::ClientContext* context, const ::Proto::RoomSettings& request, ::grpc::CompletionQueue* cq) {
       return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Proto::LastMoveInfo>>(PrepareAsyncReadPieceMoveRaw(context, request, cq));
     }
-    ::grpc::Status SetKingHittable(::grpc::ClientContext* context, const ::Proto::RoomWithIsKingHittable& request, ::Proto::Empty* response) override;
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Proto::Empty>> AsyncSetKingHittable(::grpc::ClientContext* context, const ::Proto::RoomWithIsKingHittable& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Proto::Empty>>(AsyncSetKingHittableRaw(context, request, cq));
-    }
-    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Proto::Empty>> PrepareAsyncSetKingHittable(::grpc::ClientContext* context, const ::Proto::RoomWithIsKingHittable& request, ::grpc::CompletionQueue* cq) {
-      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::Proto::Empty>>(PrepareAsyncSetKingHittableRaw(context, request, cq));
-    }
     class experimental_async final :
       public StubInterface::experimental_async_interface {
      public:
       void GetRooms(::grpc::ClientContext* context, const ::Proto::Empty* request, ::Proto::RoomsInfo* response, std::function<void(::grpc::Status)>) override;
+      void GetRooms(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::RoomsInfo* response, std::function<void(::grpc::Status)>) override;
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      void GetRooms(::grpc::ClientContext* context, const ::Proto::Empty* request, ::Proto::RoomsInfo* response, ::grpc::ClientUnaryReactor* reactor) override;
+      #else
+      void GetRooms(::grpc::ClientContext* context, const ::Proto::Empty* request, ::Proto::RoomsInfo* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
+      #endif
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      void GetRooms(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::RoomsInfo* response, ::grpc::ClientUnaryReactor* reactor) override;
+      #else
+      void GetRooms(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::RoomsInfo* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
+      #endif
       void IsRoomExists(::grpc::ClientContext* context, const ::Proto::String* request, ::Proto::Bool* response, std::function<void(::grpc::Status)>) override;
+      void IsRoomExists(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Bool* response, std::function<void(::grpc::Status)>) override;
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      void IsRoomExists(::grpc::ClientContext* context, const ::Proto::String* request, ::Proto::Bool* response, ::grpc::ClientUnaryReactor* reactor) override;
+      #else
+      void IsRoomExists(::grpc::ClientContext* context, const ::Proto::String* request, ::Proto::Bool* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
+      #endif
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      void IsRoomExists(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Bool* response, ::grpc::ClientUnaryReactor* reactor) override;
+      #else
+      void IsRoomExists(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Bool* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
+      #endif
       void CreateRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) override;
+      void CreateRoom(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) override;
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      void CreateRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
+      #else
+      void CreateRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
+      #endif
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      void CreateRoom(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
+      #else
+      void CreateRoom(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
+      #endif
       void JoinRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) override;
+      void JoinRoom(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) override;
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      void JoinRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
+      #else
+      void JoinRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
+      #endif
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      void JoinRoom(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
+      #else
+      void JoinRoom(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
+      #endif
       void LeaveRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) override;
+      void LeaveRoom(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) override;
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      void LeaveRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
+      #else
+      void LeaveRoom(::grpc::ClientContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
+      #endif
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      void LeaveRoom(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
+      #else
+      void LeaveRoom(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
+      #endif
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      void SpectateRoom(::grpc::ClientContext* context, ::Proto::String* request, ::grpc::ClientReadReactor< ::Proto::LastMoveInfo>* reactor) override;
+      #else
+      void SpectateRoom(::grpc::ClientContext* context, ::Proto::String* request, ::grpc::experimental::ClientReadReactor< ::Proto::LastMoveInfo>* reactor) override;
+      #endif
       void LeaveSpectatorRoom(::grpc::ClientContext* context, const ::Proto::String* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) override;
+      void LeaveSpectatorRoom(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) override;
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      void LeaveSpectatorRoom(::grpc::ClientContext* context, const ::Proto::String* request, ::Proto::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
+      #else
+      void LeaveSpectatorRoom(::grpc::ClientContext* context, const ::Proto::String* request, ::Proto::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
+      #endif
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      void LeaveSpectatorRoom(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
+      #else
+      void LeaveSpectatorRoom(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
+      #endif
       void GetViewersCount(::grpc::ClientContext* context, const ::Proto::String* request, ::Proto::Integer* response, std::function<void(::grpc::Status)>) override;
+      void GetViewersCount(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Integer* response, std::function<void(::grpc::Status)>) override;
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      void GetViewersCount(::grpc::ClientContext* context, const ::Proto::String* request, ::Proto::Integer* response, ::grpc::ClientUnaryReactor* reactor) override;
+      #else
+      void GetViewersCount(::grpc::ClientContext* context, const ::Proto::String* request, ::Proto::Integer* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
+      #endif
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      void GetViewersCount(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Integer* response, ::grpc::ClientUnaryReactor* reactor) override;
+      #else
+      void GetViewersCount(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Integer* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
+      #endif
       void GetUsername(::grpc::ClientContext* context, const ::Proto::RoomWithUsername* request, ::Proto::String* response, std::function<void(::grpc::Status)>) override;
+      void GetUsername(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::String* response, std::function<void(::grpc::Status)>) override;
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      void GetUsername(::grpc::ClientContext* context, const ::Proto::RoomWithUsername* request, ::Proto::String* response, ::grpc::ClientUnaryReactor* reactor) override;
+      #else
+      void GetUsername(::grpc::ClientContext* context, const ::Proto::RoomWithUsername* request, ::Proto::String* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
+      #endif
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      void GetUsername(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::String* response, ::grpc::ClientUnaryReactor* reactor) override;
+      #else
+      void GetUsername(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::String* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
+      #endif
       void WaitForReady(::grpc::ClientContext* context, const ::Proto::RoomSettings* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) override;
+      void WaitForReady(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) override;
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      void WaitForReady(::grpc::ClientContext* context, const ::Proto::RoomSettings* request, ::Proto::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
+      #else
+      void WaitForReady(::grpc::ClientContext* context, const ::Proto::RoomSettings* request, ::Proto::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
+      #endif
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      void WaitForReady(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
+      #else
+      void WaitForReady(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
+      #endif
       void Ready(::grpc::ClientContext* context, const ::Proto::ReadyRequest* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) override;
+      void Ready(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) override;
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      void Ready(::grpc::ClientContext* context, const ::Proto::ReadyRequest* request, ::Proto::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
+      #else
+      void Ready(::grpc::ClientContext* context, const ::Proto::ReadyRequest* request, ::Proto::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
+      #endif
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      void Ready(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
+      #else
+      void Ready(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
+      #endif
       void MovePiece(::grpc::ClientContext* context, const ::Proto::MoveRequest* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) override;
+      void MovePiece(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) override;
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      void MovePiece(::grpc::ClientContext* context, const ::Proto::MoveRequest* request, ::Proto::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
+      #else
+      void MovePiece(::grpc::ClientContext* context, const ::Proto::MoveRequest* request, ::Proto::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
+      #endif
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      void MovePiece(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, ::grpc::ClientUnaryReactor* reactor) override;
+      #else
+      void MovePiece(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::Empty* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
+      #endif
       void ReadPieceMove(::grpc::ClientContext* context, const ::Proto::RoomSettings* request, ::Proto::LastMoveInfo* response, std::function<void(::grpc::Status)>) override;
-      void SetKingHittable(::grpc::ClientContext* context, const ::Proto::RoomWithIsKingHittable* request, ::Proto::Empty* response, std::function<void(::grpc::Status)>) override;
+      void ReadPieceMove(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::LastMoveInfo* response, std::function<void(::grpc::Status)>) override;
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      void ReadPieceMove(::grpc::ClientContext* context, const ::Proto::RoomSettings* request, ::Proto::LastMoveInfo* response, ::grpc::ClientUnaryReactor* reactor) override;
+      #else
+      void ReadPieceMove(::grpc::ClientContext* context, const ::Proto::RoomSettings* request, ::Proto::LastMoveInfo* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
+      #endif
+      #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      void ReadPieceMove(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::LastMoveInfo* response, ::grpc::ClientUnaryReactor* reactor) override;
+      #else
+      void ReadPieceMove(::grpc::ClientContext* context, const ::grpc::ByteBuffer* request, ::Proto::LastMoveInfo* response, ::grpc::experimental::ClientUnaryReactor* reactor) override;
+      #endif
      private:
       friend class Stub;
       explicit experimental_async(Stub* stub): stub_(stub) { }
@@ -341,8 +604,6 @@ class ChessServer final {
     ::grpc::ClientAsyncResponseReader< ::Proto::Empty>* PrepareAsyncMovePieceRaw(::grpc::ClientContext* context, const ::Proto::MoveRequest& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::Proto::LastMoveInfo>* AsyncReadPieceMoveRaw(::grpc::ClientContext* context, const ::Proto::RoomSettings& request, ::grpc::CompletionQueue* cq) override;
     ::grpc::ClientAsyncResponseReader< ::Proto::LastMoveInfo>* PrepareAsyncReadPieceMoveRaw(::grpc::ClientContext* context, const ::Proto::RoomSettings& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::Proto::Empty>* AsyncSetKingHittableRaw(::grpc::ClientContext* context, const ::Proto::RoomWithIsKingHittable& request, ::grpc::CompletionQueue* cq) override;
-    ::grpc::ClientAsyncResponseReader< ::Proto::Empty>* PrepareAsyncSetKingHittableRaw(::grpc::ClientContext* context, const ::Proto::RoomWithIsKingHittable& request, ::grpc::CompletionQueue* cq) override;
     const ::grpc::internal::RpcMethod rpcmethod_GetRooms_;
     const ::grpc::internal::RpcMethod rpcmethod_IsRoomExists_;
     const ::grpc::internal::RpcMethod rpcmethod_CreateRoom_;
@@ -356,7 +617,6 @@ class ChessServer final {
     const ::grpc::internal::RpcMethod rpcmethod_Ready_;
     const ::grpc::internal::RpcMethod rpcmethod_MovePiece_;
     const ::grpc::internal::RpcMethod rpcmethod_ReadPieceMove_;
-    const ::grpc::internal::RpcMethod rpcmethod_SetKingHittable_;
   };
   static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
 
@@ -377,12 +637,11 @@ class ChessServer final {
     virtual ::grpc::Status Ready(::grpc::ServerContext* context, const ::Proto::ReadyRequest* request, ::Proto::Empty* response);
     virtual ::grpc::Status MovePiece(::grpc::ServerContext* context, const ::Proto::MoveRequest* request, ::Proto::Empty* response);
     virtual ::grpc::Status ReadPieceMove(::grpc::ServerContext* context, const ::Proto::RoomSettings* request, ::Proto::LastMoveInfo* response);
-    virtual ::grpc::Status SetKingHittable(::grpc::ServerContext* context, const ::Proto::RoomWithIsKingHittable* request, ::Proto::Empty* response);
   };
   template <class BaseClass>
   class WithAsyncMethod_GetRooms : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_GetRooms() {
       ::grpc::Service::MarkMethodAsync(0);
@@ -391,7 +650,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status GetRooms(::grpc::ServerContext* context, const ::Proto::Empty* request, ::Proto::RoomsInfo* response) override {
+    ::grpc::Status GetRooms(::grpc::ServerContext* /*context*/, const ::Proto::Empty* /*request*/, ::Proto::RoomsInfo* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -402,7 +661,7 @@ class ChessServer final {
   template <class BaseClass>
   class WithAsyncMethod_IsRoomExists : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_IsRoomExists() {
       ::grpc::Service::MarkMethodAsync(1);
@@ -411,7 +670,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status IsRoomExists(::grpc::ServerContext* context, const ::Proto::String* request, ::Proto::Bool* response) override {
+    ::grpc::Status IsRoomExists(::grpc::ServerContext* /*context*/, const ::Proto::String* /*request*/, ::Proto::Bool* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -422,7 +681,7 @@ class ChessServer final {
   template <class BaseClass>
   class WithAsyncMethod_CreateRoom : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_CreateRoom() {
       ::grpc::Service::MarkMethodAsync(2);
@@ -431,7 +690,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status CreateRoom(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response) override {
+    ::grpc::Status CreateRoom(::grpc::ServerContext* /*context*/, const ::Proto::RoomWithUsername* /*request*/, ::Proto::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -442,7 +701,7 @@ class ChessServer final {
   template <class BaseClass>
   class WithAsyncMethod_JoinRoom : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_JoinRoom() {
       ::grpc::Service::MarkMethodAsync(3);
@@ -451,7 +710,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status JoinRoom(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response) override {
+    ::grpc::Status JoinRoom(::grpc::ServerContext* /*context*/, const ::Proto::RoomWithUsername* /*request*/, ::Proto::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -462,7 +721,7 @@ class ChessServer final {
   template <class BaseClass>
   class WithAsyncMethod_LeaveRoom : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_LeaveRoom() {
       ::grpc::Service::MarkMethodAsync(4);
@@ -471,7 +730,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status LeaveRoom(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response) override {
+    ::grpc::Status LeaveRoom(::grpc::ServerContext* /*context*/, const ::Proto::RoomWithUsername* /*request*/, ::Proto::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -482,7 +741,7 @@ class ChessServer final {
   template <class BaseClass>
   class WithAsyncMethod_SpectateRoom : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_SpectateRoom() {
       ::grpc::Service::MarkMethodAsync(5);
@@ -491,7 +750,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status SpectateRoom(::grpc::ServerContext* context, const ::Proto::String* request, ::grpc::ServerWriter< ::Proto::LastMoveInfo>* writer) override {
+    ::grpc::Status SpectateRoom(::grpc::ServerContext* /*context*/, const ::Proto::String* /*request*/, ::grpc::ServerWriter< ::Proto::LastMoveInfo>* /*writer*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -502,7 +761,7 @@ class ChessServer final {
   template <class BaseClass>
   class WithAsyncMethod_LeaveSpectatorRoom : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_LeaveSpectatorRoom() {
       ::grpc::Service::MarkMethodAsync(6);
@@ -511,7 +770,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status LeaveSpectatorRoom(::grpc::ServerContext* context, const ::Proto::String* request, ::Proto::Empty* response) override {
+    ::grpc::Status LeaveSpectatorRoom(::grpc::ServerContext* /*context*/, const ::Proto::String* /*request*/, ::Proto::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -522,7 +781,7 @@ class ChessServer final {
   template <class BaseClass>
   class WithAsyncMethod_GetViewersCount : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_GetViewersCount() {
       ::grpc::Service::MarkMethodAsync(7);
@@ -531,7 +790,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status GetViewersCount(::grpc::ServerContext* context, const ::Proto::String* request, ::Proto::Integer* response) override {
+    ::grpc::Status GetViewersCount(::grpc::ServerContext* /*context*/, const ::Proto::String* /*request*/, ::Proto::Integer* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -542,7 +801,7 @@ class ChessServer final {
   template <class BaseClass>
   class WithAsyncMethod_GetUsername : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_GetUsername() {
       ::grpc::Service::MarkMethodAsync(8);
@@ -551,7 +810,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status GetUsername(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::String* response) override {
+    ::grpc::Status GetUsername(::grpc::ServerContext* /*context*/, const ::Proto::RoomWithUsername* /*request*/, ::Proto::String* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -562,7 +821,7 @@ class ChessServer final {
   template <class BaseClass>
   class WithAsyncMethod_WaitForReady : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_WaitForReady() {
       ::grpc::Service::MarkMethodAsync(9);
@@ -571,7 +830,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status WaitForReady(::grpc::ServerContext* context, const ::Proto::RoomSettings* request, ::Proto::Empty* response) override {
+    ::grpc::Status WaitForReady(::grpc::ServerContext* /*context*/, const ::Proto::RoomSettings* /*request*/, ::Proto::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -582,7 +841,7 @@ class ChessServer final {
   template <class BaseClass>
   class WithAsyncMethod_Ready : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_Ready() {
       ::grpc::Service::MarkMethodAsync(10);
@@ -591,7 +850,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Ready(::grpc::ServerContext* context, const ::Proto::ReadyRequest* request, ::Proto::Empty* response) override {
+    ::grpc::Status Ready(::grpc::ServerContext* /*context*/, const ::Proto::ReadyRequest* /*request*/, ::Proto::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -602,7 +861,7 @@ class ChessServer final {
   template <class BaseClass>
   class WithAsyncMethod_MovePiece : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_MovePiece() {
       ::grpc::Service::MarkMethodAsync(11);
@@ -611,7 +870,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status MovePiece(::grpc::ServerContext* context, const ::Proto::MoveRequest* request, ::Proto::Empty* response) override {
+    ::grpc::Status MovePiece(::grpc::ServerContext* /*context*/, const ::Proto::MoveRequest* /*request*/, ::Proto::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -622,7 +881,7 @@ class ChessServer final {
   template <class BaseClass>
   class WithAsyncMethod_ReadPieceMove : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithAsyncMethod_ReadPieceMove() {
       ::grpc::Service::MarkMethodAsync(12);
@@ -631,7 +890,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status ReadPieceMove(::grpc::ServerContext* context, const ::Proto::RoomSettings* request, ::Proto::LastMoveInfo* response) override {
+    ::grpc::Status ReadPieceMove(::grpc::ServerContext* /*context*/, const ::Proto::RoomSettings* /*request*/, ::Proto::LastMoveInfo* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -639,31 +898,618 @@ class ChessServer final {
       ::grpc::Service::RequestAsyncUnary(12, context, request, response, new_call_cq, notification_cq, tag);
     }
   };
+  typedef WithAsyncMethod_GetRooms<WithAsyncMethod_IsRoomExists<WithAsyncMethod_CreateRoom<WithAsyncMethod_JoinRoom<WithAsyncMethod_LeaveRoom<WithAsyncMethod_SpectateRoom<WithAsyncMethod_LeaveSpectatorRoom<WithAsyncMethod_GetViewersCount<WithAsyncMethod_GetUsername<WithAsyncMethod_WaitForReady<WithAsyncMethod_Ready<WithAsyncMethod_MovePiece<WithAsyncMethod_ReadPieceMove<Service > > > > > > > > > > > > > AsyncService;
   template <class BaseClass>
-  class WithAsyncMethod_SetKingHittable : public BaseClass {
+  class ExperimentalWithCallbackMethod_GetRooms : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
-    WithAsyncMethod_SetKingHittable() {
-      ::grpc::Service::MarkMethodAsync(13);
+    ExperimentalWithCallbackMethod_GetRooms() {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::Service::
+    #else
+      ::grpc::Service::experimental().
+    #endif
+        MarkMethodCallback(0,
+          new ::grpc_impl::internal::CallbackUnaryHandler< ::Proto::Empty, ::Proto::RoomsInfo>(
+            [this](
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+                   ::grpc::CallbackServerContext*
+    #else
+                   ::grpc::experimental::CallbackServerContext*
+    #endif
+                     context, const ::Proto::Empty* request, ::Proto::RoomsInfo* response) { return this->GetRooms(context, request, response); }));}
+    void SetMessageAllocatorFor_GetRooms(
+        ::grpc::experimental::MessageAllocator< ::Proto::Empty, ::Proto::RoomsInfo>* allocator) {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(0);
+    #else
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(0);
+    #endif
+      static_cast<::grpc_impl::internal::CallbackUnaryHandler< ::Proto::Empty, ::Proto::RoomsInfo>*>(handler)
+              ->SetMessageAllocator(allocator);
     }
-    ~WithAsyncMethod_SetKingHittable() override {
+    ~ExperimentalWithCallbackMethod_GetRooms() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status SetKingHittable(::grpc::ServerContext* context, const ::Proto::RoomWithIsKingHittable* request, ::Proto::Empty* response) override {
+    ::grpc::Status GetRooms(::grpc::ServerContext* /*context*/, const ::Proto::Empty* /*request*/, ::Proto::RoomsInfo* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestSetKingHittable(::grpc::ServerContext* context, ::Proto::RoomWithIsKingHittable* request, ::grpc::ServerAsyncResponseWriter< ::Proto::Empty>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(13, context, request, response, new_call_cq, notification_cq, tag);
-    }
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+    virtual ::grpc::ServerUnaryReactor* GetRooms(
+      ::grpc::CallbackServerContext* /*context*/, const ::Proto::Empty* /*request*/, ::Proto::RoomsInfo* /*response*/)
+    #else
+    virtual ::grpc::experimental::ServerUnaryReactor* GetRooms(
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::Proto::Empty* /*request*/, ::Proto::RoomsInfo* /*response*/)
+    #endif
+      { return nullptr; }
   };
-  typedef WithAsyncMethod_GetRooms<WithAsyncMethod_IsRoomExists<WithAsyncMethod_CreateRoom<WithAsyncMethod_JoinRoom<WithAsyncMethod_LeaveRoom<WithAsyncMethod_SpectateRoom<WithAsyncMethod_LeaveSpectatorRoom<WithAsyncMethod_GetViewersCount<WithAsyncMethod_GetUsername<WithAsyncMethod_WaitForReady<WithAsyncMethod_Ready<WithAsyncMethod_MovePiece<WithAsyncMethod_ReadPieceMove<WithAsyncMethod_SetKingHittable<Service > > > > > > > > > > > > > > AsyncService;
+  template <class BaseClass>
+  class ExperimentalWithCallbackMethod_IsRoomExists : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    ExperimentalWithCallbackMethod_IsRoomExists() {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::Service::
+    #else
+      ::grpc::Service::experimental().
+    #endif
+        MarkMethodCallback(1,
+          new ::grpc_impl::internal::CallbackUnaryHandler< ::Proto::String, ::Proto::Bool>(
+            [this](
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+                   ::grpc::CallbackServerContext*
+    #else
+                   ::grpc::experimental::CallbackServerContext*
+    #endif
+                     context, const ::Proto::String* request, ::Proto::Bool* response) { return this->IsRoomExists(context, request, response); }));}
+    void SetMessageAllocatorFor_IsRoomExists(
+        ::grpc::experimental::MessageAllocator< ::Proto::String, ::Proto::Bool>* allocator) {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(1);
+    #else
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(1);
+    #endif
+      static_cast<::grpc_impl::internal::CallbackUnaryHandler< ::Proto::String, ::Proto::Bool>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~ExperimentalWithCallbackMethod_IsRoomExists() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status IsRoomExists(::grpc::ServerContext* /*context*/, const ::Proto::String* /*request*/, ::Proto::Bool* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+    virtual ::grpc::ServerUnaryReactor* IsRoomExists(
+      ::grpc::CallbackServerContext* /*context*/, const ::Proto::String* /*request*/, ::Proto::Bool* /*response*/)
+    #else
+    virtual ::grpc::experimental::ServerUnaryReactor* IsRoomExists(
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::Proto::String* /*request*/, ::Proto::Bool* /*response*/)
+    #endif
+      { return nullptr; }
+  };
+  template <class BaseClass>
+  class ExperimentalWithCallbackMethod_CreateRoom : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    ExperimentalWithCallbackMethod_CreateRoom() {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::Service::
+    #else
+      ::grpc::Service::experimental().
+    #endif
+        MarkMethodCallback(2,
+          new ::grpc_impl::internal::CallbackUnaryHandler< ::Proto::RoomWithUsername, ::Proto::Empty>(
+            [this](
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+                   ::grpc::CallbackServerContext*
+    #else
+                   ::grpc::experimental::CallbackServerContext*
+    #endif
+                     context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response) { return this->CreateRoom(context, request, response); }));}
+    void SetMessageAllocatorFor_CreateRoom(
+        ::grpc::experimental::MessageAllocator< ::Proto::RoomWithUsername, ::Proto::Empty>* allocator) {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(2);
+    #else
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(2);
+    #endif
+      static_cast<::grpc_impl::internal::CallbackUnaryHandler< ::Proto::RoomWithUsername, ::Proto::Empty>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~ExperimentalWithCallbackMethod_CreateRoom() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status CreateRoom(::grpc::ServerContext* /*context*/, const ::Proto::RoomWithUsername* /*request*/, ::Proto::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+    virtual ::grpc::ServerUnaryReactor* CreateRoom(
+      ::grpc::CallbackServerContext* /*context*/, const ::Proto::RoomWithUsername* /*request*/, ::Proto::Empty* /*response*/)
+    #else
+    virtual ::grpc::experimental::ServerUnaryReactor* CreateRoom(
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::Proto::RoomWithUsername* /*request*/, ::Proto::Empty* /*response*/)
+    #endif
+      { return nullptr; }
+  };
+  template <class BaseClass>
+  class ExperimentalWithCallbackMethod_JoinRoom : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    ExperimentalWithCallbackMethod_JoinRoom() {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::Service::
+    #else
+      ::grpc::Service::experimental().
+    #endif
+        MarkMethodCallback(3,
+          new ::grpc_impl::internal::CallbackUnaryHandler< ::Proto::RoomWithUsername, ::Proto::Empty>(
+            [this](
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+                   ::grpc::CallbackServerContext*
+    #else
+                   ::grpc::experimental::CallbackServerContext*
+    #endif
+                     context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response) { return this->JoinRoom(context, request, response); }));}
+    void SetMessageAllocatorFor_JoinRoom(
+        ::grpc::experimental::MessageAllocator< ::Proto::RoomWithUsername, ::Proto::Empty>* allocator) {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(3);
+    #else
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(3);
+    #endif
+      static_cast<::grpc_impl::internal::CallbackUnaryHandler< ::Proto::RoomWithUsername, ::Proto::Empty>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~ExperimentalWithCallbackMethod_JoinRoom() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status JoinRoom(::grpc::ServerContext* /*context*/, const ::Proto::RoomWithUsername* /*request*/, ::Proto::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+    virtual ::grpc::ServerUnaryReactor* JoinRoom(
+      ::grpc::CallbackServerContext* /*context*/, const ::Proto::RoomWithUsername* /*request*/, ::Proto::Empty* /*response*/)
+    #else
+    virtual ::grpc::experimental::ServerUnaryReactor* JoinRoom(
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::Proto::RoomWithUsername* /*request*/, ::Proto::Empty* /*response*/)
+    #endif
+      { return nullptr; }
+  };
+  template <class BaseClass>
+  class ExperimentalWithCallbackMethod_LeaveRoom : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    ExperimentalWithCallbackMethod_LeaveRoom() {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::Service::
+    #else
+      ::grpc::Service::experimental().
+    #endif
+        MarkMethodCallback(4,
+          new ::grpc_impl::internal::CallbackUnaryHandler< ::Proto::RoomWithUsername, ::Proto::Empty>(
+            [this](
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+                   ::grpc::CallbackServerContext*
+    #else
+                   ::grpc::experimental::CallbackServerContext*
+    #endif
+                     context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response) { return this->LeaveRoom(context, request, response); }));}
+    void SetMessageAllocatorFor_LeaveRoom(
+        ::grpc::experimental::MessageAllocator< ::Proto::RoomWithUsername, ::Proto::Empty>* allocator) {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(4);
+    #else
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(4);
+    #endif
+      static_cast<::grpc_impl::internal::CallbackUnaryHandler< ::Proto::RoomWithUsername, ::Proto::Empty>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~ExperimentalWithCallbackMethod_LeaveRoom() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status LeaveRoom(::grpc::ServerContext* /*context*/, const ::Proto::RoomWithUsername* /*request*/, ::Proto::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+    virtual ::grpc::ServerUnaryReactor* LeaveRoom(
+      ::grpc::CallbackServerContext* /*context*/, const ::Proto::RoomWithUsername* /*request*/, ::Proto::Empty* /*response*/)
+    #else
+    virtual ::grpc::experimental::ServerUnaryReactor* LeaveRoom(
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::Proto::RoomWithUsername* /*request*/, ::Proto::Empty* /*response*/)
+    #endif
+      { return nullptr; }
+  };
+  template <class BaseClass>
+  class ExperimentalWithCallbackMethod_SpectateRoom : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    ExperimentalWithCallbackMethod_SpectateRoom() {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::Service::
+    #else
+      ::grpc::Service::experimental().
+    #endif
+        MarkMethodCallback(5,
+          new ::grpc_impl::internal::CallbackServerStreamingHandler< ::Proto::String, ::Proto::LastMoveInfo>(
+            [this](
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+                   ::grpc::CallbackServerContext*
+    #else
+                   ::grpc::experimental::CallbackServerContext*
+    #endif
+                     context, const ::Proto::String* request) { return this->SpectateRoom(context, request); }));
+    }
+    ~ExperimentalWithCallbackMethod_SpectateRoom() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SpectateRoom(::grpc::ServerContext* /*context*/, const ::Proto::String* /*request*/, ::grpc::ServerWriter< ::Proto::LastMoveInfo>* /*writer*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+    virtual ::grpc::ServerWriteReactor< ::Proto::LastMoveInfo>* SpectateRoom(
+      ::grpc::CallbackServerContext* /*context*/, const ::Proto::String* /*request*/)
+    #else
+    virtual ::grpc::experimental::ServerWriteReactor< ::Proto::LastMoveInfo>* SpectateRoom(
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::Proto::String* /*request*/)
+    #endif
+      { return nullptr; }
+  };
+  template <class BaseClass>
+  class ExperimentalWithCallbackMethod_LeaveSpectatorRoom : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    ExperimentalWithCallbackMethod_LeaveSpectatorRoom() {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::Service::
+    #else
+      ::grpc::Service::experimental().
+    #endif
+        MarkMethodCallback(6,
+          new ::grpc_impl::internal::CallbackUnaryHandler< ::Proto::String, ::Proto::Empty>(
+            [this](
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+                   ::grpc::CallbackServerContext*
+    #else
+                   ::grpc::experimental::CallbackServerContext*
+    #endif
+                     context, const ::Proto::String* request, ::Proto::Empty* response) { return this->LeaveSpectatorRoom(context, request, response); }));}
+    void SetMessageAllocatorFor_LeaveSpectatorRoom(
+        ::grpc::experimental::MessageAllocator< ::Proto::String, ::Proto::Empty>* allocator) {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(6);
+    #else
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(6);
+    #endif
+      static_cast<::grpc_impl::internal::CallbackUnaryHandler< ::Proto::String, ::Proto::Empty>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~ExperimentalWithCallbackMethod_LeaveSpectatorRoom() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status LeaveSpectatorRoom(::grpc::ServerContext* /*context*/, const ::Proto::String* /*request*/, ::Proto::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+    virtual ::grpc::ServerUnaryReactor* LeaveSpectatorRoom(
+      ::grpc::CallbackServerContext* /*context*/, const ::Proto::String* /*request*/, ::Proto::Empty* /*response*/)
+    #else
+    virtual ::grpc::experimental::ServerUnaryReactor* LeaveSpectatorRoom(
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::Proto::String* /*request*/, ::Proto::Empty* /*response*/)
+    #endif
+      { return nullptr; }
+  };
+  template <class BaseClass>
+  class ExperimentalWithCallbackMethod_GetViewersCount : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    ExperimentalWithCallbackMethod_GetViewersCount() {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::Service::
+    #else
+      ::grpc::Service::experimental().
+    #endif
+        MarkMethodCallback(7,
+          new ::grpc_impl::internal::CallbackUnaryHandler< ::Proto::String, ::Proto::Integer>(
+            [this](
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+                   ::grpc::CallbackServerContext*
+    #else
+                   ::grpc::experimental::CallbackServerContext*
+    #endif
+                     context, const ::Proto::String* request, ::Proto::Integer* response) { return this->GetViewersCount(context, request, response); }));}
+    void SetMessageAllocatorFor_GetViewersCount(
+        ::grpc::experimental::MessageAllocator< ::Proto::String, ::Proto::Integer>* allocator) {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(7);
+    #else
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(7);
+    #endif
+      static_cast<::grpc_impl::internal::CallbackUnaryHandler< ::Proto::String, ::Proto::Integer>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~ExperimentalWithCallbackMethod_GetViewersCount() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetViewersCount(::grpc::ServerContext* /*context*/, const ::Proto::String* /*request*/, ::Proto::Integer* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+    virtual ::grpc::ServerUnaryReactor* GetViewersCount(
+      ::grpc::CallbackServerContext* /*context*/, const ::Proto::String* /*request*/, ::Proto::Integer* /*response*/)
+    #else
+    virtual ::grpc::experimental::ServerUnaryReactor* GetViewersCount(
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::Proto::String* /*request*/, ::Proto::Integer* /*response*/)
+    #endif
+      { return nullptr; }
+  };
+  template <class BaseClass>
+  class ExperimentalWithCallbackMethod_GetUsername : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    ExperimentalWithCallbackMethod_GetUsername() {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::Service::
+    #else
+      ::grpc::Service::experimental().
+    #endif
+        MarkMethodCallback(8,
+          new ::grpc_impl::internal::CallbackUnaryHandler< ::Proto::RoomWithUsername, ::Proto::String>(
+            [this](
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+                   ::grpc::CallbackServerContext*
+    #else
+                   ::grpc::experimental::CallbackServerContext*
+    #endif
+                     context, const ::Proto::RoomWithUsername* request, ::Proto::String* response) { return this->GetUsername(context, request, response); }));}
+    void SetMessageAllocatorFor_GetUsername(
+        ::grpc::experimental::MessageAllocator< ::Proto::RoomWithUsername, ::Proto::String>* allocator) {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(8);
+    #else
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(8);
+    #endif
+      static_cast<::grpc_impl::internal::CallbackUnaryHandler< ::Proto::RoomWithUsername, ::Proto::String>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~ExperimentalWithCallbackMethod_GetUsername() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetUsername(::grpc::ServerContext* /*context*/, const ::Proto::RoomWithUsername* /*request*/, ::Proto::String* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+    virtual ::grpc::ServerUnaryReactor* GetUsername(
+      ::grpc::CallbackServerContext* /*context*/, const ::Proto::RoomWithUsername* /*request*/, ::Proto::String* /*response*/)
+    #else
+    virtual ::grpc::experimental::ServerUnaryReactor* GetUsername(
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::Proto::RoomWithUsername* /*request*/, ::Proto::String* /*response*/)
+    #endif
+      { return nullptr; }
+  };
+  template <class BaseClass>
+  class ExperimentalWithCallbackMethod_WaitForReady : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    ExperimentalWithCallbackMethod_WaitForReady() {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::Service::
+    #else
+      ::grpc::Service::experimental().
+    #endif
+        MarkMethodCallback(9,
+          new ::grpc_impl::internal::CallbackUnaryHandler< ::Proto::RoomSettings, ::Proto::Empty>(
+            [this](
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+                   ::grpc::CallbackServerContext*
+    #else
+                   ::grpc::experimental::CallbackServerContext*
+    #endif
+                     context, const ::Proto::RoomSettings* request, ::Proto::Empty* response) { return this->WaitForReady(context, request, response); }));}
+    void SetMessageAllocatorFor_WaitForReady(
+        ::grpc::experimental::MessageAllocator< ::Proto::RoomSettings, ::Proto::Empty>* allocator) {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(9);
+    #else
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(9);
+    #endif
+      static_cast<::grpc_impl::internal::CallbackUnaryHandler< ::Proto::RoomSettings, ::Proto::Empty>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~ExperimentalWithCallbackMethod_WaitForReady() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status WaitForReady(::grpc::ServerContext* /*context*/, const ::Proto::RoomSettings* /*request*/, ::Proto::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+    virtual ::grpc::ServerUnaryReactor* WaitForReady(
+      ::grpc::CallbackServerContext* /*context*/, const ::Proto::RoomSettings* /*request*/, ::Proto::Empty* /*response*/)
+    #else
+    virtual ::grpc::experimental::ServerUnaryReactor* WaitForReady(
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::Proto::RoomSettings* /*request*/, ::Proto::Empty* /*response*/)
+    #endif
+      { return nullptr; }
+  };
+  template <class BaseClass>
+  class ExperimentalWithCallbackMethod_Ready : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    ExperimentalWithCallbackMethod_Ready() {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::Service::
+    #else
+      ::grpc::Service::experimental().
+    #endif
+        MarkMethodCallback(10,
+          new ::grpc_impl::internal::CallbackUnaryHandler< ::Proto::ReadyRequest, ::Proto::Empty>(
+            [this](
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+                   ::grpc::CallbackServerContext*
+    #else
+                   ::grpc::experimental::CallbackServerContext*
+    #endif
+                     context, const ::Proto::ReadyRequest* request, ::Proto::Empty* response) { return this->Ready(context, request, response); }));}
+    void SetMessageAllocatorFor_Ready(
+        ::grpc::experimental::MessageAllocator< ::Proto::ReadyRequest, ::Proto::Empty>* allocator) {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(10);
+    #else
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(10);
+    #endif
+      static_cast<::grpc_impl::internal::CallbackUnaryHandler< ::Proto::ReadyRequest, ::Proto::Empty>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~ExperimentalWithCallbackMethod_Ready() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status Ready(::grpc::ServerContext* /*context*/, const ::Proto::ReadyRequest* /*request*/, ::Proto::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+    virtual ::grpc::ServerUnaryReactor* Ready(
+      ::grpc::CallbackServerContext* /*context*/, const ::Proto::ReadyRequest* /*request*/, ::Proto::Empty* /*response*/)
+    #else
+    virtual ::grpc::experimental::ServerUnaryReactor* Ready(
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::Proto::ReadyRequest* /*request*/, ::Proto::Empty* /*response*/)
+    #endif
+      { return nullptr; }
+  };
+  template <class BaseClass>
+  class ExperimentalWithCallbackMethod_MovePiece : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    ExperimentalWithCallbackMethod_MovePiece() {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::Service::
+    #else
+      ::grpc::Service::experimental().
+    #endif
+        MarkMethodCallback(11,
+          new ::grpc_impl::internal::CallbackUnaryHandler< ::Proto::MoveRequest, ::Proto::Empty>(
+            [this](
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+                   ::grpc::CallbackServerContext*
+    #else
+                   ::grpc::experimental::CallbackServerContext*
+    #endif
+                     context, const ::Proto::MoveRequest* request, ::Proto::Empty* response) { return this->MovePiece(context, request, response); }));}
+    void SetMessageAllocatorFor_MovePiece(
+        ::grpc::experimental::MessageAllocator< ::Proto::MoveRequest, ::Proto::Empty>* allocator) {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(11);
+    #else
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(11);
+    #endif
+      static_cast<::grpc_impl::internal::CallbackUnaryHandler< ::Proto::MoveRequest, ::Proto::Empty>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~ExperimentalWithCallbackMethod_MovePiece() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status MovePiece(::grpc::ServerContext* /*context*/, const ::Proto::MoveRequest* /*request*/, ::Proto::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+    virtual ::grpc::ServerUnaryReactor* MovePiece(
+      ::grpc::CallbackServerContext* /*context*/, const ::Proto::MoveRequest* /*request*/, ::Proto::Empty* /*response*/)
+    #else
+    virtual ::grpc::experimental::ServerUnaryReactor* MovePiece(
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::Proto::MoveRequest* /*request*/, ::Proto::Empty* /*response*/)
+    #endif
+      { return nullptr; }
+  };
+  template <class BaseClass>
+  class ExperimentalWithCallbackMethod_ReadPieceMove : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    ExperimentalWithCallbackMethod_ReadPieceMove() {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::Service::
+    #else
+      ::grpc::Service::experimental().
+    #endif
+        MarkMethodCallback(12,
+          new ::grpc_impl::internal::CallbackUnaryHandler< ::Proto::RoomSettings, ::Proto::LastMoveInfo>(
+            [this](
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+                   ::grpc::CallbackServerContext*
+    #else
+                   ::grpc::experimental::CallbackServerContext*
+    #endif
+                     context, const ::Proto::RoomSettings* request, ::Proto::LastMoveInfo* response) { return this->ReadPieceMove(context, request, response); }));}
+    void SetMessageAllocatorFor_ReadPieceMove(
+        ::grpc::experimental::MessageAllocator< ::Proto::RoomSettings, ::Proto::LastMoveInfo>* allocator) {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(12);
+    #else
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::experimental().GetHandler(12);
+    #endif
+      static_cast<::grpc_impl::internal::CallbackUnaryHandler< ::Proto::RoomSettings, ::Proto::LastMoveInfo>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~ExperimentalWithCallbackMethod_ReadPieceMove() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ReadPieceMove(::grpc::ServerContext* /*context*/, const ::Proto::RoomSettings* /*request*/, ::Proto::LastMoveInfo* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+    virtual ::grpc::ServerUnaryReactor* ReadPieceMove(
+      ::grpc::CallbackServerContext* /*context*/, const ::Proto::RoomSettings* /*request*/, ::Proto::LastMoveInfo* /*response*/)
+    #else
+    virtual ::grpc::experimental::ServerUnaryReactor* ReadPieceMove(
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::Proto::RoomSettings* /*request*/, ::Proto::LastMoveInfo* /*response*/)
+    #endif
+      { return nullptr; }
+  };
+  #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+  typedef ExperimentalWithCallbackMethod_GetRooms<ExperimentalWithCallbackMethod_IsRoomExists<ExperimentalWithCallbackMethod_CreateRoom<ExperimentalWithCallbackMethod_JoinRoom<ExperimentalWithCallbackMethod_LeaveRoom<ExperimentalWithCallbackMethod_SpectateRoom<ExperimentalWithCallbackMethod_LeaveSpectatorRoom<ExperimentalWithCallbackMethod_GetViewersCount<ExperimentalWithCallbackMethod_GetUsername<ExperimentalWithCallbackMethod_WaitForReady<ExperimentalWithCallbackMethod_Ready<ExperimentalWithCallbackMethod_MovePiece<ExperimentalWithCallbackMethod_ReadPieceMove<Service > > > > > > > > > > > > > CallbackService;
+  #endif
+
+  typedef ExperimentalWithCallbackMethod_GetRooms<ExperimentalWithCallbackMethod_IsRoomExists<ExperimentalWithCallbackMethod_CreateRoom<ExperimentalWithCallbackMethod_JoinRoom<ExperimentalWithCallbackMethod_LeaveRoom<ExperimentalWithCallbackMethod_SpectateRoom<ExperimentalWithCallbackMethod_LeaveSpectatorRoom<ExperimentalWithCallbackMethod_GetViewersCount<ExperimentalWithCallbackMethod_GetUsername<ExperimentalWithCallbackMethod_WaitForReady<ExperimentalWithCallbackMethod_Ready<ExperimentalWithCallbackMethod_MovePiece<ExperimentalWithCallbackMethod_ReadPieceMove<Service > > > > > > > > > > > > > ExperimentalCallbackService;
   template <class BaseClass>
   class WithGenericMethod_GetRooms : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_GetRooms() {
       ::grpc::Service::MarkMethodGeneric(0);
@@ -672,7 +1518,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status GetRooms(::grpc::ServerContext* context, const ::Proto::Empty* request, ::Proto::RoomsInfo* response) override {
+    ::grpc::Status GetRooms(::grpc::ServerContext* /*context*/, const ::Proto::Empty* /*request*/, ::Proto::RoomsInfo* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -680,7 +1526,7 @@ class ChessServer final {
   template <class BaseClass>
   class WithGenericMethod_IsRoomExists : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_IsRoomExists() {
       ::grpc::Service::MarkMethodGeneric(1);
@@ -689,7 +1535,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status IsRoomExists(::grpc::ServerContext* context, const ::Proto::String* request, ::Proto::Bool* response) override {
+    ::grpc::Status IsRoomExists(::grpc::ServerContext* /*context*/, const ::Proto::String* /*request*/, ::Proto::Bool* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -697,7 +1543,7 @@ class ChessServer final {
   template <class BaseClass>
   class WithGenericMethod_CreateRoom : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_CreateRoom() {
       ::grpc::Service::MarkMethodGeneric(2);
@@ -706,7 +1552,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status CreateRoom(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response) override {
+    ::grpc::Status CreateRoom(::grpc::ServerContext* /*context*/, const ::Proto::RoomWithUsername* /*request*/, ::Proto::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -714,7 +1560,7 @@ class ChessServer final {
   template <class BaseClass>
   class WithGenericMethod_JoinRoom : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_JoinRoom() {
       ::grpc::Service::MarkMethodGeneric(3);
@@ -723,7 +1569,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status JoinRoom(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response) override {
+    ::grpc::Status JoinRoom(::grpc::ServerContext* /*context*/, const ::Proto::RoomWithUsername* /*request*/, ::Proto::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -731,7 +1577,7 @@ class ChessServer final {
   template <class BaseClass>
   class WithGenericMethod_LeaveRoom : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_LeaveRoom() {
       ::grpc::Service::MarkMethodGeneric(4);
@@ -740,7 +1586,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status LeaveRoom(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response) override {
+    ::grpc::Status LeaveRoom(::grpc::ServerContext* /*context*/, const ::Proto::RoomWithUsername* /*request*/, ::Proto::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -748,7 +1594,7 @@ class ChessServer final {
   template <class BaseClass>
   class WithGenericMethod_SpectateRoom : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_SpectateRoom() {
       ::grpc::Service::MarkMethodGeneric(5);
@@ -757,7 +1603,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status SpectateRoom(::grpc::ServerContext* context, const ::Proto::String* request, ::grpc::ServerWriter< ::Proto::LastMoveInfo>* writer) override {
+    ::grpc::Status SpectateRoom(::grpc::ServerContext* /*context*/, const ::Proto::String* /*request*/, ::grpc::ServerWriter< ::Proto::LastMoveInfo>* /*writer*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -765,7 +1611,7 @@ class ChessServer final {
   template <class BaseClass>
   class WithGenericMethod_LeaveSpectatorRoom : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_LeaveSpectatorRoom() {
       ::grpc::Service::MarkMethodGeneric(6);
@@ -774,7 +1620,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status LeaveSpectatorRoom(::grpc::ServerContext* context, const ::Proto::String* request, ::Proto::Empty* response) override {
+    ::grpc::Status LeaveSpectatorRoom(::grpc::ServerContext* /*context*/, const ::Proto::String* /*request*/, ::Proto::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -782,7 +1628,7 @@ class ChessServer final {
   template <class BaseClass>
   class WithGenericMethod_GetViewersCount : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_GetViewersCount() {
       ::grpc::Service::MarkMethodGeneric(7);
@@ -791,7 +1637,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status GetViewersCount(::grpc::ServerContext* context, const ::Proto::String* request, ::Proto::Integer* response) override {
+    ::grpc::Status GetViewersCount(::grpc::ServerContext* /*context*/, const ::Proto::String* /*request*/, ::Proto::Integer* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -799,7 +1645,7 @@ class ChessServer final {
   template <class BaseClass>
   class WithGenericMethod_GetUsername : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_GetUsername() {
       ::grpc::Service::MarkMethodGeneric(8);
@@ -808,7 +1654,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status GetUsername(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::String* response) override {
+    ::grpc::Status GetUsername(::grpc::ServerContext* /*context*/, const ::Proto::RoomWithUsername* /*request*/, ::Proto::String* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -816,7 +1662,7 @@ class ChessServer final {
   template <class BaseClass>
   class WithGenericMethod_WaitForReady : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_WaitForReady() {
       ::grpc::Service::MarkMethodGeneric(9);
@@ -825,7 +1671,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status WaitForReady(::grpc::ServerContext* context, const ::Proto::RoomSettings* request, ::Proto::Empty* response) override {
+    ::grpc::Status WaitForReady(::grpc::ServerContext* /*context*/, const ::Proto::RoomSettings* /*request*/, ::Proto::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -833,7 +1679,7 @@ class ChessServer final {
   template <class BaseClass>
   class WithGenericMethod_Ready : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_Ready() {
       ::grpc::Service::MarkMethodGeneric(10);
@@ -842,7 +1688,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Ready(::grpc::ServerContext* context, const ::Proto::ReadyRequest* request, ::Proto::Empty* response) override {
+    ::grpc::Status Ready(::grpc::ServerContext* /*context*/, const ::Proto::ReadyRequest* /*request*/, ::Proto::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -850,7 +1696,7 @@ class ChessServer final {
   template <class BaseClass>
   class WithGenericMethod_MovePiece : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_MovePiece() {
       ::grpc::Service::MarkMethodGeneric(11);
@@ -859,7 +1705,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status MovePiece(::grpc::ServerContext* context, const ::Proto::MoveRequest* request, ::Proto::Empty* response) override {
+    ::grpc::Status MovePiece(::grpc::ServerContext* /*context*/, const ::Proto::MoveRequest* /*request*/, ::Proto::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -867,7 +1713,7 @@ class ChessServer final {
   template <class BaseClass>
   class WithGenericMethod_ReadPieceMove : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithGenericMethod_ReadPieceMove() {
       ::grpc::Service::MarkMethodGeneric(12);
@@ -876,24 +1722,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status ReadPieceMove(::grpc::ServerContext* context, const ::Proto::RoomSettings* request, ::Proto::LastMoveInfo* response) override {
-      abort();
-      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-    }
-  };
-  template <class BaseClass>
-  class WithGenericMethod_SetKingHittable : public BaseClass {
-   private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
-   public:
-    WithGenericMethod_SetKingHittable() {
-      ::grpc::Service::MarkMethodGeneric(13);
-    }
-    ~WithGenericMethod_SetKingHittable() override {
-      BaseClassMustBeDerivedFromService(this);
-    }
-    // disable synchronous version of this method
-    ::grpc::Status SetKingHittable(::grpc::ServerContext* context, const ::Proto::RoomWithIsKingHittable* request, ::Proto::Empty* response) override {
+    ::grpc::Status ReadPieceMove(::grpc::ServerContext* /*context*/, const ::Proto::RoomSettings* /*request*/, ::Proto::LastMoveInfo* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -901,7 +1730,7 @@ class ChessServer final {
   template <class BaseClass>
   class WithRawMethod_GetRooms : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_GetRooms() {
       ::grpc::Service::MarkMethodRaw(0);
@@ -910,7 +1739,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status GetRooms(::grpc::ServerContext* context, const ::Proto::Empty* request, ::Proto::RoomsInfo* response) override {
+    ::grpc::Status GetRooms(::grpc::ServerContext* /*context*/, const ::Proto::Empty* /*request*/, ::Proto::RoomsInfo* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -921,7 +1750,7 @@ class ChessServer final {
   template <class BaseClass>
   class WithRawMethod_IsRoomExists : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_IsRoomExists() {
       ::grpc::Service::MarkMethodRaw(1);
@@ -930,7 +1759,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status IsRoomExists(::grpc::ServerContext* context, const ::Proto::String* request, ::Proto::Bool* response) override {
+    ::grpc::Status IsRoomExists(::grpc::ServerContext* /*context*/, const ::Proto::String* /*request*/, ::Proto::Bool* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -941,7 +1770,7 @@ class ChessServer final {
   template <class BaseClass>
   class WithRawMethod_CreateRoom : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_CreateRoom() {
       ::grpc::Service::MarkMethodRaw(2);
@@ -950,7 +1779,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status CreateRoom(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response) override {
+    ::grpc::Status CreateRoom(::grpc::ServerContext* /*context*/, const ::Proto::RoomWithUsername* /*request*/, ::Proto::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -961,7 +1790,7 @@ class ChessServer final {
   template <class BaseClass>
   class WithRawMethod_JoinRoom : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_JoinRoom() {
       ::grpc::Service::MarkMethodRaw(3);
@@ -970,7 +1799,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status JoinRoom(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response) override {
+    ::grpc::Status JoinRoom(::grpc::ServerContext* /*context*/, const ::Proto::RoomWithUsername* /*request*/, ::Proto::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -981,7 +1810,7 @@ class ChessServer final {
   template <class BaseClass>
   class WithRawMethod_LeaveRoom : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_LeaveRoom() {
       ::grpc::Service::MarkMethodRaw(4);
@@ -990,7 +1819,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status LeaveRoom(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response) override {
+    ::grpc::Status LeaveRoom(::grpc::ServerContext* /*context*/, const ::Proto::RoomWithUsername* /*request*/, ::Proto::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -1001,7 +1830,7 @@ class ChessServer final {
   template <class BaseClass>
   class WithRawMethod_SpectateRoom : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_SpectateRoom() {
       ::grpc::Service::MarkMethodRaw(5);
@@ -1010,7 +1839,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status SpectateRoom(::grpc::ServerContext* context, const ::Proto::String* request, ::grpc::ServerWriter< ::Proto::LastMoveInfo>* writer) override {
+    ::grpc::Status SpectateRoom(::grpc::ServerContext* /*context*/, const ::Proto::String* /*request*/, ::grpc::ServerWriter< ::Proto::LastMoveInfo>* /*writer*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -1021,7 +1850,7 @@ class ChessServer final {
   template <class BaseClass>
   class WithRawMethod_LeaveSpectatorRoom : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_LeaveSpectatorRoom() {
       ::grpc::Service::MarkMethodRaw(6);
@@ -1030,7 +1859,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status LeaveSpectatorRoom(::grpc::ServerContext* context, const ::Proto::String* request, ::Proto::Empty* response) override {
+    ::grpc::Status LeaveSpectatorRoom(::grpc::ServerContext* /*context*/, const ::Proto::String* /*request*/, ::Proto::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -1041,7 +1870,7 @@ class ChessServer final {
   template <class BaseClass>
   class WithRawMethod_GetViewersCount : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_GetViewersCount() {
       ::grpc::Service::MarkMethodRaw(7);
@@ -1050,7 +1879,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status GetViewersCount(::grpc::ServerContext* context, const ::Proto::String* request, ::Proto::Integer* response) override {
+    ::grpc::Status GetViewersCount(::grpc::ServerContext* /*context*/, const ::Proto::String* /*request*/, ::Proto::Integer* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -1061,7 +1890,7 @@ class ChessServer final {
   template <class BaseClass>
   class WithRawMethod_GetUsername : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_GetUsername() {
       ::grpc::Service::MarkMethodRaw(8);
@@ -1070,7 +1899,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status GetUsername(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::String* response) override {
+    ::grpc::Status GetUsername(::grpc::ServerContext* /*context*/, const ::Proto::RoomWithUsername* /*request*/, ::Proto::String* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -1081,7 +1910,7 @@ class ChessServer final {
   template <class BaseClass>
   class WithRawMethod_WaitForReady : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_WaitForReady() {
       ::grpc::Service::MarkMethodRaw(9);
@@ -1090,7 +1919,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status WaitForReady(::grpc::ServerContext* context, const ::Proto::RoomSettings* request, ::Proto::Empty* response) override {
+    ::grpc::Status WaitForReady(::grpc::ServerContext* /*context*/, const ::Proto::RoomSettings* /*request*/, ::Proto::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -1101,7 +1930,7 @@ class ChessServer final {
   template <class BaseClass>
   class WithRawMethod_Ready : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_Ready() {
       ::grpc::Service::MarkMethodRaw(10);
@@ -1110,7 +1939,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status Ready(::grpc::ServerContext* context, const ::Proto::ReadyRequest* request, ::Proto::Empty* response) override {
+    ::grpc::Status Ready(::grpc::ServerContext* /*context*/, const ::Proto::ReadyRequest* /*request*/, ::Proto::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -1121,7 +1950,7 @@ class ChessServer final {
   template <class BaseClass>
   class WithRawMethod_MovePiece : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_MovePiece() {
       ::grpc::Service::MarkMethodRaw(11);
@@ -1130,7 +1959,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status MovePiece(::grpc::ServerContext* context, const ::Proto::MoveRequest* request, ::Proto::Empty* response) override {
+    ::grpc::Status MovePiece(::grpc::ServerContext* /*context*/, const ::Proto::MoveRequest* /*request*/, ::Proto::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -1141,7 +1970,7 @@ class ChessServer final {
   template <class BaseClass>
   class WithRawMethod_ReadPieceMove : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithRawMethod_ReadPieceMove() {
       ::grpc::Service::MarkMethodRaw(12);
@@ -1150,7 +1979,7 @@ class ChessServer final {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status ReadPieceMove(::grpc::ServerContext* context, const ::Proto::RoomSettings* request, ::Proto::LastMoveInfo* response) override {
+    ::grpc::Status ReadPieceMove(::grpc::ServerContext* /*context*/, const ::Proto::RoomSettings* /*request*/, ::Proto::LastMoveInfo* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -1159,39 +1988,520 @@ class ChessServer final {
     }
   };
   template <class BaseClass>
-  class WithRawMethod_SetKingHittable : public BaseClass {
+  class ExperimentalWithRawCallbackMethod_GetRooms : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
-    WithRawMethod_SetKingHittable() {
-      ::grpc::Service::MarkMethodRaw(13);
+    ExperimentalWithRawCallbackMethod_GetRooms() {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::Service::
+    #else
+      ::grpc::Service::experimental().
+    #endif
+        MarkMethodRawCallback(0,
+          new ::grpc_impl::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+                   ::grpc::CallbackServerContext*
+    #else
+                   ::grpc::experimental::CallbackServerContext*
+    #endif
+                     context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->GetRooms(context, request, response); }));
     }
-    ~WithRawMethod_SetKingHittable() override {
+    ~ExperimentalWithRawCallbackMethod_GetRooms() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable synchronous version of this method
-    ::grpc::Status SetKingHittable(::grpc::ServerContext* context, const ::Proto::RoomWithIsKingHittable* request, ::Proto::Empty* response) override {
+    ::grpc::Status GetRooms(::grpc::ServerContext* /*context*/, const ::Proto::Empty* /*request*/, ::Proto::RoomsInfo* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
-    void RequestSetKingHittable(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
-      ::grpc::Service::RequestAsyncUnary(13, context, request, response, new_call_cq, notification_cq, tag);
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+    virtual ::grpc::ServerUnaryReactor* GetRooms(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
+    #else
+    virtual ::grpc::experimental::ServerUnaryReactor* GetRooms(
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
+    #endif
+      { return nullptr; }
+  };
+  template <class BaseClass>
+  class ExperimentalWithRawCallbackMethod_IsRoomExists : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    ExperimentalWithRawCallbackMethod_IsRoomExists() {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::Service::
+    #else
+      ::grpc::Service::experimental().
+    #endif
+        MarkMethodRawCallback(1,
+          new ::grpc_impl::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+                   ::grpc::CallbackServerContext*
+    #else
+                   ::grpc::experimental::CallbackServerContext*
+    #endif
+                     context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->IsRoomExists(context, request, response); }));
     }
+    ~ExperimentalWithRawCallbackMethod_IsRoomExists() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status IsRoomExists(::grpc::ServerContext* /*context*/, const ::Proto::String* /*request*/, ::Proto::Bool* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+    virtual ::grpc::ServerUnaryReactor* IsRoomExists(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
+    #else
+    virtual ::grpc::experimental::ServerUnaryReactor* IsRoomExists(
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
+    #endif
+      { return nullptr; }
+  };
+  template <class BaseClass>
+  class ExperimentalWithRawCallbackMethod_CreateRoom : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    ExperimentalWithRawCallbackMethod_CreateRoom() {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::Service::
+    #else
+      ::grpc::Service::experimental().
+    #endif
+        MarkMethodRawCallback(2,
+          new ::grpc_impl::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+                   ::grpc::CallbackServerContext*
+    #else
+                   ::grpc::experimental::CallbackServerContext*
+    #endif
+                     context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->CreateRoom(context, request, response); }));
+    }
+    ~ExperimentalWithRawCallbackMethod_CreateRoom() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status CreateRoom(::grpc::ServerContext* /*context*/, const ::Proto::RoomWithUsername* /*request*/, ::Proto::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+    virtual ::grpc::ServerUnaryReactor* CreateRoom(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
+    #else
+    virtual ::grpc::experimental::ServerUnaryReactor* CreateRoom(
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
+    #endif
+      { return nullptr; }
+  };
+  template <class BaseClass>
+  class ExperimentalWithRawCallbackMethod_JoinRoom : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    ExperimentalWithRawCallbackMethod_JoinRoom() {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::Service::
+    #else
+      ::grpc::Service::experimental().
+    #endif
+        MarkMethodRawCallback(3,
+          new ::grpc_impl::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+                   ::grpc::CallbackServerContext*
+    #else
+                   ::grpc::experimental::CallbackServerContext*
+    #endif
+                     context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->JoinRoom(context, request, response); }));
+    }
+    ~ExperimentalWithRawCallbackMethod_JoinRoom() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status JoinRoom(::grpc::ServerContext* /*context*/, const ::Proto::RoomWithUsername* /*request*/, ::Proto::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+    virtual ::grpc::ServerUnaryReactor* JoinRoom(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
+    #else
+    virtual ::grpc::experimental::ServerUnaryReactor* JoinRoom(
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
+    #endif
+      { return nullptr; }
+  };
+  template <class BaseClass>
+  class ExperimentalWithRawCallbackMethod_LeaveRoom : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    ExperimentalWithRawCallbackMethod_LeaveRoom() {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::Service::
+    #else
+      ::grpc::Service::experimental().
+    #endif
+        MarkMethodRawCallback(4,
+          new ::grpc_impl::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+                   ::grpc::CallbackServerContext*
+    #else
+                   ::grpc::experimental::CallbackServerContext*
+    #endif
+                     context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->LeaveRoom(context, request, response); }));
+    }
+    ~ExperimentalWithRawCallbackMethod_LeaveRoom() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status LeaveRoom(::grpc::ServerContext* /*context*/, const ::Proto::RoomWithUsername* /*request*/, ::Proto::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+    virtual ::grpc::ServerUnaryReactor* LeaveRoom(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
+    #else
+    virtual ::grpc::experimental::ServerUnaryReactor* LeaveRoom(
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
+    #endif
+      { return nullptr; }
+  };
+  template <class BaseClass>
+  class ExperimentalWithRawCallbackMethod_SpectateRoom : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    ExperimentalWithRawCallbackMethod_SpectateRoom() {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::Service::
+    #else
+      ::grpc::Service::experimental().
+    #endif
+        MarkMethodRawCallback(5,
+          new ::grpc_impl::internal::CallbackServerStreamingHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+                   ::grpc::CallbackServerContext*
+    #else
+                   ::grpc::experimental::CallbackServerContext*
+    #endif
+                     context, const::grpc::ByteBuffer* request) { return this->SpectateRoom(context, request); }));
+    }
+    ~ExperimentalWithRawCallbackMethod_SpectateRoom() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status SpectateRoom(::grpc::ServerContext* /*context*/, const ::Proto::String* /*request*/, ::grpc::ServerWriter< ::Proto::LastMoveInfo>* /*writer*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+    virtual ::grpc::ServerWriteReactor< ::grpc::ByteBuffer>* SpectateRoom(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/)
+    #else
+    virtual ::grpc::experimental::ServerWriteReactor< ::grpc::ByteBuffer>* SpectateRoom(
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/)
+    #endif
+      { return nullptr; }
+  };
+  template <class BaseClass>
+  class ExperimentalWithRawCallbackMethod_LeaveSpectatorRoom : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    ExperimentalWithRawCallbackMethod_LeaveSpectatorRoom() {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::Service::
+    #else
+      ::grpc::Service::experimental().
+    #endif
+        MarkMethodRawCallback(6,
+          new ::grpc_impl::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+                   ::grpc::CallbackServerContext*
+    #else
+                   ::grpc::experimental::CallbackServerContext*
+    #endif
+                     context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->LeaveSpectatorRoom(context, request, response); }));
+    }
+    ~ExperimentalWithRawCallbackMethod_LeaveSpectatorRoom() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status LeaveSpectatorRoom(::grpc::ServerContext* /*context*/, const ::Proto::String* /*request*/, ::Proto::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+    virtual ::grpc::ServerUnaryReactor* LeaveSpectatorRoom(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
+    #else
+    virtual ::grpc::experimental::ServerUnaryReactor* LeaveSpectatorRoom(
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
+    #endif
+      { return nullptr; }
+  };
+  template <class BaseClass>
+  class ExperimentalWithRawCallbackMethod_GetViewersCount : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    ExperimentalWithRawCallbackMethod_GetViewersCount() {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::Service::
+    #else
+      ::grpc::Service::experimental().
+    #endif
+        MarkMethodRawCallback(7,
+          new ::grpc_impl::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+                   ::grpc::CallbackServerContext*
+    #else
+                   ::grpc::experimental::CallbackServerContext*
+    #endif
+                     context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->GetViewersCount(context, request, response); }));
+    }
+    ~ExperimentalWithRawCallbackMethod_GetViewersCount() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetViewersCount(::grpc::ServerContext* /*context*/, const ::Proto::String* /*request*/, ::Proto::Integer* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+    virtual ::grpc::ServerUnaryReactor* GetViewersCount(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
+    #else
+    virtual ::grpc::experimental::ServerUnaryReactor* GetViewersCount(
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
+    #endif
+      { return nullptr; }
+  };
+  template <class BaseClass>
+  class ExperimentalWithRawCallbackMethod_GetUsername : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    ExperimentalWithRawCallbackMethod_GetUsername() {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::Service::
+    #else
+      ::grpc::Service::experimental().
+    #endif
+        MarkMethodRawCallback(8,
+          new ::grpc_impl::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+                   ::grpc::CallbackServerContext*
+    #else
+                   ::grpc::experimental::CallbackServerContext*
+    #endif
+                     context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->GetUsername(context, request, response); }));
+    }
+    ~ExperimentalWithRawCallbackMethod_GetUsername() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetUsername(::grpc::ServerContext* /*context*/, const ::Proto::RoomWithUsername* /*request*/, ::Proto::String* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+    virtual ::grpc::ServerUnaryReactor* GetUsername(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
+    #else
+    virtual ::grpc::experimental::ServerUnaryReactor* GetUsername(
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
+    #endif
+      { return nullptr; }
+  };
+  template <class BaseClass>
+  class ExperimentalWithRawCallbackMethod_WaitForReady : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    ExperimentalWithRawCallbackMethod_WaitForReady() {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::Service::
+    #else
+      ::grpc::Service::experimental().
+    #endif
+        MarkMethodRawCallback(9,
+          new ::grpc_impl::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+                   ::grpc::CallbackServerContext*
+    #else
+                   ::grpc::experimental::CallbackServerContext*
+    #endif
+                     context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->WaitForReady(context, request, response); }));
+    }
+    ~ExperimentalWithRawCallbackMethod_WaitForReady() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status WaitForReady(::grpc::ServerContext* /*context*/, const ::Proto::RoomSettings* /*request*/, ::Proto::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+    virtual ::grpc::ServerUnaryReactor* WaitForReady(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
+    #else
+    virtual ::grpc::experimental::ServerUnaryReactor* WaitForReady(
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
+    #endif
+      { return nullptr; }
+  };
+  template <class BaseClass>
+  class ExperimentalWithRawCallbackMethod_Ready : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    ExperimentalWithRawCallbackMethod_Ready() {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::Service::
+    #else
+      ::grpc::Service::experimental().
+    #endif
+        MarkMethodRawCallback(10,
+          new ::grpc_impl::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+                   ::grpc::CallbackServerContext*
+    #else
+                   ::grpc::experimental::CallbackServerContext*
+    #endif
+                     context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->Ready(context, request, response); }));
+    }
+    ~ExperimentalWithRawCallbackMethod_Ready() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status Ready(::grpc::ServerContext* /*context*/, const ::Proto::ReadyRequest* /*request*/, ::Proto::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+    virtual ::grpc::ServerUnaryReactor* Ready(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
+    #else
+    virtual ::grpc::experimental::ServerUnaryReactor* Ready(
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
+    #endif
+      { return nullptr; }
+  };
+  template <class BaseClass>
+  class ExperimentalWithRawCallbackMethod_MovePiece : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    ExperimentalWithRawCallbackMethod_MovePiece() {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::Service::
+    #else
+      ::grpc::Service::experimental().
+    #endif
+        MarkMethodRawCallback(11,
+          new ::grpc_impl::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+                   ::grpc::CallbackServerContext*
+    #else
+                   ::grpc::experimental::CallbackServerContext*
+    #endif
+                     context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->MovePiece(context, request, response); }));
+    }
+    ~ExperimentalWithRawCallbackMethod_MovePiece() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status MovePiece(::grpc::ServerContext* /*context*/, const ::Proto::MoveRequest* /*request*/, ::Proto::Empty* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+    virtual ::grpc::ServerUnaryReactor* MovePiece(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
+    #else
+    virtual ::grpc::experimental::ServerUnaryReactor* MovePiece(
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
+    #endif
+      { return nullptr; }
+  };
+  template <class BaseClass>
+  class ExperimentalWithRawCallbackMethod_ReadPieceMove : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    ExperimentalWithRawCallbackMethod_ReadPieceMove() {
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+      ::grpc::Service::
+    #else
+      ::grpc::Service::experimental().
+    #endif
+        MarkMethodRawCallback(12,
+          new ::grpc_impl::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+                   ::grpc::CallbackServerContext*
+    #else
+                   ::grpc::experimental::CallbackServerContext*
+    #endif
+                     context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->ReadPieceMove(context, request, response); }));
+    }
+    ~ExperimentalWithRawCallbackMethod_ReadPieceMove() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ReadPieceMove(::grpc::ServerContext* /*context*/, const ::Proto::RoomSettings* /*request*/, ::Proto::LastMoveInfo* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    #ifdef GRPC_CALLBACK_API_NONEXPERIMENTAL
+    virtual ::grpc::ServerUnaryReactor* ReadPieceMove(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
+    #else
+    virtual ::grpc::experimental::ServerUnaryReactor* ReadPieceMove(
+      ::grpc::experimental::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)
+    #endif
+      { return nullptr; }
   };
   template <class BaseClass>
   class WithStreamedUnaryMethod_GetRooms : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_GetRooms() {
       ::grpc::Service::MarkMethodStreamed(0,
-        new ::grpc::internal::StreamedUnaryHandler< ::Proto::Empty, ::Proto::RoomsInfo>(std::bind(&WithStreamedUnaryMethod_GetRooms<BaseClass>::StreamedGetRooms, this, std::placeholders::_1, std::placeholders::_2)));
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::Proto::Empty, ::Proto::RoomsInfo>(
+            [this](::grpc_impl::ServerContext* context,
+                   ::grpc_impl::ServerUnaryStreamer<
+                     ::Proto::Empty, ::Proto::RoomsInfo>* streamer) {
+                       return this->StreamedGetRooms(context,
+                         streamer);
+                  }));
     }
     ~WithStreamedUnaryMethod_GetRooms() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status GetRooms(::grpc::ServerContext* context, const ::Proto::Empty* request, ::Proto::RoomsInfo* response) override {
+    ::grpc::Status GetRooms(::grpc::ServerContext* /*context*/, const ::Proto::Empty* /*request*/, ::Proto::RoomsInfo* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -1201,17 +2511,24 @@ class ChessServer final {
   template <class BaseClass>
   class WithStreamedUnaryMethod_IsRoomExists : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_IsRoomExists() {
       ::grpc::Service::MarkMethodStreamed(1,
-        new ::grpc::internal::StreamedUnaryHandler< ::Proto::String, ::Proto::Bool>(std::bind(&WithStreamedUnaryMethod_IsRoomExists<BaseClass>::StreamedIsRoomExists, this, std::placeholders::_1, std::placeholders::_2)));
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::Proto::String, ::Proto::Bool>(
+            [this](::grpc_impl::ServerContext* context,
+                   ::grpc_impl::ServerUnaryStreamer<
+                     ::Proto::String, ::Proto::Bool>* streamer) {
+                       return this->StreamedIsRoomExists(context,
+                         streamer);
+                  }));
     }
     ~WithStreamedUnaryMethod_IsRoomExists() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status IsRoomExists(::grpc::ServerContext* context, const ::Proto::String* request, ::Proto::Bool* response) override {
+    ::grpc::Status IsRoomExists(::grpc::ServerContext* /*context*/, const ::Proto::String* /*request*/, ::Proto::Bool* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -1221,17 +2538,24 @@ class ChessServer final {
   template <class BaseClass>
   class WithStreamedUnaryMethod_CreateRoom : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_CreateRoom() {
       ::grpc::Service::MarkMethodStreamed(2,
-        new ::grpc::internal::StreamedUnaryHandler< ::Proto::RoomWithUsername, ::Proto::Empty>(std::bind(&WithStreamedUnaryMethod_CreateRoom<BaseClass>::StreamedCreateRoom, this, std::placeholders::_1, std::placeholders::_2)));
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::Proto::RoomWithUsername, ::Proto::Empty>(
+            [this](::grpc_impl::ServerContext* context,
+                   ::grpc_impl::ServerUnaryStreamer<
+                     ::Proto::RoomWithUsername, ::Proto::Empty>* streamer) {
+                       return this->StreamedCreateRoom(context,
+                         streamer);
+                  }));
     }
     ~WithStreamedUnaryMethod_CreateRoom() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status CreateRoom(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response) override {
+    ::grpc::Status CreateRoom(::grpc::ServerContext* /*context*/, const ::Proto::RoomWithUsername* /*request*/, ::Proto::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -1241,17 +2565,24 @@ class ChessServer final {
   template <class BaseClass>
   class WithStreamedUnaryMethod_JoinRoom : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_JoinRoom() {
       ::grpc::Service::MarkMethodStreamed(3,
-        new ::grpc::internal::StreamedUnaryHandler< ::Proto::RoomWithUsername, ::Proto::Empty>(std::bind(&WithStreamedUnaryMethod_JoinRoom<BaseClass>::StreamedJoinRoom, this, std::placeholders::_1, std::placeholders::_2)));
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::Proto::RoomWithUsername, ::Proto::Empty>(
+            [this](::grpc_impl::ServerContext* context,
+                   ::grpc_impl::ServerUnaryStreamer<
+                     ::Proto::RoomWithUsername, ::Proto::Empty>* streamer) {
+                       return this->StreamedJoinRoom(context,
+                         streamer);
+                  }));
     }
     ~WithStreamedUnaryMethod_JoinRoom() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status JoinRoom(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response) override {
+    ::grpc::Status JoinRoom(::grpc::ServerContext* /*context*/, const ::Proto::RoomWithUsername* /*request*/, ::Proto::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -1261,17 +2592,24 @@ class ChessServer final {
   template <class BaseClass>
   class WithStreamedUnaryMethod_LeaveRoom : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_LeaveRoom() {
       ::grpc::Service::MarkMethodStreamed(4,
-        new ::grpc::internal::StreamedUnaryHandler< ::Proto::RoomWithUsername, ::Proto::Empty>(std::bind(&WithStreamedUnaryMethod_LeaveRoom<BaseClass>::StreamedLeaveRoom, this, std::placeholders::_1, std::placeholders::_2)));
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::Proto::RoomWithUsername, ::Proto::Empty>(
+            [this](::grpc_impl::ServerContext* context,
+                   ::grpc_impl::ServerUnaryStreamer<
+                     ::Proto::RoomWithUsername, ::Proto::Empty>* streamer) {
+                       return this->StreamedLeaveRoom(context,
+                         streamer);
+                  }));
     }
     ~WithStreamedUnaryMethod_LeaveRoom() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status LeaveRoom(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::Empty* response) override {
+    ::grpc::Status LeaveRoom(::grpc::ServerContext* /*context*/, const ::Proto::RoomWithUsername* /*request*/, ::Proto::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -1281,17 +2619,24 @@ class ChessServer final {
   template <class BaseClass>
   class WithStreamedUnaryMethod_LeaveSpectatorRoom : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_LeaveSpectatorRoom() {
       ::grpc::Service::MarkMethodStreamed(6,
-        new ::grpc::internal::StreamedUnaryHandler< ::Proto::String, ::Proto::Empty>(std::bind(&WithStreamedUnaryMethod_LeaveSpectatorRoom<BaseClass>::StreamedLeaveSpectatorRoom, this, std::placeholders::_1, std::placeholders::_2)));
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::Proto::String, ::Proto::Empty>(
+            [this](::grpc_impl::ServerContext* context,
+                   ::grpc_impl::ServerUnaryStreamer<
+                     ::Proto::String, ::Proto::Empty>* streamer) {
+                       return this->StreamedLeaveSpectatorRoom(context,
+                         streamer);
+                  }));
     }
     ~WithStreamedUnaryMethod_LeaveSpectatorRoom() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status LeaveSpectatorRoom(::grpc::ServerContext* context, const ::Proto::String* request, ::Proto::Empty* response) override {
+    ::grpc::Status LeaveSpectatorRoom(::grpc::ServerContext* /*context*/, const ::Proto::String* /*request*/, ::Proto::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -1301,17 +2646,24 @@ class ChessServer final {
   template <class BaseClass>
   class WithStreamedUnaryMethod_GetViewersCount : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_GetViewersCount() {
       ::grpc::Service::MarkMethodStreamed(7,
-        new ::grpc::internal::StreamedUnaryHandler< ::Proto::String, ::Proto::Integer>(std::bind(&WithStreamedUnaryMethod_GetViewersCount<BaseClass>::StreamedGetViewersCount, this, std::placeholders::_1, std::placeholders::_2)));
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::Proto::String, ::Proto::Integer>(
+            [this](::grpc_impl::ServerContext* context,
+                   ::grpc_impl::ServerUnaryStreamer<
+                     ::Proto::String, ::Proto::Integer>* streamer) {
+                       return this->StreamedGetViewersCount(context,
+                         streamer);
+                  }));
     }
     ~WithStreamedUnaryMethod_GetViewersCount() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status GetViewersCount(::grpc::ServerContext* context, const ::Proto::String* request, ::Proto::Integer* response) override {
+    ::grpc::Status GetViewersCount(::grpc::ServerContext* /*context*/, const ::Proto::String* /*request*/, ::Proto::Integer* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -1321,17 +2673,24 @@ class ChessServer final {
   template <class BaseClass>
   class WithStreamedUnaryMethod_GetUsername : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_GetUsername() {
       ::grpc::Service::MarkMethodStreamed(8,
-        new ::grpc::internal::StreamedUnaryHandler< ::Proto::RoomWithUsername, ::Proto::String>(std::bind(&WithStreamedUnaryMethod_GetUsername<BaseClass>::StreamedGetUsername, this, std::placeholders::_1, std::placeholders::_2)));
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::Proto::RoomWithUsername, ::Proto::String>(
+            [this](::grpc_impl::ServerContext* context,
+                   ::grpc_impl::ServerUnaryStreamer<
+                     ::Proto::RoomWithUsername, ::Proto::String>* streamer) {
+                       return this->StreamedGetUsername(context,
+                         streamer);
+                  }));
     }
     ~WithStreamedUnaryMethod_GetUsername() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status GetUsername(::grpc::ServerContext* context, const ::Proto::RoomWithUsername* request, ::Proto::String* response) override {
+    ::grpc::Status GetUsername(::grpc::ServerContext* /*context*/, const ::Proto::RoomWithUsername* /*request*/, ::Proto::String* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -1341,17 +2700,24 @@ class ChessServer final {
   template <class BaseClass>
   class WithStreamedUnaryMethod_WaitForReady : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_WaitForReady() {
       ::grpc::Service::MarkMethodStreamed(9,
-        new ::grpc::internal::StreamedUnaryHandler< ::Proto::RoomSettings, ::Proto::Empty>(std::bind(&WithStreamedUnaryMethod_WaitForReady<BaseClass>::StreamedWaitForReady, this, std::placeholders::_1, std::placeholders::_2)));
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::Proto::RoomSettings, ::Proto::Empty>(
+            [this](::grpc_impl::ServerContext* context,
+                   ::grpc_impl::ServerUnaryStreamer<
+                     ::Proto::RoomSettings, ::Proto::Empty>* streamer) {
+                       return this->StreamedWaitForReady(context,
+                         streamer);
+                  }));
     }
     ~WithStreamedUnaryMethod_WaitForReady() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status WaitForReady(::grpc::ServerContext* context, const ::Proto::RoomSettings* request, ::Proto::Empty* response) override {
+    ::grpc::Status WaitForReady(::grpc::ServerContext* /*context*/, const ::Proto::RoomSettings* /*request*/, ::Proto::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -1361,17 +2727,24 @@ class ChessServer final {
   template <class BaseClass>
   class WithStreamedUnaryMethod_Ready : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_Ready() {
       ::grpc::Service::MarkMethodStreamed(10,
-        new ::grpc::internal::StreamedUnaryHandler< ::Proto::ReadyRequest, ::Proto::Empty>(std::bind(&WithStreamedUnaryMethod_Ready<BaseClass>::StreamedReady, this, std::placeholders::_1, std::placeholders::_2)));
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::Proto::ReadyRequest, ::Proto::Empty>(
+            [this](::grpc_impl::ServerContext* context,
+                   ::grpc_impl::ServerUnaryStreamer<
+                     ::Proto::ReadyRequest, ::Proto::Empty>* streamer) {
+                       return this->StreamedReady(context,
+                         streamer);
+                  }));
     }
     ~WithStreamedUnaryMethod_Ready() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status Ready(::grpc::ServerContext* context, const ::Proto::ReadyRequest* request, ::Proto::Empty* response) override {
+    ::grpc::Status Ready(::grpc::ServerContext* /*context*/, const ::Proto::ReadyRequest* /*request*/, ::Proto::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -1381,17 +2754,24 @@ class ChessServer final {
   template <class BaseClass>
   class WithStreamedUnaryMethod_MovePiece : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_MovePiece() {
       ::grpc::Service::MarkMethodStreamed(11,
-        new ::grpc::internal::StreamedUnaryHandler< ::Proto::MoveRequest, ::Proto::Empty>(std::bind(&WithStreamedUnaryMethod_MovePiece<BaseClass>::StreamedMovePiece, this, std::placeholders::_1, std::placeholders::_2)));
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::Proto::MoveRequest, ::Proto::Empty>(
+            [this](::grpc_impl::ServerContext* context,
+                   ::grpc_impl::ServerUnaryStreamer<
+                     ::Proto::MoveRequest, ::Proto::Empty>* streamer) {
+                       return this->StreamedMovePiece(context,
+                         streamer);
+                  }));
     }
     ~WithStreamedUnaryMethod_MovePiece() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status MovePiece(::grpc::ServerContext* context, const ::Proto::MoveRequest* request, ::Proto::Empty* response) override {
+    ::grpc::Status MovePiece(::grpc::ServerContext* /*context*/, const ::Proto::MoveRequest* /*request*/, ::Proto::Empty* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -1401,58 +2781,52 @@ class ChessServer final {
   template <class BaseClass>
   class WithStreamedUnaryMethod_ReadPieceMove : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithStreamedUnaryMethod_ReadPieceMove() {
       ::grpc::Service::MarkMethodStreamed(12,
-        new ::grpc::internal::StreamedUnaryHandler< ::Proto::RoomSettings, ::Proto::LastMoveInfo>(std::bind(&WithStreamedUnaryMethod_ReadPieceMove<BaseClass>::StreamedReadPieceMove, this, std::placeholders::_1, std::placeholders::_2)));
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::Proto::RoomSettings, ::Proto::LastMoveInfo>(
+            [this](::grpc_impl::ServerContext* context,
+                   ::grpc_impl::ServerUnaryStreamer<
+                     ::Proto::RoomSettings, ::Proto::LastMoveInfo>* streamer) {
+                       return this->StreamedReadPieceMove(context,
+                         streamer);
+                  }));
     }
     ~WithStreamedUnaryMethod_ReadPieceMove() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status ReadPieceMove(::grpc::ServerContext* context, const ::Proto::RoomSettings* request, ::Proto::LastMoveInfo* response) override {
+    ::grpc::Status ReadPieceMove(::grpc::ServerContext* /*context*/, const ::Proto::RoomSettings* /*request*/, ::Proto::LastMoveInfo* /*response*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
     // replace default version of method with streamed unary
     virtual ::grpc::Status StreamedReadPieceMove(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::Proto::RoomSettings,::Proto::LastMoveInfo>* server_unary_streamer) = 0;
   };
-  template <class BaseClass>
-  class WithStreamedUnaryMethod_SetKingHittable : public BaseClass {
-   private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
-   public:
-    WithStreamedUnaryMethod_SetKingHittable() {
-      ::grpc::Service::MarkMethodStreamed(13,
-        new ::grpc::internal::StreamedUnaryHandler< ::Proto::RoomWithIsKingHittable, ::Proto::Empty>(std::bind(&WithStreamedUnaryMethod_SetKingHittable<BaseClass>::StreamedSetKingHittable, this, std::placeholders::_1, std::placeholders::_2)));
-    }
-    ~WithStreamedUnaryMethod_SetKingHittable() override {
-      BaseClassMustBeDerivedFromService(this);
-    }
-    // disable regular version of this method
-    ::grpc::Status SetKingHittable(::grpc::ServerContext* context, const ::Proto::RoomWithIsKingHittable* request, ::Proto::Empty* response) override {
-      abort();
-      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-    }
-    // replace default version of method with streamed unary
-    virtual ::grpc::Status StreamedSetKingHittable(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::Proto::RoomWithIsKingHittable,::Proto::Empty>* server_unary_streamer) = 0;
-  };
-  typedef WithStreamedUnaryMethod_GetRooms<WithStreamedUnaryMethod_IsRoomExists<WithStreamedUnaryMethod_CreateRoom<WithStreamedUnaryMethod_JoinRoom<WithStreamedUnaryMethod_LeaveRoom<WithStreamedUnaryMethod_LeaveSpectatorRoom<WithStreamedUnaryMethod_GetViewersCount<WithStreamedUnaryMethod_GetUsername<WithStreamedUnaryMethod_WaitForReady<WithStreamedUnaryMethod_Ready<WithStreamedUnaryMethod_MovePiece<WithStreamedUnaryMethod_ReadPieceMove<WithStreamedUnaryMethod_SetKingHittable<Service > > > > > > > > > > > > > StreamedUnaryService;
+  typedef WithStreamedUnaryMethod_GetRooms<WithStreamedUnaryMethod_IsRoomExists<WithStreamedUnaryMethod_CreateRoom<WithStreamedUnaryMethod_JoinRoom<WithStreamedUnaryMethod_LeaveRoom<WithStreamedUnaryMethod_LeaveSpectatorRoom<WithStreamedUnaryMethod_GetViewersCount<WithStreamedUnaryMethod_GetUsername<WithStreamedUnaryMethod_WaitForReady<WithStreamedUnaryMethod_Ready<WithStreamedUnaryMethod_MovePiece<WithStreamedUnaryMethod_ReadPieceMove<Service > > > > > > > > > > > > StreamedUnaryService;
   template <class BaseClass>
   class WithSplitStreamingMethod_SpectateRoom : public BaseClass {
    private:
-    void BaseClassMustBeDerivedFromService(const Service *service) {}
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
    public:
     WithSplitStreamingMethod_SpectateRoom() {
       ::grpc::Service::MarkMethodStreamed(5,
-        new ::grpc::internal::SplitServerStreamingHandler< ::Proto::String, ::Proto::LastMoveInfo>(std::bind(&WithSplitStreamingMethod_SpectateRoom<BaseClass>::StreamedSpectateRoom, this, std::placeholders::_1, std::placeholders::_2)));
+        new ::grpc::internal::SplitServerStreamingHandler<
+          ::Proto::String, ::Proto::LastMoveInfo>(
+            [this](::grpc_impl::ServerContext* context,
+                   ::grpc_impl::ServerSplitStreamer<
+                     ::Proto::String, ::Proto::LastMoveInfo>* streamer) {
+                       return this->StreamedSpectateRoom(context,
+                         streamer);
+                  }));
     }
     ~WithSplitStreamingMethod_SpectateRoom() override {
       BaseClassMustBeDerivedFromService(this);
     }
     // disable regular version of this method
-    ::grpc::Status SpectateRoom(::grpc::ServerContext* context, const ::Proto::String* request, ::grpc::ServerWriter< ::Proto::LastMoveInfo>* writer) override {
+    ::grpc::Status SpectateRoom(::grpc::ServerContext* /*context*/, const ::Proto::String* /*request*/, ::grpc::ServerWriter< ::Proto::LastMoveInfo>* /*writer*/) override {
       abort();
       return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
     }
@@ -1460,7 +2834,7 @@ class ChessServer final {
     virtual ::grpc::Status StreamedSpectateRoom(::grpc::ServerContext* context, ::grpc::ServerSplitStreamer< ::Proto::String,::Proto::LastMoveInfo>* server_split_streamer) = 0;
   };
   typedef WithSplitStreamingMethod_SpectateRoom<Service > SplitStreamedService;
-  typedef WithStreamedUnaryMethod_GetRooms<WithStreamedUnaryMethod_IsRoomExists<WithStreamedUnaryMethod_CreateRoom<WithStreamedUnaryMethod_JoinRoom<WithStreamedUnaryMethod_LeaveRoom<WithSplitStreamingMethod_SpectateRoom<WithStreamedUnaryMethod_LeaveSpectatorRoom<WithStreamedUnaryMethod_GetViewersCount<WithStreamedUnaryMethod_GetUsername<WithStreamedUnaryMethod_WaitForReady<WithStreamedUnaryMethod_Ready<WithStreamedUnaryMethod_MovePiece<WithStreamedUnaryMethod_ReadPieceMove<WithStreamedUnaryMethod_SetKingHittable<Service > > > > > > > > > > > > > > StreamedService;
+  typedef WithStreamedUnaryMethod_GetRooms<WithStreamedUnaryMethod_IsRoomExists<WithStreamedUnaryMethod_CreateRoom<WithStreamedUnaryMethod_JoinRoom<WithStreamedUnaryMethod_LeaveRoom<WithSplitStreamingMethod_SpectateRoom<WithStreamedUnaryMethod_LeaveSpectatorRoom<WithStreamedUnaryMethod_GetViewersCount<WithStreamedUnaryMethod_GetUsername<WithStreamedUnaryMethod_WaitForReady<WithStreamedUnaryMethod_Ready<WithStreamedUnaryMethod_MovePiece<WithStreamedUnaryMethod_ReadPieceMove<Service > > > > > > > > > > > > > StreamedService;
 };
 
 }  // namespace Proto

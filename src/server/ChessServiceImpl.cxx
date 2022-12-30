@@ -329,7 +329,6 @@ grpc::Status Remote::ChessServiceImpl::MovePiece(
     P2C_Converter::ConvertPosition(request->newposition(), newPos);
     room.lastMove = Remote::LastMove(oldPos, newPos);
     room.spectatorLastMove = Remote::LastMove(oldPos, newPos);
-    room.lastMove.isKingHittable = false;
     room.isLastMoveRead = true;
     room.moveConditionVar->notify_one();
     for (auto& spectator : room.vecSpectators)
@@ -363,21 +362,5 @@ grpc::Status Remote::ChessServiceImpl::ReadPieceMove(
         C2P_Converter::ConvertLastMoveInfo(room.lastMove, *response);
         room.lastMove.Clean();
     }
-    return grpc::Status::OK;
-}
-
-grpc::Status Remote::ChessServiceImpl::SetKingHittable(
-        grpc::ServerContext* context,
-        const Proto::RoomWithIsKingHittable* request,
-        Proto::Empty* response)
-{
-    std::string errMsg = "";
-    if (!doCheckRoomSettings(request->room(), errMsg))
-    {
-        return grpc::Status(grpc::StatusCode::CANCELLED, errMsg);
-    }
-    Remote::ServerRoom& room = m_mapRooms[request->room().name()];
-    room.lastMove.isKingHittable = request->iskinghittable().status();
-    room.lastMove.hittableKingColor = (Pieces::PieceColor)request->iskinghittable().color();
     return grpc::Status::OK;
 }

@@ -23,11 +23,12 @@ public:
     bool IsFree(const Pieces::Position& pos) const;
     bool IsEnemy(const Pieces::Position& piecePos,
             const Pieces::Position& newPos) const;
-    bool IsKingHittable(const Pieces::PieceColor& color) const;
     Pieces::BasePiece* GetPiece(const Pieces::Position& pos) const;
-    void SetKingHittable(const Pieces::PieceColor& color, bool status);
+    Pieces::BasePiece* GetKing(const Pieces::PieceColor& color) const;
     void SetAvailableMoves(const Pieces::Positions& positions) const;
     Pieces::BasePiece*** GetBoard() const;
+    void GetPieces(const Pieces::PieceColor& color,
+            std::vector<Pieces::BasePiece*>& pieces) const;
     void DestroyEmpties();
     void Clean();
 

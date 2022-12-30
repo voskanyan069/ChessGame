@@ -18,5 +18,4 @@ service ChessServer {
     rpc Ready (ReadyRequest) returns (Empty) {};
     rpc MovePiece (MoveRequest) returns (Empty) {};
     rpc ReadPieceMove (RoomSettings) returns (LastMoveInfo) {};
-    rpc SetKingHittable (RoomWithIsKingHittable) returns (Empty) {};
 }

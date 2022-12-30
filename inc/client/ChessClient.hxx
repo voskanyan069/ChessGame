@@ -39,8 +39,6 @@ public:
             const Pieces::Position& newPos) const;
     void ReadLastMove(const Remote::Room& room,
             Remote::LastMove& lastMove) const;
-    void SetKingHittable(const Remote::Room& room,
-            const Pieces::PieceColor& color, bool status) const;
     int GetViewersCount(const std::string& room) const;
     std::string GetOpponentUsername(const Remote::Room& room) const;
 

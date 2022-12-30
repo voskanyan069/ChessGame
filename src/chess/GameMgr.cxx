@@ -186,15 +186,13 @@ void Chess::GameMgr::waitForUpdates(Pieces::Positions& positions) const
     Logger::GetInstance()->PrintBoard();
     Logger::GetInstance()->Print(INFO, "Waiting for opponent move...");
     m_client->ReadLastMove(m_room, lastMove);
-    m_board->SetKingHittable(lastMove.hittableKingColor,
-            lastMove.isKingHittable);
     piece = m_board->GetPiece(lastMove.oldPos);
     piece->GetAvailableMoves(positions);
     piece->Move(lastMove.newPos);
     positions.clear();
 }
 
-bool Chess::GameMgr::movePiece(Pieces::BasePiece* piece,
+Chess::GameMgr::MoveStatus Chess::GameMgr::movePiece(Pieces::BasePiece* piece,
         const Pieces::Position& newPos)
 {
     Pieces::Position pos = piece->GetPosition();
@@ -202,14 +200,17 @@ bool Chess::GameMgr::movePiece(Pieces::BasePiece* piece,
     {
         piece->Move(newPos);
         m_client->MovePiece(m_room, pos, newPos);
-        return true;
+        return MoveStatus::Moved;
     }
     catch (const Utils::Exception& e)
     {
         Logger::GetInstance()->PrintEndl();
         Logger::GetInstance()->Print(e);
-        Logger::GetInstance()->PrintEndl();
-        return false;
+        if ( e.GetErrorCode() == 2 )
+        {
+            return MoveStatus::KingHittable;
+        }
+        return MoveStatus::Fail;
     }
 }
 
@@ -311,7 +312,16 @@ void Chess::GameMgr::askNewPosition(Pieces::BasePiece*& piece)
         askNewPosition(piece);
         return;
     }
-    if (!movePiece(piece, newPos))
+    Chess::GameMgr::MoveStatus moveStatus = movePiece(piece, newPos);
+    if ( moveStatus == Chess::GameMgr::KingHittable )
+    {
+        m_board->DestroyEmpties();
+        Logger::GetInstance()->PrintBoard();
+        askCurrentPosition(piece);
+        askNewPosition(piece);
+        return;
+    }
+    else if ( moveStatus == Chess::GameMgr::Fail )
     {
         askNewPosition(piece);
         return;
@@ -472,20 +482,6 @@ void Chess::GameMgr::InitModel()
     initClient();
     initRoom();
     initPlayers();
-}
-
-void Chess::GameMgr::SetKingHittable(const Pieces::PieceColor& color,
-        bool status) const
-{
-    try
-    {
-        m_client->SetKingHittable(m_room, color, status);
-    }
-    catch (const Utils::Exception& e)
-    {
-        Logger::GetInstance()->Print(e);
-        std::exit(1);
-    }
 }
 
 void Chess::GameMgr::GetRooms()
