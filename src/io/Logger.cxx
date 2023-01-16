@@ -8,6 +8,8 @@
 
 #include <iostream>
 
+BackgroundType currentBgColor = BackgroundType::BLACK;
+
 Logger* Logger::GetInstance()
 {
     static Logger* instance = new Logger();
@@ -44,9 +46,39 @@ void Logger::setConsoleColor(const MessageType& type) const
     }
 }
 
+void Logger::setConsoleBackground(const BackgroundType& type) const
+{
+    switch (type)
+    {
+    case WHITE:
+        {
+            *m_os << WHITE_BG_CONSOLE;
+            break;
+        }
+    case BLACK:
+        {
+            *m_os << BLACK_BG_CONSOLE;
+            break;
+        }
+    }
+}
+
+BackgroundType Logger::reverseBackgroundColor() const
+{
+    if ( BackgroundType::WHITE == currentBgColor )
+    {
+        currentBgColor = BackgroundType::BLACK;
+    }
+    else
+    {
+        currentBgColor = BackgroundType::WHITE;
+    }
+    return currentBgColor;
+}
+
 void Logger::resetConsole() const
 {
-    *m_os << RESET_CONSOLE << std::endl;
+    *m_os << RESET_CONSOLE;
 }
 
 void Logger::printViewersCount() const
@@ -88,9 +120,12 @@ void Logger::printPieces(int lineIdx) const
 {
     for (int i = 0; i < 8; ++i)
     {
+        setConsoleBackground(reverseBackgroundColor());
         *m_os << " ";
         printPieceChar(m_board->GetBoard()[lineIdx][i]);
-        *m_os << " |";
+        *m_os << " ";
+        resetConsole();
+        *m_os << "|";
     }
 }
 
@@ -98,8 +133,10 @@ void Logger::printLine(int lineIdx) const
 {
     *m_os << "  " << lineIdx + 1 << " ⎪";
     printPieces(lineIdx);
+    resetConsole();
     *m_os << " " << lineIdx + 1;
     *m_os << "\n ———————————————————————————————————————";
+    reverseBackgroundColor();
 }
 
 void Logger::printLastMove(int lineIdx) const
@@ -158,6 +195,7 @@ bool Logger::IsWhiteTop() const
 void Logger::ReverseBoard()
 {
     m_bWhiteTop = !m_bWhiteTop;
+    reverseBackgroundColor();
 }
 
 void Logger::Print(const Utils::Exception& error) const

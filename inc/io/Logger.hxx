@@ -21,6 +21,12 @@ typedef enum
     ERROR
 } MessageType;
 
+typedef enum
+{
+    WHITE,
+    BLACK
+} BackgroundType;
+
 class Logger
 {
 public:
@@ -46,12 +52,14 @@ public:
             Arguments&&... args) const
     {
         setConsoleColor(type);
-        *m_os << boost::str((boost::format(fmt) % ... % args));
+        *m_os << boost::str((boost::format(fmt) % ... % args)) << std::endl;
         resetConsole();
     }
 
 private:
     void setConsoleColor(const MessageType& type) const;
+    void setConsoleBackground(const BackgroundType& type) const;
+    BackgroundType reverseBackgroundColor() const;
     void resetConsole() const;
     void printViewersCount() const;
     void printLetters(bool line=true) const;

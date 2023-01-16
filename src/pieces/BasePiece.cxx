@@ -158,7 +158,7 @@ void Pieces::BasePiece::SetHittable(bool isHittable)
     m_isHittable = isHittable;
     if (isHittable)
     {
-        m_pieceChar = "\033[31m" + m_pieceChar + "\033[0m";
+        m_pieceChar = "\033[31m" + m_pieceChar;
     }
     else
     {

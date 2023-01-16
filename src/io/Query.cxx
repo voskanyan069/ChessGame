@@ -84,6 +84,7 @@ void Query::printUsername() const
     std::cout << " [" << player->name << "] ";
 }
 
+/*
 void Query::AskPosition(const std::string& msg, Pieces::Position& pos) const
 {
     std::string input;
@@ -92,8 +93,8 @@ void Query::AskPosition(const std::string& msg, Pieces::Position& pos) const
     std::getline(std::cin, input);
     Pieces::ConvertPosition(input, pos);
 }
+*/
 
-/*
 void Query::AskPosition(const std::string& msg, Pieces::Position& pos) const
 {
     std::string input;
@@ -127,7 +128,7 @@ void Query::AskPosition(const std::string& msg, Pieces::Position& pos) const
     }
     Pieces::ConvertPosition(input, pos);
 }
-*/
+
 bool Query::AskForReady() const
 {
     bool value = false;
