@@ -84,6 +84,14 @@ void Query::printUsername() const
     std::cout << " [" << player->name << "] ";
 }
 
+void Query::checkSpectatorCommand(const std::string& input) const
+{
+    if (input.empty())
+    {
+        throw Utils::Exception("Empty command");
+    }
+}
+
 /*
 void Query::AskPosition(const std::string& msg, Pieces::Position& pos) const
 {
@@ -160,4 +168,14 @@ Pieces::PawnReplacements Query::AskPawnReplacement() const
         throw Utils::Exception("Incorrect answer");
     }
     return (Pieces::PawnReplacements)value;
+}
+
+void Query::AskSpectatorCommand(std::string& command) const
+{
+    std::string input;
+    std::cout << " Command(?) > ";
+    std::getline(std::cin, input);
+    checkSpectatorCommand(input);
+    boost::to_lower(input);
+    command = input;
 }

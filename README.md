@@ -25,4 +25,4 @@
   - ~~Viewers count~~
 - ~~Test and fix game with multiple players and spectators~~
 - ~~Add board rotation feature~~
-- Add commands for spectator mode
+- ~~Add commands for spectator mode~~

@@ -86,6 +86,8 @@ private:
     void askNewPosition(Pieces::BasePiece*& piece);
     void updateFrame();
     void updateFrame(const Remote::LastMove& lastMove);
+    void spectatorCommandsInput();
+    void processSpectatorCommand(const std::string& sCmd);
     void closeHandler(int signal);
 
 private:

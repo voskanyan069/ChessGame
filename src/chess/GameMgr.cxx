@@ -12,6 +12,7 @@
 #include <iostream>
 #include <sstream>
 #include <iomanip>
+#include <thread>
 
 Chess::GameMgr* Chess::GameMgr::GetInstance()
 {
@@ -355,6 +356,58 @@ void Chess::GameMgr::updateFrame(const Remote::LastMove& lastMove)
     Logger::GetInstance()->PrintBoard();
 }
 
+void Chess::GameMgr::processSpectatorCommand(const std::string& sCmd)
+{
+    if ("?" == sCmd || "help" == sCmd)
+    {
+        Logger::GetInstance()->PrintEndl();
+        Logger::GetInstance()->PrintHelp(GetCommandsHelp());
+        Logger::GetInstance()->PrintEndl();
+    }
+    else if ("ref" == sCmd || "refresh" == sCmd)
+    {
+        Logger::GetInstance()->PrintBoard();
+    }
+    else if ("rev" == sCmd || "reverse" == sCmd)
+    {
+        Logger::GetInstance()->ReverseBoard();
+        Logger::GetInstance()->PrintBoard();
+    }
+    else if ("close" == sCmd || "quit" == sCmd || "exit" == sCmd)
+    {
+        LeaveSpectatorRoom();
+        CloseEngine();
+    }
+    else
+    {
+        std::string msg = "Unknown command \"" + sCmd +
+            "\", enter \"?\" or \"help\" to see available commands";
+        Logger::GetInstance()->PrintEndl();
+        Logger::GetInstance()->Print(ERROR, msg);
+        Logger::GetInstance()->PrintEndl();
+    }
+}
+
+void Chess::GameMgr::spectatorCommandsInput()
+{
+    std::thread thObj([&] {
+            std::string cmd;
+            try
+            {
+                Query::GetInstance()->AskSpectatorCommand(cmd);
+            }
+            catch (const Utils::Exception& e)
+            {
+                Logger::GetInstance()->PrintEndl();
+                Logger::GetInstance()->Print(e);
+                Logger::GetInstance()->PrintEndl();
+            }
+            processSpectatorCommand(cmd);
+            spectatorCommandsInput();
+    });
+    thObj.detach();
+}
+
 void Chess::GameMgr::StartGame()
 {
     m_isGameOnline = true;
@@ -375,6 +428,7 @@ void Chess::GameMgr::SpectateGame()
     {
         Remote::MoveCallback fCallback = [this] (const Remote::LastMove& lm) {
             updateFrame(lm);
+            spectatorCommandsInput();
         };
         m_client->SpectateRoom(m_room.name, fCallback);
     }
