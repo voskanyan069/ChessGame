@@ -15,6 +15,7 @@ namespace Remote
 {
     typedef enum { OWNER, GUEST } PlayerType;
     struct Room;
+    struct GetRoomsInfo;
     struct Player;
     struct ServerRoom;
     struct ServerPlayer;
@@ -116,6 +117,12 @@ struct Remote::Room
     }
 };
 
+struct Remote::GetRoomsInfo
+{
+    std::string name;
+    bool is_closed;
+};
+
 struct Remote::Player
 {
     PlayerType playerType;
@@ -162,6 +169,8 @@ struct Remote::ServerRoom
     BoostConditionVariableUP waitConditionVar;    
     BoostMutexUP moveMutex;
     BoostConditionVariableUP moveConditionVar;    
+    BoostMutexUP closeMutex;
+    BoostConditionVariableUP closeConditionVar;
 };
 
 #endif // __UTILS_TYPES_HXX__

@@ -89,6 +89,7 @@ private:
     void spectatorCommandsInput();
     void processSpectatorCommand(const std::string& sCmd);
     void closeHandler(int signal);
+    void waitForClose();
 
 private:
     bool m_isGameOnline;

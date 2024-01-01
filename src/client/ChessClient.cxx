@@ -52,16 +52,20 @@ void Remote::ChessClient::convertPieceColor(const Pieces::PieceColor& color,
     }
 }
 
-void Remote::ChessClient::GetRooms(std::vector<std::string>& vRoomNames) const
+void Remote::ChessClient::GetRooms(
+        std::vector<Remote::GetRoomsInfo>& vRooms) const
 {
     grpc::ClientContext context;
     Proto::Empty request;
     Proto::RoomsInfo response;
     grpc::Status status = m_stub->GetRooms(&context, request, &response);
     checkRequestStatus(status);
-    for (int i = 0; i < response.names().size(); ++i)
+    Remote::GetRoomsInfo room;
+    for (int i = 0; i < response.room().size(); ++i)
     {
-        vRoomNames.push_back(response.names(i));
+        const Proto::GetRoomsType& protoRoom = response.room(i);
+        P2C_Converter::ConvertGetRoomInfo(protoRoom, room);
+        vRooms.push_back(room);
     }
 }
 
@@ -149,6 +153,17 @@ void Remote::ChessClient::WaitForReady(const Remote::Room& room) const
     request.set_name(room.name);
     request.set_password(room.password);
     grpc::Status status = m_stub->WaitForReady(&context, request, &response);
+    checkRequestStatus(status);
+}
+
+void Remote::ChessClient::WaitForClose(const Remote::Room& room) const
+{
+    grpc::ClientContext context;
+    Proto::RoomSettings request;
+    Proto::Empty response;
+    request.set_name(room.name);
+    request.set_password(room.password);
+    grpc::Status status = m_stub->WaitForClose(&context, request, &response);
     checkRequestStatus(status);
 }
 

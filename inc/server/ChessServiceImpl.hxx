@@ -44,6 +44,10 @@ public:
             grpc::ServerContext* context,
             const Proto::RoomWithUsername* request,
             Proto::Empty* response) override;
+    grpc::Status WaitForClose(
+            grpc::ServerContext* context,
+            const Proto::RoomSettings* request,
+            Proto::Empty* response) override;
     grpc::Status SpectateRoom(
             grpc::ServerContext* context,
             const Proto::String* request,
@@ -80,6 +84,7 @@ public:
 private:
     bool doCheckRoomSettings(const Proto::RoomSettings& settings,
             std::string& message) const;
+    void closeRoom(Remote::ServerRoom& room) const;
     void initMutexAndConditionVar(
             std::unique_ptr<boost::mutex>& mutex,
             std::unique_ptr<boost::condition_variable>& condVar) const;

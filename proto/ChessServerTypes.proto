@@ -32,8 +32,13 @@ message Position {
     int32 y = 2;
 };
 
+message GetRoomsType {
+    string name = 1;
+    bool is_closed = 2;
+};
+
 message RoomsInfo {
-    repeated string names = 1;
+    repeated GetRoomsType room = 1;
 }
 
 message RoomSettings {

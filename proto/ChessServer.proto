@@ -10,6 +10,7 @@ service ChessServer {
     rpc CreateRoom (RoomWithUsername) returns (Empty) {};
     rpc JoinRoom (RoomWithUsername) returns (Empty) {};
     rpc LeaveRoom (RoomWithUsername) returns (Empty) {};
+    rpc WaitForClose(RoomSettings) returns (Empty) {};
     rpc SpectateRoom (String) returns (stream LastMoveInfo) {};
     rpc LeaveSpectatorRoom (String) returns (Empty) {};
     rpc GetViewersCount (String) returns (Integer) {};

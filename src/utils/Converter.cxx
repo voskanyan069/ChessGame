@@ -15,6 +15,13 @@ void P2C_Converter::ConvertLastMoveInfo(const Proto::LastMoveInfo& src,
     P2C_Converter::ConvertPosition(src.newposition(), dest.newPos);
 }
 
+void P2C_Converter::ConvertGetRoomInfo(const Proto::GetRoomsType& src,
+        Remote::GetRoomsInfo& dest)
+{
+    dest.name = src.name();
+    dest.is_closed = src.is_closed();
+}
+
 void C2P_Converter::ConvertPosition(const Pieces::Position& src,
         Proto::Position& dest)
 {

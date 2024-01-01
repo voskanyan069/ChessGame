@@ -79,7 +79,7 @@ void Chess::GameMgr::waitOrLeaveRoom(const Remote::PlayerType& playerType) const
     {
         m_client->LeaveRoom(m_room);
         Logger::GetInstance()->Print(INFO, "Room has been left, Bye...");
-        std::exit(-1);
+        std::exit(1);
     }
 }
 
@@ -408,13 +408,33 @@ void Chess::GameMgr::spectatorCommandsInput()
     thObj.detach();
 }
 
+void Chess::GameMgr::waitForClose()
+{
+    try
+    {
+        m_client->WaitForClose(m_room);
+        Logger::GetInstance()->PrintEndl();
+        Logger::GetInstance()->Print(WARN, "Room has been closed");
+        Logger::GetInstance()->PrintEndl();
+        CloseEngine();
+    }
+    catch (const Utils::Exception& e)
+    {
+        Logger::GetInstance()->Print(INFO, "IT\'S ME, MARIO");
+        Logger::GetInstance()->Print(e);
+        waitForClose();
+    }
+}
+
 void Chess::GameMgr::StartGame()
 {
     m_isGameOnline = true;
+    std::thread closeThread(&Chess::GameMgr::waitForClose, this);
     while (m_isGameOnline)
     {
         updateFrame();
     }
+    closeThread.join();
 }
 
 void Chess::GameMgr::SpectateGame()
@@ -540,14 +560,19 @@ void Chess::GameMgr::InitModel()
 
 void Chess::GameMgr::GetRooms()
 {
-    std::vector<std::string> vRoomNames;
-    m_client->GetRooms(vRoomNames);
+    std::vector<Remote::GetRoomsInfo> vRooms;
+    m_client->GetRooms(vRooms);
     Logger::GetInstance()->PrintEndl();
     Logger::GetInstance()->Print(INFO, "Available rooms in the server:");
     Logger::GetInstance()->PrintEndl();
-    for (int i = 0; i < vRoomNames.size(); ++i)
+    for (int i = 0; i < vRooms.size(); ++i)
     {
-        Logger::GetInstance()->Print(INFO, "%d: %s", 1 + i, vRoomNames.at(i));
+        std::string name = vRooms.at(i).name;
+        if ( vRooms.at(i).is_closed )
+        {
+            name += "🔒";
+        }
+        Logger::GetInstance()->Print(INFO, "%d: %s", 1 + i, name);
     }
     Logger::GetInstance()->PrintEndl();
 }
@@ -582,6 +607,7 @@ void Chess::GameMgr::ConnectToServer()
 
 void Chess::GameMgr::DisconnectFromServer()
 {
+    m_client->LeaveRoom(m_room);
 }
 
 std::string Chess::GameMgr::GetCommandsHelp()

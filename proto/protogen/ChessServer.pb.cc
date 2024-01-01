@@ -25,24 +25,26 @@ static constexpr ::PROTOBUF_NAMESPACE_ID::Message* const* file_default_instances
 
 const char descriptor_table_protodef_ChessServer_2eproto[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) =
   "\n\021ChessServer.proto\022\005Proto\032\026ChessServerT"
-  "ypes.proto2\266\005\n\013ChessServer\022,\n\010GetRooms\022\014"
+  "ypes.proto2\353\005\n\013ChessServer\022,\n\010GetRooms\022\014"
   ".Proto.Empty\032\020.Proto.RoomsInfo\"\000\022,\n\014IsRo"
   "omExists\022\r.Proto.String\032\013.Proto.Bool\"\000\0225"
   "\n\nCreateRoom\022\027.Proto.RoomWithUsername\032\014."
   "Proto.Empty\"\000\0223\n\010JoinRoom\022\027.Proto.RoomWi"
   "thUsername\032\014.Proto.Empty\"\000\0224\n\tLeaveRoom\022"
   "\027.Proto.RoomWithUsername\032\014.Proto.Empty\"\000"
-  "\0226\n\014SpectateRoom\022\r.Proto.String\032\023.Proto."
-  "LastMoveInfo\"\0000\001\0223\n\022LeaveSpectatorRoom\022\r"
-  ".Proto.String\032\014.Proto.Empty\"\000\0222\n\017GetView"
-  "ersCount\022\r.Proto.String\032\016.Proto.Integer\""
-  "\000\0227\n\013GetUsername\022\027.Proto.RoomWithUsernam"
-  "e\032\r.Proto.String\"\000\0223\n\014WaitForReady\022\023.Pro"
-  "to.RoomSettings\032\014.Proto.Empty\"\000\022,\n\005Ready"
-  "\022\023.Proto.ReadyRequest\032\014.Proto.Empty\"\000\022/\n"
-  "\tMovePiece\022\022.Proto.MoveRequest\032\014.Proto.E"
-  "mpty\"\000\022;\n\rReadPieceMove\022\023.Proto.RoomSett"
-  "ings\032\023.Proto.LastMoveInfo\"\000b\006proto3"
+  "\0223\n\014WaitForClose\022\023.Proto.RoomSettings\032\014."
+  "Proto.Empty\"\000\0226\n\014SpectateRoom\022\r.Proto.St"
+  "ring\032\023.Proto.LastMoveInfo\"\0000\001\0223\n\022LeaveSp"
+  "ectatorRoom\022\r.Proto.String\032\014.Proto.Empty"
+  "\"\000\0222\n\017GetViewersCount\022\r.Proto.String\032\016.P"
+  "roto.Integer\"\000\0227\n\013GetUsername\022\027.Proto.Ro"
+  "omWithUsername\032\r.Proto.String\"\000\0223\n\014WaitF"
+  "orReady\022\023.Proto.RoomSettings\032\014.Proto.Emp"
+  "ty\"\000\022,\n\005Ready\022\023.Proto.ReadyRequest\032\014.Pro"
+  "to.Empty\"\000\022/\n\tMovePiece\022\022.Proto.MoveRequ"
+  "est\032\014.Proto.Empty\"\000\022;\n\rReadPieceMove\022\023.P"
+  "roto.RoomSettings\032\023.Proto.LastMoveInfo\"\000"
+  "b\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_ChessServer_2eproto_deps[1] = {
   &::descriptor_table_ChessServerTypes_2eproto,
@@ -51,7 +53,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_Che
 };
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_ChessServer_2eproto_once;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_ChessServer_2eproto = {
-  false, false, descriptor_table_protodef_ChessServer_2eproto, "ChessServer.proto", 755,
+  false, false, descriptor_table_protodef_ChessServer_2eproto, "ChessServer.proto", 808,
   &descriptor_table_ChessServer_2eproto_once, descriptor_table_ChessServer_2eproto_sccs, descriptor_table_ChessServer_2eproto_deps, 0, 1,
   schemas, file_default_instances, TableStruct_ChessServer_2eproto::offsets,
   file_level_metadata_ChessServer_2eproto, 0, file_level_enum_descriptors_ChessServer_2eproto, file_level_service_descriptors_ChessServer_2eproto,

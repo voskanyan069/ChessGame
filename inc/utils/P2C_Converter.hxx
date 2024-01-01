@@ -9,6 +9,8 @@ namespace P2C_Converter
     void ConvertPosition(const Proto::Position& src, Pieces::Position& dest);
     void ConvertLastMoveInfo(const Proto::LastMoveInfo& src,
             Remote::LastMove& dest);
+    void ConvertGetRoomInfo(const Proto::GetRoomsType& src,
+            Remote::GetRoomsInfo& dest);
 }
 
 #endif // __UTILS_P2C_CONVERTER_HXX__

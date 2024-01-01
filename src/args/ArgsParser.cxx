@@ -1,4 +1,5 @@
 #include "args/ArgsParser.hxx"
+#include "utils/Exception.hxx"
 
 #include <sstream>
 
@@ -30,13 +31,22 @@ void ArgsParser::setOption(const std::string& key, const T& val)
     CMDArguments::GetInstance()->SetArgument(key, (ArgumentBase*)arg);
 }
 
-bool ArgsParser::ParseArguments()
+void ArgsParser::ParseArguments()
 {
-    po::store(po::parse_command_line(m_argc, m_argv, *m_desc), *m_vm);
-    po::notify(*m_vm);
+    try
+    {
+        po::store(po::parse_command_line(m_argc, m_argv, *m_desc), *m_vm);
+        po::notify(*m_vm);
+    }
+    catch ( const boost::program_options::unknown_option& e )
+    {
+        std::string msg = e.what();
+        msg += "\nPlease use -h option to see help message";
+        throw Utils::Exception(msg);
+    }
     if (m_vm->count("help"))
     {
-        return false;
+        throw Utils::Exception("help", "Info");
     }
     for (const auto& it : *m_vm)
     {
@@ -50,7 +60,6 @@ bool ArgsParser::ParseArguments()
             setOption(it.first, *v);
         }
     }
-    return true;
 }
 
 void ArgsParser::GetHelpMessage(std::string& helpMsg)

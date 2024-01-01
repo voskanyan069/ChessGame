@@ -12,8 +12,6 @@
   - ~~Move piece in both clients boards~~
   - ~~Add loop in game~~
 - ~~Implement hittable King~~
-- Implement checkmate
-- Close session when one of players leave room
 - ~~Allow to join other players when someone press not ready~~
 - ~~Add GetRooms() rpc~~
 - ~~Close session when signal received (ctrl-c, termination)~~
@@ -26,3 +24,11 @@
 - ~~Test and fix game with multiple players and spectators~~
 - ~~Add board rotation feature~~
 - ~~Add commands for spectator mode~~
+- ~~Add lock icon for rooms with password for GetRooms command output~~
+- Close session when one of players leave room
+  - ~~Close session for both players~~
+  - Clean the room from server
+  - Test it for spectator mode
+- Organize exit codes for each error
+- Add connection handler
+- Implement checkmate

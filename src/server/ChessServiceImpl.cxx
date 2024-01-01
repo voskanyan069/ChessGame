@@ -4,8 +4,11 @@
 #include "utils/C2P_Converter.hxx"
 
 #include <iostream>
+#include <thread>
+#include <chrono>
 
 #include <grpcpp/grpcpp.h>
+
 
 Remote::ChessServiceImpl::ChessServiceImpl()
 {
@@ -40,7 +43,10 @@ grpc::Status Remote::ChessServiceImpl::GetRooms(
 {
     for (const auto& room : m_mapRooms)
     {
-        response->add_names(room.first);
+        Proto::GetRoomsType* protoRoom = response->add_room();
+        bool is_closed = ("" != room.second.password);
+        protoRoom->set_name(room.first);
+        protoRoom->set_is_closed(is_closed);
     }
     return grpc::Status::OK;
 }
@@ -61,6 +67,12 @@ grpc::Status Remote::ChessServiceImpl::IsRoomExists(
         response->set_value(true);
     }
     return grpc::Status::OK;
+}
+
+void Remote::ChessServiceImpl::closeRoom(Remote::ServerRoom& room) const
+{
+    room.exists = false;
+    room.closeConditionVar->notify_one();
 }
 
 void Remote::ChessServiceImpl::initMutexAndConditionVar(
@@ -97,6 +109,7 @@ grpc::Status Remote::ChessServiceImpl::CreateRoom(
     room.isLastMoveRead = false;
     initMutexAndConditionVar(room.waitMutex, room.waitConditionVar);
     initMutexAndConditionVar(room.moveMutex, room.moveConditionVar);
+    initMutexAndConditionVar(room.closeMutex, room.closeConditionVar);
     std::cout << context->peer() << " has created " << name
         << " room" << std::endl;
     return grpc::Status::OK;
@@ -140,13 +153,10 @@ grpc::Status Remote::ChessServiceImpl::LeaveRoom(
         return grpc::Status(grpc::StatusCode::CANCELLED, errMsg);
     }
     Remote::ServerRoom& room = m_mapRooms[request->room().name()];
-    if (request->username() == room.ownerPlayer.username)
+    if (request->username() == room.ownerPlayer.username ||
+            request->username() == room.guestPlayer.username)
     {
-        m_mapRooms.erase(request->room().name());
-    }
-    else if (request->username() == room.guestPlayer.username)
-    {
-        room.guestPlayer.username = "";
+        closeRoom(room);
     }
     else
     {
@@ -154,6 +164,25 @@ grpc::Status Remote::ChessServiceImpl::LeaveRoom(
     }
     std::cout << context->peer() << " has leaved " << request->room().name()
         << " room" << std::endl;
+    return grpc::Status::OK;
+}
+
+grpc::Status Remote::ChessServiceImpl::WaitForClose(
+        grpc::ServerContext* context,
+        const Proto::RoomSettings* request,
+        Proto::Empty* response)
+{
+    std::string errMsg = "";
+    if (!doCheckRoomSettings(*request, errMsg))
+    {
+        return grpc::Status(grpc::StatusCode::CANCELLED, errMsg);
+    }
+    Remote::ServerRoom& room = m_mapRooms[request->name()];
+    boost::mutex::scoped_lock lock(*(room.closeMutex));
+    while (room.exists)
+    {
+        room.closeConditionVar->wait(lock);
+    }
     return grpc::Status::OK;
 }
 
@@ -351,6 +380,7 @@ grpc::Status Remote::ChessServiceImpl::ReadPieceMove(
         return grpc::Status(grpc::StatusCode::CANCELLED, errMsg);
     }
     Remote::ServerRoom& room = m_mapRooms[request->name()];
+    bool bStopCloseWaiting = false;
     room.isLastMoveRead = false;
     boost::mutex::scoped_lock lock(*(room.moveMutex));
     while (!room.isLastMoveRead)

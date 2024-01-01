@@ -16,7 +16,7 @@ public:
     ~ArgsParser();
 
 public:
-    bool ParseArguments();
+    void ParseArguments();
     void GetHelpMessage(std::string& helpMsg);
 
 public:

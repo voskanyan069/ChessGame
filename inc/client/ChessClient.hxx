@@ -25,7 +25,7 @@ public:
     ~ChessClient() = default;
 
 public:
-    void GetRooms(std::vector<std::string>& vRoomNames) const;
+    void GetRooms(std::vector<Remote::GetRoomsInfo>& vRooms) const;
     bool IsRoomExists(const std::string& name) const;
     void CreateRoom(const Remote::Room& room) const;
     void JoinRoom(const Remote::Room& room) const;
@@ -34,6 +34,7 @@ public:
             const Remote::MoveCallback& fUpdCallback) const;
     void LeaveSpectatorRoom(const std::string& name) const;
     void WaitForReady(const Remote::Room& room) const;
+    void WaitForClose(const Remote::Room& room) const;
     void Ready(const Remote::Room& room, const Remote::Player& player) const;
     void MovePiece(const Remote::Room& room, const Pieces::Position& oldPos,
             const Pieces::Position& newPos) const;

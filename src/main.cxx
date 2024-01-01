@@ -27,12 +27,23 @@ void initArgsParser(ArgsParser& parser)
     parser.AddOption<std::string>("room,r", "create or join to room", "admin");
     parser.AddOption<std::string>("password,p", "password of the room","");
     parser.AddOption<std::string>("username,u", "player username", getlogin());
-    if (!parser.ParseArguments())
+    try
     {
-        std::string helpMsg;
-        parser.GetHelpMessage(helpMsg);
-        helpMsg += "\n" + Chess::GameMgr::GetCommandsHelp();
-        Logger::GetInstance()->PrintHelp(helpMsg);
+        parser.ParseArguments();
+    }
+    catch ( const Utils::Exception& e )
+    {
+        if ( 0 == strcmp("help", e.what()) )
+        {
+            std::string helpMsg;
+            parser.GetHelpMessage(helpMsg);
+            helpMsg += "\n" + Chess::GameMgr::GetCommandsHelp();
+            Logger::GetInstance()->PrintHelp(helpMsg);
+        }
+        else
+        {
+            Logger::GetInstance()->Print(e);
+        }
         std::exit(1);
     }
 }
@@ -64,8 +75,6 @@ int main(int argc, char** argv)
     ArgsParser parser(argc, argv);
     initArgsParser(parser);
     initGameMgrModel();
-    //Logger::GetInstance()->PrintBoard();
-    //return 0;
     startGame();
     return 0;
 }
